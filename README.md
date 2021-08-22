@@ -1,3 +1,3 @@
-# The-Game—Tree
+# The-Game-Tree
 
 ues The-Modding-Tree
