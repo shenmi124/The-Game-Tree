@@ -1,18 +1,19 @@
 addLayer("p", {
     name: "prestige", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
+addLayer("$", {
+    name: "$", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "R-$", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
 		points: new Decimal(0),
     }},
-    color: "#4BDC13",
     requires: new Decimal(10), // Can be a function that takes requirement increases into account
-    resource: "prestige points", // Name of prestige currency
     baseResource: "points", // Name of resource prestige is based on
+    baseResource: "time", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.5, // Prestige currency exponent
+    exponent: 0, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -25,4 +26,89 @@ addLayer("p", {
         {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return true}
+		cost: new Decimal(0),
+		},
+		12:{
+		title: "java?",
+		description: "You can buy some coffee to stay up late to play The Game Tree (sleep time 12 hours> 9 hours).",
+		cost: new Decimal(5),
+		unlocked(){
+			return hasUpgrade("$",11)
+		},
+		},
+		13:{
+		title: "Don't sleep in hell!",
+		description: "You can buy a new bed to Improve sleep quality (sleep time 9 hours> 6 hours).",
+		cost: new Decimal(20),
+		unlocked(){
+			return hasUpgrade("$",12)
+		},
+		},
+		14:{
+		title: "Adrenaline",
+		description: "You can buy some adrenalines to Improve sleep quality (sleep time 6 hours> 3 hours).",
+		cost: new Decimal(200),
+		unlocked(){
+			return hasUpgrade("$",13)
+		},
+		},
+		},
+})
+
+
+addLayer("w", {
+    name: "wood",
+    symbol: "V-W",
+    position: 0,
+    startData() { return {
+        unlocked: true,
+		points: new Decimal(0),
+    }},
+    color: "#FF8000",
+    requires: new Decimal(5), 
+    resource: "wood",
+    baseResource: "time", 
+    baseAmount() {return player.points},
+    type: "normal",
+    exponent: 0.47,
+    gainMult() {
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { 
+        return new Decimal(1)
+    },
+    row: 0, 
+    hotkeys: [
+        {key: "w", description: "w: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return true},
+		upgrades:{
+		11:{
+		title: "wood!",
+		description: "You got wood, which makes you feel excited, you want to spend more time playing this game",
+		cost: new Decimal(10),
+		effect() {
+        return player[this.layer].points.add(0.045).pow(0.045)
+		},
+		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
+		},
+		12:{
+		title: "The Game Tree is AWESOME",
+		description: "”wood!“ again",
+		cost: new Decimal(30),
+		effect() {
+        return player[this.layer].points.add(0.045).pow(0.045)
+		},
+		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
+		},
+		13:{
+		title: "to be continued",
+		description: "WHAT!!!???(It's true)",
+		cost: new Decimal(new Decimal("1e14514")),
+		unlocked(){
+			return hasUpgrade("w",12)
+		},
+		},
+		},
 })
