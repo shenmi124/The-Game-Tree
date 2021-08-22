@@ -1,5 +1,3 @@
-addLayer("p", {
-    name: "prestige", // This is optional, only used in a few places, If absent it just uses the layer id.
 addLayer("$", {
     name: "$", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "R-$", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -8,8 +6,9 @@ addLayer("$", {
         unlocked: true,
 		points: new Decimal(0),
     }},
+    color: "#FFFF6F",
     requires: new Decimal(10), // Can be a function that takes requirement increases into account
-    baseResource: "points", // Name of resource prestige is based on
+    resource: "$", // Name of prestige currency
     baseResource: "time", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
@@ -23,9 +22,13 @@ addLayer("$", {
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "$", description: "$: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return true}
+    layerShown(){return true},
+		upgrades: {
+		11:{
+		title: "start",
+		description: "You found a free idle game",
 		cost: new Decimal(0),
 		},
 		12:{
