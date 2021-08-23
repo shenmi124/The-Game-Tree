@@ -13,12 +13,15 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1",
+	num: "0.1.1",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Virtual and reality?</h2><br>
+	<h3>v0.1.1</h3><br>
+	    - "w" The price formula has slowed down, and the "wood", "The Game Tree is AWESOME!" formula has been improved <br>
+		- Added two upgrades in "w"<br>
 	<h3>v0.1</h3><br>
 		- Added $.<br>
 		- Added w.`
@@ -48,7 +51,7 @@ function getPointGen() {
 	if (hasUpgrade('$', 13)) gain = new Decimal(0.75)
 	if (hasUpgrade('$', 13)) gain = new Decimal(0.875)
 	if (hasUpgrade('w', 11)) gain = gain.times(upgradeEffect('w', 11))
-	if (hasUpgrade('w', 12)) gain = gain.times(upgradeEffect('w', 12))
+	if (hasUpgrade('w', 13)) gain = gain.times(upgradeEffect('w', 13))
 	return gain
 }
 

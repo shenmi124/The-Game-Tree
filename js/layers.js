@@ -73,7 +73,7 @@ addLayer("w", {
     baseResource: "time", 
     baseAmount() {return player.points},
     type: "normal",
-    exponent: 0.47,
+    exponent: 0.55,
     gainMult() {
         mult = new Decimal(1)
         return mult
@@ -90,27 +90,48 @@ addLayer("w", {
 		11:{
 		title: "wood!",
 		description: "You got wood, which makes you feel excited, you want to spend more time playing this game",
-		cost: new Decimal(10),
+		cost: new Decimal(5),
 		effect() {
-        return player[this.layer].points.add(0.045).pow(0.045)
+        return player[this.layer].points.add(1).pow(0.05)
+		if (hasUpgrade("w", 12)) eff = eff.pow(1.5);
 		},
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 		},
 		12:{
-		title: "The Game Tree is AWESOME",
-		description: "”wood!“ again",
-		cost: new Decimal(30),
+		title: "Crafts",
+		description: "The effect of up, down, left, and right directions is 1.5 power",
+		cost: new Decimal(20),
+		unlocked(){
+		return hasUpgrade("w",13)
+		},
+		},
+		13:{
+		title: "The Game Tree is AWESOME!",
+		description: "“wood” again" ,
+		cost: new Decimal(15),
+		unlocked(){
+		return hasUpgrade("w",11)
+		},
 		effect() {
-        return player[this.layer].points.add(0.045).pow(0.045)
+        return player[this.layer].points.add(1).pow(0.05)
+		if (hasUpgrade("w", 12)) eff = eff.pow(1.5);
 		},
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 		},
-		13:{
-		title: "to be continued",
-		description: "WHAT!!!???(It's true)",
-		cost: new Decimal(new Decimal("1e14514")),
+		14:{
+		title: "Only used three times",
+		description: "Make wood_pickaxe",
+		cost: new Decimal(new Decimal("50")),
 		unlocked(){
-			return hasUpgrade("w",12)
+		return hasUpgrade("w",13)
+		},
+		},
+		15:{
+		title: "too much!",
+		description: "You can sell your woods(not made)",
+		cost: new Decimal (50),
+		unlocked(){
+		return hasUpgrade("w",13)
 		},
 		},
 		},
