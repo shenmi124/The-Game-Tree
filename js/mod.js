@@ -17,10 +17,25 @@ let VERSION = {
 	name: "Literally nothing",
 }
 
-let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+let changelog = `<h1>更新日志:</h1><br>
+<h2>虚拟与现实？</h2><br>
+	<h3>v0.1.3.2</h3><br>
+		- “w”升级11&12指数+0.5
+	<h3>v0.1.3.1</h3><br>
+		- “太多了!”已经做好<br>
+	<h3>v0.1.2.1</h3><br>
+		- 修复$层里程碑0没有效果<br>
+		- 修复“w”层的显示bug<br>
+	<h3>v0.1.2</h3><br>
+		- ”太多了!“有了一个按钮，但是没有用<br>
+		- 修复 "工艺品" 的bug并且修改数值<br>
+	<h3>v0.1.1</h3><br>
+	    - “w”价格公式放缓，“原木！”，“游戏树真的太棒了（强调）！”公式得到了改进 <br>
+		- “w”层新增2个升级<br>
+	<h3>v0.1</h3><br>
+		- 增加 “$”层。<br>
+		- 增加 “w”层。`
+
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
