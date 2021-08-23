@@ -9,7 +9,7 @@ addLayer("$", {
     color: "#FFFF6F",
     requires: new Decimal(10), // Can be a function that takes requirement increases into account
     resource: "$", // Name of prestige currency
-    baseResource: "time", // Name of resource prestige is based on
+    baseResource: "时间", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 0, // Prestige currency exponent
@@ -27,29 +27,29 @@ addLayer("$", {
     layerShown(){return true},
 		upgrades: {
 		11:{
-		title: "start",
-		description: "You found a free idle game",
+		title: "开始",
+		description: "你找到一个免费的放置游戏",
 		cost: new Decimal(0),
 		},
 		12:{
 		title: "java?",
-		description: "You can buy some coffee to stay up late to play The Game Tree (sleep time 12 hours> 9 hours).",
+		description: "你可以买一些咖啡来熬夜玩游戏树 (睡觉时长 12 小时 > 9 小时).",
 		cost: new Decimal(5),
 		unlocked(){
 			return hasUpgrade("$",11)
 		},
 		},
 		13:{
-		title: "Don't sleep in hell!",
-		description: "You can buy a new bed to Improve sleep quality (sleep time 9 hours> 6 hours).",
+		title: "不要在地狱睡觉！",
+		description: "你可以买一张新床来改善睡眠 (睡觉时长 9 小时 > 6 小时).",
 		cost: new Decimal(20),
 		unlocked(){
 			return hasUpgrade("$",12)
 		},
 		},
 		14:{
-		title: "Adrenaline",
-		description: "You can buy some adrenalines to Improve sleep quality (sleep time 6 hours> 3 hours).",
+		title: "肾上腺素",
+		description: "你可以买一些肾上腺素来提高睡眠质量 (睡觉时长 6 小时 > 3 小时).",
 		cost: new Decimal(200),
 		unlocked(){
 			return hasUpgrade("$",13)
@@ -69,8 +69,8 @@ addLayer("w", {
     }},
     color: "#FF8000",
     requires: new Decimal(5), 
-    resource: "wood",
-    baseResource: "time", 
+    resource: "原木",
+    baseResource: "时间", 
     baseAmount() {return player.points},
     type: "normal",
     exponent: 0.55,
@@ -88,8 +88,8 @@ addLayer("w", {
     layerShown(){return true},
 		upgrades:{
 		11:{
-		title: "wood!",
-		description: "You got wood, which makes you feel excited, you want to spend more time playing this game",
+		title: "原木!",
+		description: "你获得了原木，这让你感到兴奋，你想花更多的时间玩这个游戏",
 		cost: new Decimal(5),
 		effect() {
         return player[this.layer].points.add(1).pow(0.05)
@@ -98,16 +98,16 @@ addLayer("w", {
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 		},
 		12:{
-		title: "Crafts",
-		description: "The effect of up, down, left, and right directions is 1.5 power",
+		title: "工艺品",
+		description: "这个升级上下左右方向的升级效果变成1.5次方",
 		cost: new Decimal(20),
 		unlocked(){
 		return hasUpgrade("w",13)
 		},
 		},
 		13:{
-		title: "The Game Tree is AWESOME!",
-		description: "“wood” again" ,
+		title: "游戏树真的太棒了!（强调）",
+		description: "“原木！”再一次" ,
 		cost: new Decimal(15),
 		unlocked(){
 		return hasUpgrade("w",11)
@@ -119,16 +119,16 @@ addLayer("w", {
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 		},
 		14:{
-		title: "Only used three times",
-		description: "Make wood_pickaxe",
+		title: "只用三次",
+		description: "制作一把木镐",
 		cost: new Decimal(new Decimal("50")),
 		unlocked(){
 		return hasUpgrade("w",13)
 		},
 		},
 		15:{
-		title: "too much!",
-		description: "You can sell your woods(not made)",
+		title: "太多了!",
+		description: "你可以卖掉你的原木 (未制作)",
 		cost: new Decimal (50),
 		unlocked(){
 		return hasUpgrade("w",13)
