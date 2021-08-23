@@ -162,6 +162,15 @@ addLayer("w", {
 		unlocked(){
 		return hasUpgrade("w",15)
 		},
+		canClick() {
+		let w = player[this.layer].points
+		if (w >= 10) 
+		return true
 		},
-		}
+		onClick(){
+		player.w.points = player.w.points.sub(10)
+		player.$.points = player.$.points.add(3)
+		},
+		},
+		},
 })
