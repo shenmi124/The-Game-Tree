@@ -20,7 +20,7 @@ let VERSION = {
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Virtual and reality?</h2><br>
 	<h3>v0.1.3.1</h3><br>
-		- "too much!" is ready
+		- "too much!" is ready<br>
 	<h3>v0.1.2.1</h3><br>
 		- Fix the bug that $0milestone has no effect<br>
 		- Fix the display bug of w layer purchase<br>
