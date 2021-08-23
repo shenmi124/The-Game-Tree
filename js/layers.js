@@ -110,8 +110,8 @@ addLayer("w", {
 		description: "You got wood, which makes you feel excited, you want to spend more time playing this game",
 		cost: new Decimal(5),
 		effect() {
-        let eff = player[this.layer].points.add(1).pow(0.05)
-		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.1);
+        let eff = player[this.layer].points.add(1).pow(0.1)
+		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.15);
 		return eff
 		},
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
@@ -132,8 +132,8 @@ addLayer("w", {
 		return hasUpgrade("w",11)
 		},
 		effect() {
-        let eff = player[this.layer].points.add(1).pow(0.05)
-		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.1);
+        let eff = player[this.layer].points.add(1).pow(0.1)
+		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.15);
 		return eff
 		},
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 

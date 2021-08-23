@@ -19,6 +19,8 @@ let VERSION = {
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Virtual and reality?</h2><br>
+	<h3>v0.1.3.2</h3><br>
+		- "w" upgrades 11&12 index +0.5
 	<h3>v0.1.3.1</h3><br>
 		- "too much!" is ready<br>
 	<h3>v0.1.2.1</h3><br>
