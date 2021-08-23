@@ -57,7 +57,7 @@ addLayer("$", {
 		},
 		21:{
 		title: "Investment is risky",
-		description: "You can buy a new bed to Improve sleep quality (sleep time 9 hours> 6 hours).",
+		description: "You can unlock a milestone",
 		cost: new Decimal(50),
 		unlocked(){
 		return hasUpgrade("$",12)
