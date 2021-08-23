@@ -1,8 +1,8 @@
 let modInfo = {
-	name: "游戏树",
+	name: "The Game Tree",
 	id: "mymod",
-	author: "辉影神秘（mysterious_124）",
-	pointsName: "时间",
+	author: "mysterious_124",
+	pointsName: "time",
 	modFiles: ["layers.js", "tree.js"],
 
 	discordName: "",
@@ -17,14 +17,14 @@ let VERSION = {
 	name: "Literally nothing",
 }
 
-let changelog = `<h1>更新日志:</h1><br>
-<h2>虚拟与现实？</h2><br>
+let changelog = `<h1>Changelog:</h1><br>
+<h2>Virtual and reality?</h2><br>
 	<h3>v0.1.1</h3><br>
-	    - “w”价格公式放缓，“原木！”，“游戏树真的太棒了（强调）！”公式得到了改进 <br>
-		- “w”层新增2个升级<br>
+	    - "w" The price formula has slowed down, and the "wood", "The Game Tree is AWESOME!" formula has been improved <br>
+		- Added two upgrades in "w"<br>
 	<h3>v0.1</h3><br>
-		- 增加 “$”层。<br>
-		- 增加 “w”层。`
+		- Added $.<br>
+		- Added w.`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
