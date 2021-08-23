@@ -158,7 +158,7 @@ addLayer("w", {
 		clickables: {
 		11: {
 		getClickableState(layer){
-		if ("w" >= 3)
+		if ("w" >= 3){}
 		},
         display() {return "3wood -> 2$"},
 		unlocked(){
