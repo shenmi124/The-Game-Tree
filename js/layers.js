@@ -68,12 +68,12 @@ addLayer("$", {
 		0: {
         requirementDescription: "75$",
         effectDescription: "Get 1% $ every second",
-        done() { return player.$.points.gte(75) },
-		unlocked(){
-		return hasUpgrade("$",21)
+		unlocked(){return hasUpgrade("$",21)},
+        done() {
+		return player.$.points.gte(75) && hasUpgrade("$",21)},
 		},
 		},
-		}
+		passiveGeneration() { return hasMilestone("$", 0)?0.05:0 },
 })
 
 
@@ -88,7 +88,7 @@ addLayer("w", {
     color: "#FF8000",
     requires: new Decimal(5), 
     resource: "wood",
-    baseResource: "wood", 
+    baseResource: "time", 
     baseAmount() {return player.points},
     type: "normal",
     exponent: 0.55,
@@ -157,7 +157,8 @@ addLayer("w", {
 		},
 		clickables: {
 		11: {
-        display() {return "3wood -> 2$"},
+        display() {return "10wood -> 3$"},
+		cost: new Decimal(10),
 		unlocked(){
 		return hasUpgrade("w",15)
 		},
