@@ -13,12 +13,16 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1.1",
+	num: "0.1.2",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Virtual and reality?</h2><br>
+	<h3>v0.1.2</h3><br>
+		- "too much!" has an butten, but cannot be clicked
+		- Fix "Crafts" bug and made a numerical modification
+		- Added one upgrades&milestones in "$"<br>
 	<h3>v0.1.1</h3><br>
 	    - "w" The price formula has slowed down, and the "wood", "The Game Tree is AWESOME!" formula has been improved <br>
 		- Added two upgrades in "w"<br>

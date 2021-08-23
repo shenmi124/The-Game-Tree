@@ -4,7 +4,7 @@ addLayer("$", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-		points: new Decimal(0),
+		points: new Decimal(114514),
     }},
     color: "#FFFF6F",
     requires: new Decimal(10), // Can be a function that takes requirement increases into account
@@ -55,7 +55,25 @@ addLayer("$", {
 			return hasUpgrade("$",13)
 		},
 		},
+		21:{
+		title: "Investment is risky",
+		description: "You can buy a new bed to Improve sleep quality (sleep time 9 hours> 6 hours).",
+		cost: new Decimal(50),
+		unlocked(){
+		return hasUpgrade("$",12)
 		},
+		},
+		},
+		milestones: {
+		0: {
+        requirementDescription: "75$",
+        effectDescription: "Get 1% $ every second",
+        done() { return player.$.points.gte(75) },
+		unlocked(){
+		return hasUpgrade("$",21)
+		},
+		},
+		}
 })
 
 
@@ -65,12 +83,12 @@ addLayer("w", {
     position: 0,
     startData() { return {
         unlocked: true,
-		points: new Decimal(0),
+		points: new Decimal(114514),
     }},
     color: "#FF8000",
     requires: new Decimal(5), 
     resource: "wood",
-    baseResource: "time", 
+    baseResource: "wood", 
     baseAmount() {return player.points},
     type: "normal",
     exponent: 0.55,
@@ -92,14 +110,15 @@ addLayer("w", {
 		description: "You got wood, which makes you feel excited, you want to spend more time playing this game",
 		cost: new Decimal(5),
 		effect() {
-        return player[this.layer].points.add(1).pow(0.05)
-		if (hasUpgrade("w", 12)) eff = eff.pow(1.5);
+        let eff = player[this.layer].points.add(1).pow(0.05)
+		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.1);
+		return eff
 		},
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 		},
 		12:{
 		title: "Crafts",
-		description: "The effect of up, down, left, and right directions is 1.5 power",
+		description: "The effect in the up, down, left, and right directions is increased by the power of 0.05",
 		cost: new Decimal(20),
 		unlocked(){
 		return hasUpgrade("w",13)
@@ -113,8 +132,9 @@ addLayer("w", {
 		return hasUpgrade("w",11)
 		},
 		effect() {
-        return player[this.layer].points.add(1).pow(0.05)
-		if (hasUpgrade("w", 12)) eff = eff.pow(1.5);
+        let eff = player[this.layer].points.add(1).pow(0.05)
+		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.1);
+		return eff
 		},
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 		},
@@ -135,4 +155,15 @@ addLayer("w", {
 		},
 		},
 		},
+		clickables: {
+		11: {
+		getClickableState(layer){
+		if ("w" >= 3)
+		},
+        display() {return "3wood -> 2$"},
+		unlocked(){
+		return hasUpgrade("w",15)
+		},
+		},
+		}
 })
