@@ -1,6 +1,6 @@
 let modInfo = {
 	name: "The Game Tree",
-	id: "mymod",
+	id: "Gamemod",
 	author: "mysterious_124",
 	pointsName: "time",
 	modFiles: ["layers.js", "tree.js"],
