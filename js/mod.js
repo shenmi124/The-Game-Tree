@@ -13,12 +13,17 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.2",
+	num: "0.2.1",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Getting an Upgrade</h2><br>
+	<h3>v0.2.1</h3><br>
+		- 10wood -> 3$ effect modification<br>
+		- Added s0milestone & one challenge in "s"<br>
+		- Added one upgrades in "w"<br>
+		- Modify a series of w upgrade costs<br>
 	<h3>v0.2</h3><br>
 		- Added s.<br>
 		- $0milestone effectDescription correction<br>
@@ -66,7 +71,7 @@ function getPointGen() {
 	if (hasUpgrade('$', 13)) gain = new Decimal(0.75)
 	if (hasUpgrade('$', 13)) gain = new Decimal(0.875)
 	if (hasUpgrade('w', 11)) gain = gain.times(upgradeEffect('w', 11))
-	if (hasUpgrade('w', 13)) gain = gain.times(upgradeEffect('w', 13))
+	if(inChallenge('s',11)) gain = gain.mul(0.3)
 	return gain
 }
 

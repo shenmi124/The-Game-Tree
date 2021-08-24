@@ -115,15 +115,17 @@ addLayer("w", {
 		description: "You got wood, which makes you feel excited, you want to spend more time playing this game",
 		cost: new Decimal(5),
 		effect() {
-        let eff = player[this.layer].points.add(1).pow(0.1)
+        let eff = player[this.layer].points.add(1).pow(0.10)
 		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.15);
+		if (hasUpgrade('w', 13)) eff = eff.times(upgradeEffect('w', 13));
+		if (hasUpgrade('w', 21)) eff = eff.times(upgradeEffect('w', 21));
 		return eff
 		},
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 		},
 		12:{
 		title: "Crafts",
-		description: "The effect in the up, down, left, and right directions is increased by the power of 0.05",
+		description: "The upgrade effect in the up, down, left, and right directions is increased by the power of 0.05",
 		cost: new Decimal(20),
 		unlocked(){
 		return hasUpgrade("w",13)
@@ -131,14 +133,15 @@ addLayer("w", {
 		},
 		13:{
 		title: "The Game Tree is AWESOME!",
-		description: "“wood” again" ,
-		cost: new Decimal(15),
+		description: "Strengthen “wood”" ,
+		cost: new Decimal(10),
 		unlocked(){
 		return hasUpgrade("w",11)
 		},
 		effect() {
-        let eff = player[this.layer].points.add(1).pow(0.1)
-		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.15);
+        let eff = player[this.layer].points.add(1).pow(0.01)
+		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.06);
+		if (hasUpgrade('w', 21)) eff = eff.times(upgradeEffect('w', 21));
 		return eff
 		},
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
@@ -146,7 +149,7 @@ addLayer("w", {
 		14:{
 		title: "Only used three times",
 		description: "Make wooden_pickaxe",
-		cost: new Decimal(new Decimal("50")),
+		cost: new Decimal(new Decimal("30")),
 		unlocked(){
 		return hasUpgrade("w",13)
 		},
@@ -159,10 +162,23 @@ addLayer("w", {
 		return hasUpgrade("w",13)
 		},
 		},
+		21:{
+		title: "too too much!",
+		description: "Strengthen “wood” & ”The Game Tree is AWESOME!“",
+				effect() {
+        let eff = player[this.layer].points.add(1).pow(0.03)
+		return eff
+		},
+				effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
+		cost: new Decimal (150),
+		unlocked(){
+		return hasChallenge("s",11)
+		},
+		},
 		},
 		clickables: {
 		11: {
-        display() {return "10wood -> 3$"},
+        display() {return "5wood -> 2$"},
 		cost: new Decimal(10),
 		unlocked(){
 		return hasUpgrade("w",15)
@@ -173,13 +189,12 @@ addLayer("w", {
 		return true
 		},
 		onClick(){
-		player.w.points = player.w.points.sub(10)
-		player.$.points = player.$.points.add(3)
+		player.w.points = player.w.points.sub(5)
+		player.$.points = player.$.points.add(2)
 		},
 		},
 		},
 })
-
 
 
 addLayer("s", {
@@ -210,4 +225,22 @@ addLayer("s", {
         {key: "s", description: "s: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return player[this.layer].unlocked || (hasUpgrade("w",14))},
+			milestones: {
+		0: {
+			requirementDescription: "1stone",
+			effectDescription: "Unlock a new challenge",
+		done() {
+			return player.s.points.gte(1)},
+		},
+		},
+			challenges: {
+		11: {
+			name: "No wood in the mine",
+			challengeDescription: "This makes you negative, the Time acquisition is only 30%",
+			unlocked() { return hasMilestone("s",0) },
+			canComplete: function() {return player.w.points.gte(50)},
+			goalDescription:"50 wood",
+			rewardDescription: "Unlock a new wood upgrade",
+			},
+		}
 })
