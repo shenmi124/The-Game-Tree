@@ -13,6 +13,10 @@ addLayer("$", {
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 0, // Prestige currency exponent
+	position:0,
+		doReset(resettingLayer) {
+            layerDataReset(this.layer ,["upgrades","points","best", "total", "upgrades"])
+		},
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -67,7 +71,7 @@ addLayer("$", {
 		milestones: {
 		0: {
         requirementDescription: "75$",
-        effectDescription: "Get 1% $ every second",
+        effectDescription: "Get 5% $ every second",
 		unlocked(){return hasUpgrade("$",21)},
         done() {
 		return player.$.points.gte(75) && hasUpgrade("$",21)},
@@ -80,7 +84,7 @@ addLayer("$", {
 addLayer("w", {
     name: "wood",
     symbol: "V-W",
-    position: 0,
+    position: 1,
     startData() { return {
         unlocked: true,
 		points: new Decimal(0),
@@ -92,6 +96,7 @@ addLayer("w", {
     baseAmount() {return player.points},
     type: "normal",
     exponent: 0.55,
+	position:0,
     gainMult() {
         mult = new Decimal(1)
         return mult
@@ -140,7 +145,7 @@ addLayer("w", {
 		},
 		14:{
 		title: "Only used three times",
-		description: "Make wood_pickaxe",
+		description: "Make wooden_pickaxe",
 		cost: new Decimal(new Decimal("50")),
 		unlocked(){
 		return hasUpgrade("w",13)
@@ -163,8 +168,8 @@ addLayer("w", {
 		return hasUpgrade("w",15)
 		},
 		canClick() {
-		let w = player[this.layer].points
-		if (w >= 10) 
+		let wc = player[this.layer].points
+		if (wc >= 10) 
 		return true
 		},
 		onClick(){
@@ -173,4 +178,36 @@ addLayer("w", {
 		},
 		},
 		},
+})
+
+
+
+addLayer("s", {
+    name: "stone",
+    symbol: "V-S",
+    position: 0,
+    startData() { return {
+        unlocked:false,
+		points: new Decimal(0),
+    }},
+    color: "#ADADAD",
+    requires:new Decimal(30),
+    resource: "stone",
+    baseResource: "wood", 
+    baseAmount() {return player.w.points},
+    type: "normal",
+    exponent: 0.5,
+	branches: ["w"],
+    gainMult() {
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { 
+        return new Decimal(1)
+    },
+    row: 1, 
+    hotkeys: [
+        {key: "s", description: "s: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return player[this.layer].unlocked || (hasUpgrade("w",14))},
 })
