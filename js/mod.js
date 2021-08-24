@@ -22,7 +22,6 @@ let changelog = `<h1>Changelog:</h1><br>
 	<h3>v0.2</h3><br>
 		- Added s.<br>
 		- $0milestone effectDescription correction<br>
-		- Only used three times<br>
 <h2>Virtual and reality?</h2><br>
 	<h3>v0.1.3.2</h3><br>
 		- "w" upgrades 11&12 index +0.5<br>
