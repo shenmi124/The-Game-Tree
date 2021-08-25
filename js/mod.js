@@ -13,14 +13,19 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.2.1",
+	num: "0.2.2",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Getting an Upgrade</h2><br>
+	<h3>v0.2.2</h3><br>
+		- Added one upgrades in "$"<br>
+		- Modify a series of data<br>
+		- Added one challenge in "s"<br>
+		- Fix the bug “10wood -> 3$” cannot be purchased before 10wood<br>
 	<h3>v0.2.1</h3><br>
-		- 10wood -> 3$ effect modification<br>
+		- “10wood -> 3$” effect modification<br>
 		- Added s0milestone & one challenge in "s"<br>
 		- Added one upgrades in "w"<br>
 		- Modify a series of w upgrade costs<br>
@@ -67,11 +72,13 @@ function getPointGen() {
 		return new Decimal(0)
 	
 	let gain = new Decimal(0.5)
-	if (hasUpgrade('$', 12)) gain = new Decimal(0.6)
-	if (hasUpgrade('$', 13)) gain = new Decimal(0.75)
-	if (hasUpgrade('$', 13)) gain = new Decimal(0.875)
-	if (hasUpgrade('w', 11)) gain = gain.times(upgradeEffect('w', 11))
-	if(inChallenge('s',11)) gain = gain.mul(0.3)
+		if (hasUpgrade('$', 12)) gain = new Decimal(0.6)
+		if (hasUpgrade('$', 13)) gain = new Decimal(0.75)
+		if (hasUpgrade('$', 13)) gain = new Decimal(0.875)
+		if (hasUpgrade('w', 11)) gain = gain.times(upgradeEffect('w', 11))
+		if (hasUpgrade('s',11)) gain = gain.mul(1.5)
+		if (inChallenge('s',11)) gain = gain.mul(0.3)
+		if (inChallenge('s',12)) gain = gain.mul(0.3)
 	return gain
 }
 

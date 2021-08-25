@@ -62,19 +62,47 @@ addLayer("$", {
 		21:{
 		title: "Investment is risky",
 		description: "You can unlock a milestone",
-		cost: new Decimal(50),
+		cost: new Decimal(25),
 		unlocked(){
 		return hasUpgrade("$",12)
+		},
+		},
+		22:{
+			title: "too much?",
+			description: "You can buy some woods",
+			cost: new Decimal(30),
+		unlocked(){
+			return hasUpgrade("$",13)
 		},
 		},
 		},
 		milestones: {
 		0: {
-        requirementDescription: "75$",
+        requirementDescription: "50$",
         effectDescription: "Get 5% $ every second",
 		unlocked(){return hasUpgrade("$",21)},
         done() {
-		return player.$.points.gte(75) && hasUpgrade("$",21)},
+		return player.$.points.gte(50) && hasUpgrade("$",21)},
+		},
+		},
+				clickables: {
+		11: {
+        display() {return "3$ -> 5wood"},
+		cost: new Decimal(10),
+		unlocked(){
+		return hasUpgrade("$",22)
+		},
+		canClick() {
+		let $c = player[this.layer].points
+		if ($c >= 3) 
+		if (!inChallenge('s',11))
+		if (!inChallenge('s',12))
+		return true
+		},
+		onClick(){
+		player.$.points = player.$.points.sub(3)
+		player.w.points = player.w.points.add(5)
+		},
 		},
 		},
 		passiveGeneration() { return hasMilestone("$", 0)?0.05:0 },
@@ -87,7 +115,7 @@ addLayer("w", {
     position: 1,
     startData() { return {
         unlocked: true,
-		points: new Decimal(0),
+		points: new Decimal(1000),
     }},
     color: "#FF8000",
     requires: new Decimal(5), 
@@ -95,14 +123,18 @@ addLayer("w", {
     baseResource: "time", 
     baseAmount() {return player.points},
     type: "normal",
-    exponent: 0.55,
+    exponent: 0.5,
 	position:0,
     gainMult() {
-        mult = new Decimal(1)
+        let mult = new Decimal(1)
+		if(inChallenge('s',12)) mult = mult.mul(0.5)
         return mult
     },
     gainExp() { 
-        return new Decimal(1)
+		let exp = new Decimal(1)
+		if(hasMilestone('s',0)) exp = exp.mul(1.5)
+		if(hasUpgrade("s" ,12)) exp = exp.add(0.5)
+        return exp
     },
     row: 0, 
     hotkeys: [
@@ -115,8 +147,8 @@ addLayer("w", {
 		description: "You got wood, which makes you feel excited, you want to spend more time playing this game",
 		cost: new Decimal(5),
 		effect() {
-        let eff = player[this.layer].points.add(1).pow(0.10)
-		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.15);
+        let eff = player[this.layer].points.add(1).pow(0.15)
+		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.2);
 		if (hasUpgrade('w', 13)) eff = eff.times(upgradeEffect('w', 13));
 		if (hasUpgrade('w', 21)) eff = eff.times(upgradeEffect('w', 21));
 		return eff
@@ -149,15 +181,15 @@ addLayer("w", {
 		14:{
 		title: "Only used three times",
 		description: "Make wooden_pickaxe",
-		cost: new Decimal(new Decimal("30")),
+		cost: new Decimal(new Decimal("20")),
 		unlocked(){
 		return hasUpgrade("w",13)
 		},
 		},
 		15:{
 		title: "too much!",
-		description: "You can sell your woods(not made)",
-		cost: new Decimal (50),
+		description: "You can sell your woods",
+		cost: new Decimal (30),
 		unlocked(){
 		return hasUpgrade("w",13)
 		},
@@ -170,7 +202,7 @@ addLayer("w", {
 		return eff
 		},
 				effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
-		cost: new Decimal (150),
+		cost: new Decimal (50),
 		unlocked(){
 		return hasChallenge("s",11)
 		},
@@ -185,7 +217,7 @@ addLayer("w", {
 		},
 		canClick() {
 		let wc = player[this.layer].points
-		if (wc >= 10) 
+		if (wc >= 5) 
 		return true
 		},
 		onClick(){
@@ -228,7 +260,7 @@ addLayer("s", {
 			milestones: {
 		0: {
 			requirementDescription: "1stone",
-			effectDescription: "Unlock a new challenge",
+			effectDescription: "Unlock a new challenge & wood consumption divided by 1.5",
 		done() {
 			return player.s.points.gte(1)},
 		},
@@ -238,9 +270,29 @@ addLayer("s", {
 			name: "No wood in the mine",
 			challengeDescription: "This makes you negative, the Time acquisition is only 30%",
 			unlocked() { return hasMilestone("s",0) },
-			canComplete: function() {return player.w.points.gte(50)},
-			goalDescription:"50 wood",
+			canComplete: function() {return player.w.points.gte(35)},
+			goalDescription:"35 wood",
 			rewardDescription: "Unlock a new wood upgrade",
 			},
-		}
+		12: {
+			name: "No wood in the mine2.0",
+			challengeDescription: "This makes you negative, the Time acquisition is only 30%, the Wood base is *4",
+			unlocked() { return hasChallenge("s",11) },
+			canComplete: function() {return player.w.points.gte(35)},
+			goalDescription:"35 wood",
+			rewardDescription: "Unlock two new wood upgrade",
+			},
+			},
+			upgrades:{
+		11:{
+			title: "stone!",
+			description: "You got stone, which makes you feel excited, you want to spend more time playing this game (Time acquisition is 150%)",
+			cost: new Decimal(1),
+		},
+		12:{
+			title: "axe",
+			description: "Make stone_axe (Improve wood acquisition)",
+			cost: new Decimal(30),
+		},
+			}
 })
