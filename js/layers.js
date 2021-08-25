@@ -118,7 +118,11 @@ addLayer("w", {
 		points: new Decimal(0),
     }},
     color: "#FF8000",
-    requires: new Decimal(5), 
+    requires:function (){
+		let wr = new Decimal(5);
+		if (hasUpgrade('w',22)) wr = wr.sub(1)
+		return wr
+	},
     resource: "wood",
     baseResource: "time", 
     baseAmount() {return player.points},
@@ -127,13 +131,14 @@ addLayer("w", {
 	position:0,
     gainMult() {
         let mult = new Decimal(1)
-		if(inChallenge('s',12)) mult = mult.mul(0.5)
+			if(inChallenge('s',12)) mult = mult.mul(0.5)
+			if(inChallenge('s',21)) mult = mult.mul(0.5)
         return mult
     },
     gainExp() { 
 		let exp = new Decimal(1)
-		if(hasMilestone('s',0)) exp = exp.mul(1.5)
-		if(hasUpgrade("s" ,12)) exp = exp.add(0.5)
+			if(hasMilestone('s',0)) exp = exp.mul(1.5)
+			if(hasUpgrade("s" ,12)) exp = exp.add(0.5)
         return exp
     },
     row: 0, 
@@ -207,11 +212,26 @@ addLayer("w", {
 		return hasChallenge("s",11)
 		},
 		},
+		22:{
+		title: "fast!",
+		description: "wood requires -1",
+		cost: new Decimal (50),
+		unlocked(){
+		return hasChallenge("s",12)
+		},
+		},
+		23:{
+		title: "Really too much!",
+		description: "You can sell your woods, but more cost-effective",
+		cost: new Decimal (77),
+		unlocked(){
+		return hasChallenge("s",12)
+		},
+		},
 		},
 		clickables: {
 		11: {
         display() {return "5wood -> 2$"},
-		cost: new Decimal(10),
 		unlocked(){
 		return hasUpgrade("w",15)
 		},
@@ -223,6 +243,21 @@ addLayer("w", {
 		onClick(){
 		player.w.points = player.w.points.sub(5)
 		player.$.points = player.$.points.add(2)
+		},
+		},
+		12: {
+        display() {return "25wood -> 13$"},
+		unlocked(){
+		return hasUpgrade("w",23)
+		},
+		canClick() {
+		let wc = player[this.layer].points
+		if (wc >= 25) 
+		return true
+		},
+		onClick(){
+		player.w.points = player.w.points.sub(25)
+		player.$.points = player.$.points.add(13)
 		},
 		},
 		},
@@ -281,6 +316,14 @@ addLayer("s", {
 			canComplete: function() {return player.w.points.gte(35)},
 			goalDescription:"35 wood",
 			rewardDescription: "Unlock two new wood upgrade",
+			},
+		21: {
+			name: "No wood in the mine3.0",
+			challengeDescription: "This makes you negative, the Time acquisition is only 20%, the Wood base is *4",
+			unlocked() { return hasChallenge("s",12) },
+			canComplete: function() {return player.s.points.gte(35)},
+			goalDescription:"35 stone",
+			rewardDescription: "Unlock two new row",
 			},
 			},
 			upgrades:{

@@ -13,14 +13,17 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.2.2",
+	num: "0.2.3",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Getting an Upgrade</h2><br>
+	<h3>v0.2.3</h3><br>
+		- Added two upgrades in "w"<br>
+		- Added one challenge in "s"<br>
 	<h3>v0.2.2</h3><br>
-		- Added one upgrades in "$"<br>
+		- Added one upgrade in "$"<br>
 		- Modify a series of data<br>
 		- Added one challenge in "s"<br>
 		- Fix the bug “10wood -> 3$” cannot be purchased before 10wood<br>
@@ -79,6 +82,7 @@ function getPointGen() {
 		if (hasUpgrade('s',11)) gain = gain.mul(1.5)
 		if (inChallenge('s',11)) gain = gain.mul(0.3)
 		if (inChallenge('s',12)) gain = gain.mul(0.3)
+		if (inChallenge('s',21)) gain = gain.mul(0.2)
 	return gain
 }
 
