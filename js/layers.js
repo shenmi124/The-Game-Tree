@@ -84,6 +84,7 @@ addLayer("$", {
         done() {
 		return player.$.points.gte(50) && hasUpgrade("$",21)},
 		},
+		
 		},
 				clickables: {
 		11: {
@@ -153,17 +154,17 @@ addLayer("w", {
 		description: "You got wood, which makes you feel excited, you want to spend more time playing this game",
 		cost: new Decimal(5),
 		effect() {
-        let eff = player[this.layer].points.add(1).pow(0.15)
-		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.2);
-		if (hasUpgrade('w', 13)) eff = eff.times(upgradeEffect('w', 13));
-		if (hasUpgrade('w', 21)) eff = eff.times(upgradeEffect('w', 21));
-		return eff
+			let eff = player[this.layer].points.add(1).pow(0.15)
+			if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.2);
+			if (hasUpgrade('w', 13)) eff = eff.times(upgradeEffect('w', 13));
+			if (hasUpgrade('w', 21)) eff = eff.times(upgradeEffect('w', 21));
+			return eff
 		},
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 		},
 		12:{
 		title: "Crafts",
-		description: "The upgrade effect in the up, down, left, and right directions is increased by the power of 0.05",
+		description: "The upgrade effect in the left and right directions is increased by the power of 0.05",
 		cost: new Decimal(20),
 		unlocked(){
 		return hasUpgrade("w",13)
@@ -171,7 +172,7 @@ addLayer("w", {
 		},
 		13:{
 		title: "The Game Tree is AWESOME!",
-		description: "Strengthen “wood”" ,
+		description: "Strengthen “wood!”" ,
 		cost: new Decimal(10),
 		unlocked(){
 		return hasUpgrade("w",11)
@@ -203,14 +204,14 @@ addLayer("w", {
 		21:{
 		title: "too too much!",
 		description: "Strengthen “wood” & ”The Game Tree is AWESOME!“",
-				effect() {
-        let eff = player[this.layer].points.add(1).pow(0.03)
-		return eff
+		effect() {
+			let eff = player[this.layer].points.add(1).pow(0.03)
+			return eff
 		},
-				effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
+			effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 		cost: new Decimal (50),
 		unlocked(){
-		return hasChallenge("s",11)
+			return hasChallenge("s",11)
 		},
 		},
 		22:{
@@ -218,7 +219,7 @@ addLayer("w", {
 		description: "wood requires -1",
 		cost: new Decimal (50),
 		unlocked(){
-		return hasChallenge("s",12)
+			return hasChallenge("s",12)
 		},
 		},
 		23:{
@@ -226,8 +227,34 @@ addLayer("w", {
 		description: "You can sell your woods, but more cost-effective",
 		cost: new Decimal (77),
 		unlocked(){
-		return hasChallenge("s",12)
+			return hasChallenge("s",12)
 		},
+		},
+		24:{
+		title: "Soon",
+		description: "Each wood upgrade will increase the production Time by 0.05 times",
+		cost: new Decimal (99),
+		unlocked(){
+			return hasChallenge("s",14)
+		},
+		effect() {
+			let eff = player.w.upgrades.length * 0.05 + 1
+			return eff
+		},
+		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
+		},
+		25:{
+		title: "The End?",
+		description: "keep wood upgrade",
+		cost: new Decimal (200),
+		unlocked(){
+			return hasChallenge("s",13)
+		},
+		effect() {
+			let eff = player.w.upgrades.length * 0.05 + 1
+			return eff
+		},
+		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 		},
 		},
 		clickables: {
@@ -320,11 +347,19 @@ addLayer("s", {
 			},
 		21: {
 			name: "No wood in the mine3.0",
-			challengeDescription: "This makes you negative, the Time acquisition is only 20%, the Wood base is *4",
+			challengeDescription: "This makes you negative, the Time acquisition is only 30%, the Wood base is *4",
 			unlocked() { return hasChallenge("s",12) },
 			canComplete: function() {return player.w.points.gte(100)},
 			goalDescription:"100 wood",
-			rewardDescription: "Unlock two new row",
+			rewardDescription: "Unlock two new wood upgrade",
+			},
+		22: {
+			name: "No wood in the mine4.0",
+			challengeDescription: "This makes you negative, the Time acquisition is only 5%, the Wood base is *4",
+			unlocked() { return hasChallenge("s",13) },
+			canComplete: function() {return player.w.points.gte(100)},
+			goalDescription:"100 wood",
+			rewardDescription: "Unlock new row",
 			},
 			},
 			upgrades:{

@@ -13,12 +13,17 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.2.3.1",
+	num: "0.2.4.1",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Getting an Upgrade</h2><br>
+	<h3>v0.2.4.1</h3><br>
+		- Modify a series of values<br>
+		- Added one challenge in "s"<br>
+		- Modify s21challenge effect<br>
+		- Added two upgrades in "w"<br>
 	<h3>v0.2.3.1</h3><br>
 		- Fix the bug
 	<h3>v0.2.3</h3><br>
@@ -81,10 +86,12 @@ function getPointGen() {
 		if (hasUpgrade('$', 13)) gain = new Decimal(0.75)
 		if (hasUpgrade('$', 13)) gain = new Decimal(0.875)
 		if (hasUpgrade('w', 11)) gain = gain.times(upgradeEffect('w', 11))
+		if (hasUpgrade('w', 24)) gain = gain.times(upgradeEffect('w', 24))
 		if (hasUpgrade('s',11)) gain = gain.mul(1.5)
 		if (inChallenge('s',11)) gain = gain.mul(0.3)
 		if (inChallenge('s',12)) gain = gain.mul(0.3)
-		if (inChallenge('s',21)) gain = gain.mul(0.2)
+		if (inChallenge('s',21)) gain = gain.mul(0.3)
+		if (inChallenge('s',22)) gain = gain.mul(0.05)
 	return gain
 }
 
