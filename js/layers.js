@@ -97,6 +97,7 @@ addLayer("$", {
 		if ($c >= 3) 
 		if (!inChallenge('s',11))
 		if (!inChallenge('s',12))
+		if (!inChallenge('s',13))
 		return true
 		},
 		onClick(){
@@ -321,8 +322,8 @@ addLayer("s", {
 			name: "No wood in the mine3.0",
 			challengeDescription: "This makes you negative, the Time acquisition is only 20%, the Wood base is *4",
 			unlocked() { return hasChallenge("s",12) },
-			canComplete: function() {return player.s.points.gte(35)},
-			goalDescription:"35 stone",
+			canComplete: function() {return player.w.points.gte(100)},
+			goalDescription:"100 wood",
 			rewardDescription: "Unlock two new row",
 			},
 			},
@@ -339,3 +340,4 @@ addLayer("s", {
 		},
 			}
 })
+
