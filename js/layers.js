@@ -115,7 +115,7 @@ addLayer("w", {
     position: 1,
     startData() { return {
         unlocked: true,
-		points: new Decimal(1000),
+		points: new Decimal(0),
     }},
     color: "#FF8000",
     requires: new Decimal(5), 
