@@ -1,7 +1,7 @@
 addLayer("$", {
     name: "$", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "R-$", // This appears on the layer's node. Default is the id with the first letter capitalized
-    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
 		points: new Decimal(0),
@@ -13,10 +13,10 @@ addLayer("$", {
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 0, // Prestige currency exponent
-	position:1,
 		doReset(resettingLayer) {
 			let keep = [];
 			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades");
+			if (resettingLayer=="a") keep.push("points","best","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("$", keep)
 		},
     gainMult() { // Calculate the multiplier for main currency from bonuses
@@ -117,12 +117,12 @@ addLayer("$", {
 addLayer("w", {
     name: "wood",
     symbol: "V-W",
-    position: 1,
+    position: 0,
     startData() { return {
         unlocked: true,
 		points: new Decimal(0),
     }},
-    color: "#FF8000",
+    color: "#A23400",
     requires:function (){
 		let wr = new Decimal(5);
 		if (hasUpgrade('w',22)) wr = wr.sub(1)
@@ -133,10 +133,10 @@ addLayer("w", {
     baseAmount() {return player.points},
     type: "normal",
     exponent: 0.5,
-	position:0,
 		doReset(resettingLayer) {
 			let keep = [];
 			if (hasUpgrade("w", 25)) keep.push("upgrades");
+			if (resettingLayer=="a") keep.push("points","best","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("w", keep);
 		},
     gainMult() {
@@ -380,3 +380,80 @@ addLayer("s", {
 			}
 })
 
+
+addLayer("a", {
+    name: "attack",
+    symbol: "V-A",
+    position: 1,
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+		atk: new Decimal(0),
+    }},
+    color: "#FFB5B5",
+    requires: new Decimal(10), 
+    resource: "attack",
+    baseResource: "stone", 
+    baseAmount() {return player.s.points},
+    type: "static",
+    exponent: 1,
+	base:10,
+	branches: ["b"],
+	tabFormat:["main-display",
+			"prestige-button",
+			"blank",
+			["display-text",
+				function() {return 'You hava ' + format(player.a.ATK) + " ATK"},
+					{}],
+			],
+	update(diff) {
+		if (player.a.unlocked) player.a.atk = player.a.atk.plus(diff);
+	},
+    gainMult() {
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { 
+        return new Decimal(1)
+    },
+    row: 1, 
+    hotkeys: [
+        {key: "a", description: "a: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return player[this.layer].unlocked || (hasChallenge("s",22))},
+})
+
+
+addLayer("b", {
+    name: "blood",
+    symbol: "V-B",
+    position: 0.1,
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+    }},
+    color: "#CE0000",
+    requires: new Decimal(0), 
+    resource: "blood",
+    type: "none",
+    row: 0, 
+    layerShown(){return player[this.layer].unlocked},
+})
+
+
+addLayer("c", {
+    name: "copper",
+    symbol: "V-C",
+    position: 1,
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+    }},
+    color: "#FF9224",
+    requires: new Decimal(0), 
+    resource: "copper",
+    type: "none",
+    row: 3, 
+	branches: ["s","a"],
+    layerShown(){return player[this.layer].unlocked},
+})
