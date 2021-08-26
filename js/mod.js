@@ -1,8 +1,8 @@
 let modInfo = {
-	name: "The ??? Tree",
-	id: "mymod",
+	name: "游戏树",
+	id: "Gamemod",
 	author: "nobody",
-	pointsName: "points",
+	pointsName: "时间",
 	modFiles: ["layers.js", "tree.js"],
 
 	discordName: "",
@@ -13,11 +13,15 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0",
+	num: "0.2",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>更新日志:</h1><br>
+<h2>获得升级</h2><br>
+	<h3>v0.2</h3><br>
+		- 增加 “s”层。<br>
+		- $层里程碑0效果介绍修正<br>
 <h2>虚拟与现实？</h2><br>
 	<h3>v0.1.3.2</h3><br>
 		- “w”升级11&12指数+0.5

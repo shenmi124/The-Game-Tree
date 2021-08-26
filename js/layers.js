@@ -9,10 +9,14 @@ addLayer("$", {
     color: "#FFFF6F",
     requires: new Decimal(10), // Can be a function that takes requirement increases into account
     resource: "$", // Name of prestige currency
-    baseResource: "time", // Name of resource prestige is based on
+    baseResource: "时间", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 0, // Prestige currency exponent
+	position:0,
+		doReset(resettingLayer) {
+            layerDataReset(this.layer ,["upgrades","points","best", "total", "upgrades"])
+		},
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -22,7 +26,7 @@ addLayer("$", {
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "$", description: "$: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "$", description: "$: 重置$层", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return true},
 		upgrades: {
@@ -92,6 +96,7 @@ addLayer("w", {
     baseAmount() {return player.points},
     type: "normal",
     exponent: 0.55,
+	position:0,
     gainMult() {
         mult = new Decimal(1)
         return mult
@@ -101,7 +106,7 @@ addLayer("w", {
     },
     row: 0, 
     hotkeys: [
-        {key: "w", description: "w: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "w", description: "w: 重置w层", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return true},
 		upgrades:{
@@ -173,4 +178,35 @@ addLayer("w", {
 		},
 		},
 		},
+})
+
+
+addLayer("s", {
+    name: "stone",
+    symbol: "V-S",
+    position: 0,
+    startData() { return {
+        unlocked:false,
+		points: new Decimal(0),
+    }},
+    color: "#ADADAD",
+    requires:new Decimal(30),
+    resource: "石头",
+    baseResource: "原木", 
+    baseAmount() {return player.w.points},
+    type: "normal",
+    exponent: 0.5,
+	branches: ["w"],
+    gainMult() {
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { 
+        return new Decimal(1)
+    },
+    row: 1, 
+    hotkeys: [
+        {key: "s", description: "s: 重置s层", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return player[this.layer].unlocked || (hasUpgrade("w",14))},
 })
