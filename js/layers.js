@@ -98,7 +98,8 @@ addLayer("$", {
 		if ($c >= 3) 
 		if (!inChallenge('s',11))
 		if (!inChallenge('s',12))
-		if (!inChallenge('s',13))
+		if (!inChallenge('s',21))
+		if (!inChallenge('s',22))
 		return true
 		},
 		onClick(){
@@ -135,6 +136,7 @@ addLayer("w", {
         let mult = new Decimal(1)
 			if(inChallenge('s',12)) mult = mult.mul(0.5)
 			if(inChallenge('s',21)) mult = mult.mul(0.5)
+			if(inChallenge('s',22)) mult = mult.mul(0.5)
         return mult
     },
     gainExp() { 
