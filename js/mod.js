@@ -1,6 +1,6 @@
 let modInfo = {
 	name: "The Game Tree",
-	id: "Gamemod",
+	id: "Gamemodv0.2",
 	author: "mysterious_124",
 	pointsName: "time",
 	modFiles: ["layers.js", "tree.js"],
@@ -13,12 +13,15 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.2.4.2",
+	num: "0.2.4.3",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Getting an Upgrade</h2><br>
+	<h3>v0.2.4.3</h3><br>
+		- Fix three bugs<br>
+		- Complete "w","$","s"<br>
 	<h3>v0.2.4.2</h3><br>
 		- Fix two bugs<br>
 	<h3>v0.2.4.1</h3><br>

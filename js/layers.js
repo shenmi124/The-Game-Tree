@@ -15,7 +15,9 @@ addLayer("$", {
     exponent: 0, // Prestige currency exponent
 	position:1,
 		doReset(resettingLayer) {
-            layerDataReset(this.layer ,["upgrades","points","best", "total", "upgrades"])
+			let keep = [];
+			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades");
+			if (layers[resettingLayer].row > this.row) layerDataReset("$", keep)
 		},
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
@@ -132,6 +134,11 @@ addLayer("w", {
     type: "normal",
     exponent: 0.5,
 	position:0,
+		doReset(resettingLayer) {
+			let keep = [];
+			if (hasUpgrade("w", 25)) keep.push("upgrades");
+			if (layers[resettingLayer].row > this.row) layerDataReset("w", keep);
+		},
     gainMult() {
         let mult = new Decimal(1)
 			if(inChallenge('s',12)) mult = mult.mul(0.5)
@@ -237,7 +244,7 @@ addLayer("w", {
 		description: "Each wood upgrade will increase the production Time by 0.05 times",
 		cost: new Decimal (99),
 		unlocked(){
-			return hasChallenge("s",14)
+			return hasChallenge("s",21)
 		},
 		effect() {
 			let eff = player.w.upgrades.length * 0.05 + 1
@@ -248,15 +255,10 @@ addLayer("w", {
 		25:{
 		title: "The End?",
 		description: "keep wood upgrade",
-		cost: new Decimal (200),
+		cost: new Decimal (666),
 		unlocked(){
-			return hasChallenge("s",13)
-		},
-		effect() {
-			let eff = player.w.upgrades.length * 0.05 + 1
-			return eff
-		},
-		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
+			return hasChallenge("s",21)
+		}, 
 		},
 		},
 		clickables: {
@@ -358,7 +360,7 @@ addLayer("s", {
 		22: {
 			name: "No wood in the mine4.0",
 			challengeDescription: "This makes you negative, the Time acquisition is only 5%, the Wood base is *4",
-			unlocked() { return hasChallenge("s",13) },
+			unlocked() { return hasChallenge("s",21) },
 			canComplete: function() {return player.w.points.gte(100)},
 			goalDescription:"100 wood",
 			rewardDescription: "Unlock new row",
