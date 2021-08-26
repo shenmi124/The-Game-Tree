@@ -27,7 +27,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Modify s21challenge effect<br>
 		- Added two upgrades in "w"<br>
 	<h3>v0.2.3.1</h3><br>
-		- Fix the bug
+		- Fix the bug<br>
 	<h3>v0.2.3</h3><br>
 		- Added two upgrades in "w"<br>
 		- Added one challenge in "s"<br>
@@ -53,8 +53,8 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Fix the bug that $0milestone has no effect<br>
 		- Fix the display bug of w layer purchase<br>
 	<h3>v0.1.2</h3><br>
-		- "too much!" has an butten, but cannot be clicked
-		- Fix "Crafts" bug and made a numerical modification
+		- "too much!" has an butten, but cannot be clicked<br>
+		- Fix "Crafts" bug and made a numerical modification<br>
 		- Added one upgrades&milestones in "$"<br>
 	<h3>v0.1.1</h3><br>
 	    - "w" The price formula has slowed down, and the "wood", "The Game Tree is AWESOME!" formula has been improved <br>
