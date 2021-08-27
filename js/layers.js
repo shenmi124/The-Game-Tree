@@ -17,6 +17,7 @@ addLayer("$", {
 			let keep = [];
 			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades");
 			if (resettingLayer=="a") keep.push("points","best","total","milestones","upgrades");
+			if (resettingLayer=="bm") keep.push("points","best","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("$", keep)
 		},
     gainMult() { // Calculate the multiplier for main currency from bonuses
@@ -28,7 +29,7 @@ addLayer("$", {
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "$", description: "$: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "$", description: "$: Reset for $ points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return true},
 		upgrades: {
@@ -136,6 +137,7 @@ addLayer("w", {
 			let keep = [];
 			if (hasUpgrade("w", 25)) keep.push("upgrades");
 			if (resettingLayer=="a") keep.push("points","best","total","milestones","upgrades");
+			if (resettingLayer=="bm") keep.push("points","best","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("w", keep);
 		},
     gainMult() {
@@ -153,7 +155,7 @@ addLayer("w", {
     },
     row: 0, 
     hotkeys: [
-        {key: "w", description: "w: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "w", description: "w: Reset for w points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return true},
 		upgrades:{
@@ -320,7 +322,7 @@ addLayer("s", {
     },
     row: 1, 
     hotkeys: [
-        {key: "s", description: "s: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "s", description: "s: Reset for s points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return player[this.layer].unlocked || (hasUpgrade("w",14))},
 			milestones: {
@@ -334,7 +336,7 @@ addLayer("s", {
 			challenges: {
 		11: {
 			name: "No wood in the mine",
-			challengeDescription: "This makes you negative, the Time acquisition is only 30%",
+			challengeDescription: "This makes you negative, the Time acquisition is only 55%",
 			unlocked() { return hasMilestone("s",0) },
 			canComplete: function() {return player.w.points.gte(35)},
 			goalDescription:"35 wood",
@@ -342,7 +344,7 @@ addLayer("s", {
 			},
 		12: {
 			name: "No wood in the mine2.0",
-			challengeDescription: "This makes you negative, the Time acquisition is only 30%, the Wood base is *4",
+			challengeDescription: "This makes you negative, the Time acquisition is only 45%, the Wood base is *4",
 			unlocked() { return hasChallenge("s",11) },
 			canComplete: function() {return player.w.points.gte(35)},
 			goalDescription:"35 wood",
@@ -350,7 +352,7 @@ addLayer("s", {
 			},
 		21: {
 			name: "No wood in the mine3.0",
-			challengeDescription: "This makes you negative, the Time acquisition is only 30%, the Wood base is *4",
+			challengeDescription: "This makes you negative, the Time acquisition is only 35%, the Wood base is *4",
 			unlocked() { return hasChallenge("s",12) },
 			canComplete: function() {return player.w.points.gte(100)},
 			goalDescription:"100 wood",
@@ -358,17 +360,17 @@ addLayer("s", {
 			},
 		22: {
 			name: "No wood in the mine4.0",
-			challengeDescription: "This makes you negative, the Time acquisition is only 5%, the Wood base is *4",
+			challengeDescription: "This makes you negative, the Time acquisition is only 25%, the Wood base is *4",
 			unlocked() { return hasChallenge("s",21) },
-			canComplete: function() {return player.w.points.gte(100)},
-			goalDescription:"100 wood",
+			canComplete: function() {return player.w.points.gte(200)},
+			goalDescription:"200 wood",
 			rewardDescription: "Unlock three new rows",
 			},
 			},
 			upgrades:{
 		11:{
 			title: "stone!",
-			description: "You got stone, which makes you feel excited, you want to spend more time playing this game (Time acquisition is 150%)",
+			description: "You got stone, which makes you feel excited, you want to spend more time playing this game (Time acquisition is 175%)",
 			cost: new Decimal(1),
 		},
 		12:{
@@ -390,7 +392,7 @@ addLayer("a", {
 		atk: new Decimal(0),
     }},
     color: "#FFB5B5",
-    requires: new Decimal(10), 
+    requires: new Decimal(1), 
     resource: "attack",
     baseResource: "stone", 
     baseAmount() {return player.s.points},
@@ -410,60 +412,112 @@ addLayer("a", {
     },
     row: 1, 
     hotkeys: [
-        {key: "a", description: "a: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "a", description: "a: Reset for a points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return player[this.layer].unlocked || (hasChallenge("s",22))},
 		clickables: {
 			11: {
-			display() {return  'You hava ' + format(player.a.atk) + " ATK <br> You get " + format(player.a.points.pow(2))+ "/sec"},
+				display() {return  'You hava ' + format(player.a.atk) + " ATK <br> You get " + format(player.a.points.pow(2))+ "/sec"},
 			},
 			21: {
-			title:"kill it! *1 ",
-			display() {return  "- 100 ATK<br>get 0~100 blood<br>0.1% get copper"},
-			canClick() {
-				let ac = player.a.atk
-				if (ac >= 100) 
-				return true
+				title:"kill it! *1 ",
+				display() {return  "- 100 ATK<br>get 0~100 blood<br>0.1% get copper"},
+				canClick() {
+					let ac = player.a.atk
+					if (ac >= 100) 
+					return true
+					},
+				onClick(){
+					let bm = Math.floor(Math.random() * 101)
+					let cm = Math.floor(Math.random() * 1000)
+					player.a.atk = player.a.atk.sub(100)
+					player.b.points = player.b.points.add(bm);
+					if (cm == 0) {player.c.points = player.c.points.add(1)};
 				},
-			onClick(){
-				let bm = Math.floor(Math.random() * 101)
-				let cm = Math.floor(Math.random() * 1000)
-				player.a.atk = player.a.atk.sub(100)
-				player.b.points = player.b.points.add(bm);
-				if (cm == 0) {player.c.points = player.c.points.add(1)};
-			},
 			},
 			22: {
-			title:"kill it! *10 ",
-			display() {return  "- 1000 ATK<br>get 0~1000 blood<br>1% get copper"},
-			canClick() {
-				let ac = player.a.atk
-				if (ac >= 1000) 
-				return true
+				title:"kill it! *10 ",
+				display() {return  "- 1000 ATK<br>get 0~1000 blood<br>1% get copper"},
+				canClick() {
+					let ac = player.a.atk
+					if (ac >= 1000) 
+					return true
+					},
+				onClick(){
+					let bm = Math.floor(Math.random() * 1001)
+					let cm = Math.floor(Math.random() * 100)
+					player.a.atk = player.a.atk.sub(1000)
+					player.b.points = player.b.points.add(bm);
+					if (cm == 0) {player.c.points = player.c.points.add(1)};
 				},
-			onClick(){
-				let bm = Math.floor(Math.random() * 1001)
-				let cm = Math.floor(Math.random() * 100)
-				player.a.atk = player.a.atk.sub(1000)
-				player.b.points = player.b.points.add(bm);
-				if (cm == 0) {player.c.points = player.c.points.add(1)};
-			},
 			},
 			23: {
-			title:"kill it! *100 ",
-			display() {return  "- 10000 ATK<br>get 0~10000 blood<br>10% get copper"},
-			canClick() {
-				let ac = player.a.atk
-				if (ac >= 10000) 
-				return true
+				title:"kill it! *100 ",
+				display() {return  "- 10000 ATK<br>get 0~10000 blood<br>10% get copper"},
+				canClick() {
+					let ac = player.a.atk
+					if (ac >= 10000) 
+					return true
+					},
+				onClick(){
+					let bm = Math.floor(Math.random() * 10001)
+					let cm = Math.floor(Math.random() * 10)
+					player.a.atk = player.a.atk.sub(10000)
+					player.b.points = player.b.points.add(bm);
+					if (cm == 0) {player.c.points = player.c.points.add(1)};
 				},
-			onClick(){
-				let bm = Math.floor(Math.random() * 10001)
-				let cm = Math.floor(Math.random() * 10)
-				player.a.atk = player.a.atk.sub(10000)
-				player.b.points = player.b.points.add(bm);
-				if (cm == 0) {player.c.points = player.c.points.add(1)};
 			},
+			23: {
+				title:"kill it! *100 ",
+				display() {return  "- 10000 ATK<br>get 0~10000 blood<br>10% get copper"},
+				canClick() {
+					let ac = player.a.atk
+					if (ac >= 10000) 
+					return true
+					},
+				onClick(){
+					let bm = Math.floor(Math.random() * 10001)
+					let cm = Math.floor(Math.random() * 10)
+					player.a.atk = player.a.atk.sub(10000)
+					player.b.points = player.b.points.add(bm);
+					if (cm == 0) {player.c.points = player.c.points.add(1)};
+				},
+			},
+			24: {
+				title:"kill it! *1000 ",
+				display() {return  "- 100000 ATK<br>get 0~100000 blood<br>100% get copper"},
+				canClick() {
+					let ac = player.a.atk
+					if (ac >= 100000) 
+					return true
+					},
+				onClick(){
+					let bm = Math.floor(Math.random() * 100001)
+					player.a.atk = player.a.atk.sub(10000)
+					player.b.points = player.b.points.add(bm);
+					player.c.points = player.c.points.add(1);
+				},
+				unlocked(){
+					return getBuyableAmount("b", 11).gte(1)
+				},
+			},
+			25: {
+				title:"kill it! *10000 ",
+				display() {return  "- 1000000 ATK<br>get 0~1000000 blood<br>1000% get copper"},
+				canClick() {
+					let ac = player.a.atk
+					if (ac >= 1000000) 
+					return true
+					},
+				onClick(){
+					let bm = Math.floor(Math.random() * 1000001)
+					player.a.atk = player.a.atk.sub(100000)
+					player.b.points = player.b.points.add(bm);
+					player.c.points = player.c.points.add(10);
+				},
+				unlocked(){
+					return getBuyableAmount("b", 11).gte(2)
+				},
 			},
 		},
 })
@@ -480,6 +534,7 @@ addLayer("b", {
 	resource: "blood",
 		doReset(resettingLayer) {
 			let keep = [];
+			if (hasUpgrade("bm", 12)) keep.push("");
 			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("b", keep)
 		},
@@ -487,6 +542,104 @@ addLayer("b", {
     type: "none",
     row: 0, 
     layerShown(){ return (hasChallenge("s",22))},
+	upgrades:{
+		11:{
+			title: "Magic?",
+			description: "Blood, blood, I need blood. OH!,I still need an altar",
+			cost: new Decimal(666),
+		},
+	},
+	buyables: {
+		11: {
+			cost(x) { 
+				return new Decimal(1000).pow(x+1)
+			},
+			title:"Efficiency Rune I",
+			display() { return "cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>+"+format(getBuyableAmount(this.layer, this.id))+" “kill it”"},
+			canAfford() { return player[this.layer].points.gte(this.cost()) },
+			buy() {
+				player[this.layer].points = player[this.layer].points.sub(this.cost())
+				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+			},
+			purchaseLimit: 2,
+			unlocked(){return hasUpgrade("bm",31)},
+		},
+	}
+})
+
+
+addLayer("bm", {
+    name: "blood magic",
+    symbol: "V-BM",
+    position: 2,
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+    }},
+    color: "#842a84",
+    requires: new Decimal(500), 
+    resource: "blood magic",
+    baseResource: "blood", 
+    baseAmount() {return player.b.points},
+    type: "normal",
+    exponent: 1,
+	branches: ["b"],
+    gainMult() {
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { 
+        return new Decimal(1)
+    },
+    row: 1, 
+    hotkeys: [
+        {key:"B", description: "shift+b: Reset for bm points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return player[this.layer].unlocked || (hasUpgrade("b",11))},
+	upgrades:{
+		11:{
+			title: "Drink?",
+			description: "No,no,no. But maybe I can make some blood runes",
+			cost: new Decimal(1),
+		},
+		12:{
+			title: "Immortal",
+			description: "Keep blood on buyables",
+			cost: new Decimal(50),
+		},
+		31:{
+			title: "Efficiency Rune I",
+			description: "Unlock Efficiency Rune I",
+			cost: new Decimal(5),
+			unlocked(){
+				return (hasUpgrade("bm",11))
+			},
+		},
+		32:{
+			title: "Endurance Rune I",
+			description: "Unlock Endurance Rune I(Not made)",
+			cost: new Decimal(5),
+			unlocked(){
+				return (hasUpgrade("bm",11))
+			},
+		},
+		33:{
+			title: "Speed Rune I",
+			description: "Unlock Speed Rune I(Not made)",
+			cost: new Decimal(5),
+			unlocked(){
+				return (hasUpgrade("bm",11))
+			},
+		},
+		34:{
+			title: "Strength Rune I",
+			description: "Unlock Strength Rune I(Not made)",
+			cost: new Decimal(5),
+			unlocked(){
+				return (hasUpgrade("bm",11))
+			},
+		},
+	}
 })
 
 
@@ -502,7 +655,7 @@ addLayer("c", {
     requires: new Decimal(0), 
     resource: "copper",
     type: "none",
-    row: 3, 
+    row: 2, 
 	branches: ["s","a"],
     layerShown(){return (hasChallenge("s",22))},
 })

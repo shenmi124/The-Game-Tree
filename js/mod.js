@@ -13,12 +13,20 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.3.1",
+	num: "0.3.3",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Attack!</h2><br>
+	<h3>v0.3.3</h3><br>
+		- Added one buyables in "b"<br>
+		- Added some upgrades<br>
+		- Modify "s" challenge<br>
+	<h3>v0.3.2</h3><br>
+		- Added "bm"<br>
+		- Added some upgrades<br>
+		- "stone!" effect 150% -> 175%<br>
 	<h3>v0.3.1</h3><br>
 		- "a" little bit is added to the a layer<br>
 		- Added "ATK" in "a"
@@ -100,11 +108,12 @@ function getPointGen() {
 		if (hasUpgrade('$', 13)) gain = new Decimal(0.875)
 		if (hasUpgrade('w', 11)) gain = gain.times(upgradeEffect('w', 11))
 		if (hasUpgrade('w', 24)) gain = gain.times(upgradeEffect('w', 24))
-		if (hasUpgrade('s',11)) gain = gain.mul(1.5)
-		if (inChallenge('s',11)) gain = gain.mul(0.3)
-		if (inChallenge('s',12)) gain = gain.mul(0.3)
-		if (inChallenge('s',21)) gain = gain.mul(0.3)
-		if (inChallenge('s',22)) gain = gain.mul(0.05)
+		if (hasUpgrade('s',11)) gain = gain.mul(1.75)
+		if (getBuyableAmount("b", 11)) gain = gain.times(getBuyableAmount("b",11))
+		if (inChallenge('s',11)) gain = gain.mul(0.55)
+		if (inChallenge('s',12)) gain = gain.mul(0.45)
+		if (inChallenge('s',21)) gain = gain.mul(0.35)
+		if (inChallenge('s',22)) gain = gain.mul(0.25)
 	return gain
 }
 
