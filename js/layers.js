@@ -80,7 +80,7 @@ addLayer("$", {
 			},
 			23:{
 				title: "friend?",
-				description: "You can find some friend.  ... (?)",
+				description: "You can find some friend.  ... (?)(Not make)",
 				cost: new Decimal(1000),
 			unlocked(){
 				return hasUpgrade("$",11) && hasUpgrade("$",12) && hasUpgrade("$",13) && hasUpgrade("$",14) && hasUpgrade("$",21) && hasUpgrade("$",22)
@@ -88,7 +88,7 @@ addLayer("$", {
 			},
 			24:{
 				title: "Make DLC",
-				description: "You can make The Game Tree's DLC",
+				description: "You can make The Game Tree's DLC(Not make)",
 				cost: new Decimal(10000),
 			unlocked(){
 				return hasUpgrade("$",11) && hasUpgrade("$",12) && hasUpgrade("$",13) && hasUpgrade("$",14) && hasUpgrade("$",21) && hasUpgrade("$",22)
@@ -178,10 +178,10 @@ addLayer("w", {
 		11:{
 		title: "wood!",
 		description: "You got wood, which makes you feel excited, you want to spend more time playing this game",
-		cost: new Decimal(5),
+		cost: new Decimal(3),
 		effect() {
-			let eff = player[this.layer].points.add(1).pow(0.15)
-			if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.2);
+			let eff = player[this.layer].points.add(1).pow(0.21)
+			if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.28);
 			if (hasUpgrade('w', 13)) eff = eff.times(upgradeEffect('w', 13));
 			if (hasUpgrade('w', 21)) eff = eff.times(upgradeEffect('w', 21));
 			return eff
@@ -190,8 +190,8 @@ addLayer("w", {
 		},
 		12:{
 		title: "Crafts",
-		description: "The upgrade effect in the left and right directions is increased by the power of 0.05",
-		cost: new Decimal(20),
+		description: "The upgrade effect in the left and right directions is increased by the power of 0.07",
+		cost: new Decimal(10),
 		unlocked(){
 		return hasUpgrade("w",13)
 		},
@@ -199,13 +199,13 @@ addLayer("w", {
 		13:{
 		title: "The Game Tree is AWESOME!",
 		description: "Strengthen “wood!”" ,
-		cost: new Decimal(10),
+		cost: new Decimal(5),
 		unlocked(){
 		return hasUpgrade("w",11)
 		},
 		effect() {
-        let eff = player[this.layer].points.add(1).pow(0.01)
-		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.06);
+        let eff = player[this.layer].points.add(1).pow(0.07)
+		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.14);
 		if (hasUpgrade('w', 21)) eff = eff.times(upgradeEffect('w', 21));
 		return eff
 		},
@@ -214,7 +214,7 @@ addLayer("w", {
 		14:{
 		title: "Only used three times",
 		description: "Make wooden_pickaxe",
-		cost: new Decimal(new Decimal("20")),
+		cost: new Decimal(20),
 		unlocked(){
 		return hasUpgrade("w",13)
 		},
@@ -231,11 +231,11 @@ addLayer("w", {
 		title: "too too much!",
 		description: "Strengthen “wood” & ”The Game Tree is AWESOME!“",
 		effect() {
-			let eff = player[this.layer].points.add(1).pow(0.03)
+			let eff = player[this.layer].points.add(1).pow(0.035)
 			return eff
 		},
 			effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
-		cost: new Decimal (50),
+		cost: new Decimal (40),
 		unlocked(){
 			return hasChallenge("s",11)
 		},
@@ -243,7 +243,7 @@ addLayer("w", {
 		22:{
 		title: "fast!",
 		description: "wood requires -1",
-		cost: new Decimal (50),
+		cost: new Decimal (45),
 		unlocked(){
 			return hasChallenge("s",12)
 		},
@@ -259,7 +259,7 @@ addLayer("w", {
 		24:{
 		title: "Soon",
 		description: "Each wood upgrade will increase the production Time by 0.05 times",
-		cost: new Decimal (99),
+		cost: new Decimal (88),
 		unlocked(){
 			return hasChallenge("s",21)
 		},
@@ -272,7 +272,7 @@ addLayer("w", {
 		25:{
 		title: "The End?",
 		description: "keep wood upgrade",
-		cost: new Decimal (666),
+		cost: new Decimal (233),
 		unlocked(){
 			return hasChallenge("s",21)
 		}, 
@@ -354,45 +354,45 @@ addLayer("s", {
 			name: "No wood in the mine",
 			challengeDescription: "This makes you negative, the Time acquisition is only 55%",
 			unlocked() { return hasMilestone("s",0) },
-			canComplete: function() {return player.w.points.gte(35)},
-			goalDescription:"35 wood",
+			canComplete: function() {return player.w.points.gte(25)},
+			goalDescription:"25 wood",
 			rewardDescription: "Unlock a new wood upgrade",
 			},
 		12: {
 			name: "No wood in the mine2.0",
 			challengeDescription: "This makes you negative, the Time acquisition is only 45%, the Wood base is *4",
 			unlocked() { return hasChallenge("s",11) },
-			canComplete: function() {return player.w.points.gte(35)},
-			goalDescription:"35 wood",
+			canComplete: function() {return player.w.points.gte(25)},
+			goalDescription:"25 wood",
 			rewardDescription: "Unlock two new wood upgrade",
 			},
 		21: {
 			name: "No wood in the mine3.0",
 			challengeDescription: "This makes you negative, the Time acquisition is only 35%, the Wood base is *4",
 			unlocked() { return hasChallenge("s",12) },
-			canComplete: function() {return player.w.points.gte(100)},
-			goalDescription:"100 wood",
+			canComplete: function() {return player.w.points.gte(35)},
+			goalDescription:"35 wood",
 			rewardDescription: "Unlock two new wood upgrade",
 			},
 		22: {
 			name: "No wood in the mine4.0",
 			challengeDescription: "This makes you negative, the Time acquisition is only 25%, the Wood base is *4",
 			unlocked() { return hasChallenge("s",21) },
-			canComplete: function() {return player.w.points.gte(200)},
-			goalDescription:"200 wood",
+			canComplete: function() {return player.w.points.gte(75)},
+			goalDescription:"75 wood",
 			rewardDescription: "Unlock three new rows",
 			},
 			},
 			upgrades:{
 		11:{
 			title: "stone!",
-			description: "You got stone, which makes you feel excited, you want to spend more time playing this game (Time acquisition is 175%)",
+			description: "You got stone, which makes you feel excited, you want to spend more time playing this game (Time acquisition is 200%)",
 			cost: new Decimal(1),
 		},
 		12:{
 			title: "axe",
 			description: "Make stone_axe (Improve wood acquisition)",
-			cost: new Decimal(30),
+			cost: new Decimal(3),
 		},
 			}
 })
@@ -534,7 +534,7 @@ addLayer("b", {
 	resource: "blood",
 		doReset(resettingLayer) {
 			let keep = [];
-			if (hasUpgrade("bm", 12)) keep.push("");
+			if (hasUpgrade("bm", 13)) keep.push("");
 			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("b", keep)
 		},
@@ -552,7 +552,7 @@ addLayer("b", {
 	buyables: {
 		11: {
 			cost(x) { 
-				return new Decimal(1000).pow(x+1)
+				return new Decimal(10000).pow(x+1)
 			},
 			title:"Efficiency Rune I",
 			display() { return "cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>+"+format(getBuyableAmount(this.layer, this.id))+" “kill it”"},
@@ -566,7 +566,7 @@ addLayer("b", {
 		},
 		12: {
 			cost(x) { 
-				return new Decimal(10000).mul((x+1)*(x+1)).sub(10000*x)
+				return new Decimal(1000).mul((x+1)*(x+1)).sub(100000*x*x)
 			},
 			title:"Endurance Rune I",
 			display() { return "cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:"+format(this.effect())+"x"},
@@ -578,7 +578,7 @@ addLayer("b", {
 			purchaseLimit: 2,
 			unlocked(){return hasUpgrade("bm",32)},
 			effect:function(){
-				return new Decimal(1).add(0.5*x).pow(player[this.layer].points*0.0001)
+				{return new Decimal(1).add(0.5*x).pow(player[this.layer].points*0.000022*x)}
 			},
 		},
 	}
@@ -620,22 +620,27 @@ addLayer("bm", {
 			cost: new Decimal(1),
 		},
 		12:{
+			title: "Blood stone",
+			description: "unlock two upgrades(Not make)",
+			cost: new Decimal(10),
+		},
+		13:{
 			title: "Immortal",
-			description: "Keep blood on buyables",
-			cost: new Decimal(50),
+			description: "Keep blood on buyables & upgrade",
+			cost: new Decimal(30),
 		},
 		31:{
 			title: "Efficiency Rune I",
 			description: "Unlock Efficiency Rune I",
-			cost: new Decimal(5),
+			cost: new Decimal(2),
 			unlocked(){
 				return (hasUpgrade("bm",11))
 			},
 		},
 		32:{
 			title: "Endurance Rune I",
-			description: "Unlock Endurance Rune I(Not made)",
-			cost: new Decimal(5),
+			description: "Unlock Endurance Rune I",
+			cost: new Decimal(2),
 			unlocked(){
 				return (hasUpgrade("bm",11))
 			},
@@ -643,7 +648,7 @@ addLayer("bm", {
 		33:{
 			title: "Speed Rune I",
 			description: "Unlock Speed Rune I(Not made)",
-			cost: new Decimal(5),
+			cost: new Decimal(2),
 			unlocked(){
 				return (hasUpgrade("bm",11))
 			},
@@ -651,7 +656,7 @@ addLayer("bm", {
 		34:{
 			title: "Strength Rune I",
 			description: "Unlock Strength Rune I(Not made)",
-			cost: new Decimal(5),
+			cost: new Decimal(2),
 			unlocked(){
 				return (hasUpgrade("bm",11))
 			},
