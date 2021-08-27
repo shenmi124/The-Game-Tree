@@ -483,22 +483,6 @@ addLayer("a", {
 					if (cm == 0) {player.c.points = player.c.points.add(1)};
 				},
 			},
-			23: {
-				title:"kill it! *100 ",
-				display() {return  "- 10000 ATK<br>get 0~10000 blood<br>10% get copper"},
-				canClick() {
-					let ac = player.a.atk
-					if (ac >= 10000) 
-					return true
-					},
-				onClick(){
-					let bm = Math.floor(Math.random() * 10001)
-					let cm = Math.floor(Math.random() * 10)
-					player.a.atk = player.a.atk.sub(10000)
-					player.b.points = player.b.points.add(bm);
-					if (cm == 0) {player.c.points = player.c.points.add(1)};
-				},
-			},
 			24: {
 				title:"kill it! *1000 ",
 				display() {return  "- 100000 ATK<br>get 0~100000 blood<br>100% get copper"},
@@ -579,6 +563,23 @@ addLayer("b", {
 			},
 			purchaseLimit: 2,
 			unlocked(){return hasUpgrade("bm",31)},
+		},
+		12: {
+			cost(x) { 
+				return new Decimal(10000).mul((x+1)*(x+1)).sub(10000*x)
+			},
+			title:"Endurance Rune I",
+			display() { return "cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:"+format(this.effect())+"x"},
+			canAfford() { return player[this.layer].points.gte(this.cost()) },
+			buy() {
+				player[this.layer].points = player[this.layer].points.sub(this.cost())
+				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+			},
+			purchaseLimit: 2,
+			unlocked(){return hasUpgrade("bm",32)},
+			effect:function(){
+				return new Decimal(1).add(0.5*x).pow(player[this.layer].points*0.0001)
+			},
 		},
 	}
 })
