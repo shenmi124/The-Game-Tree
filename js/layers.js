@@ -91,7 +91,6 @@ addLayer("$", {
 				clickables: {
 		11: {
         display() {return "3$ -> 5wood"},
-		cost: new Decimal(10),
 		unlocked(){
 		return hasUpgrade("$",22)
 		},
@@ -363,7 +362,7 @@ addLayer("s", {
 			unlocked() { return hasChallenge("s",21) },
 			canComplete: function() {return player.w.points.gte(100)},
 			goalDescription:"100 wood",
-			rewardDescription: "Unlock new row",
+			rewardDescription: "Unlock three new rows",
 			},
 			},
 			upgrades:{
@@ -399,15 +398,8 @@ addLayer("a", {
     exponent: 1,
 	base:10,
 	branches: ["b"],
-	tabFormat:["main-display",
-			"prestige-button",
-			"blank",
-			["display-text",
-				function() {return 'You hava ' + format(player.a.ATK) + " ATK"},
-					{}],
-			],
 	update(diff) {
-		if (player.a.unlocked) player.a.atk = player.a.atk.plus(diff);
+		player.a.atk = player.a.atk.add(new Decimal((player.a.points.pow(2))).mul(diff));
 	},
     gainMult() {
         mult = new Decimal(1)
@@ -421,6 +413,59 @@ addLayer("a", {
         {key: "a", description: "a: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return player[this.layer].unlocked || (hasChallenge("s",22))},
+		clickables: {
+			11: {
+			display() {return  'You hava ' + format(player.a.atk) + " ATK <br> You get " + format(player.a.points.pow(2))+ "/sec"},
+			},
+			21: {
+			title:"kill it! *1 ",
+			display() {return  "- 100 ATK<br>get 0~100 blood<br>0.1% get copper"},
+			canClick() {
+				let ac = player.a.atk
+				if (ac >= 100) 
+				return true
+				},
+			onClick(){
+				let bm = Math.floor(Math.random() * 101)
+				let cm = Math.floor(Math.random() * 1000)
+				player.a.atk = player.a.atk.sub(100)
+				player.b.points = player.b.points.add(bm);
+				if (cm == 0) {player.c.points = player.c.points.add(1)};
+			},
+			},
+			22: {
+			title:"kill it! *10 ",
+			display() {return  "- 1000 ATK<br>get 0~1000 blood<br>1% get copper"},
+			canClick() {
+				let ac = player.a.atk
+				if (ac >= 1000) 
+				return true
+				},
+			onClick(){
+				let bm = Math.floor(Math.random() * 1001)
+				let cm = Math.floor(Math.random() * 100)
+				player.a.atk = player.a.atk.sub(1000)
+				player.b.points = player.b.points.add(bm);
+				if (cm == 0) {player.c.points = player.c.points.add(1)};
+			},
+			},
+			23: {
+			title:"kill it! *100 ",
+			display() {return  "- 10000 ATK<br>get 0~10000 blood<br>10% get copper"},
+			canClick() {
+				let ac = player.a.atk
+				if (ac >= 10000) 
+				return true
+				},
+			onClick(){
+				let bm = Math.floor(Math.random() * 10001)
+				let cm = Math.floor(Math.random() * 10)
+				player.a.atk = player.a.atk.sub(10000)
+				player.b.points = player.b.points.add(bm);
+				if (cm == 0) {player.c.points = player.c.points.add(1)};
+			},
+			},
+		},
 })
 
 
@@ -429,15 +474,19 @@ addLayer("b", {
     symbol: "V-B",
     position: 0.1,
     startData() { return {
-        unlocked: false,
+        unlocked: true,
 		points: new Decimal(0),
     }},
+	resource: "blood",
+		doReset(resettingLayer) {
+			let keep = [];
+			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades");
+			if (layers[resettingLayer].row > this.row) layerDataReset("b", keep)
+		},
     color: "#CE0000",
-    requires: new Decimal(0), 
-    resource: "blood",
     type: "none",
     row: 0, 
-    layerShown(){return player[this.layer].unlocked},
+    layerShown(){ return (hasChallenge("s",22))},
 })
 
 
@@ -446,7 +495,7 @@ addLayer("c", {
     symbol: "V-C",
     position: 1,
     startData() { return {
-        unlocked: false,
+        unlocked: true,
 		points: new Decimal(0),
     }},
     color: "#FF9224",
@@ -455,5 +504,5 @@ addLayer("c", {
     type: "none",
     row: 3, 
 	branches: ["s","a"],
-    layerShown(){return player[this.layer].unlocked},
+    layerShown(){return (hasChallenge("s",22))},
 })

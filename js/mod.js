@@ -19,6 +19,9 @@ let VERSION = {
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Attack!</h2><br>
+	<h3>v0.3.1</h3><br>
+		- "a" little bit is added to the a layer<br>
+		- Added "ATK" in "a"
 	<h3>v0.3</h3><br>
 		- Added "b"<br>
 		- Added "a"<br>
@@ -91,7 +94,6 @@ function canGenPoints(){
 function getPointGen() {
 	if(!canGenPoints())
 		return new Decimal(0)
-	
 	let gain = new Decimal(0.5)
 		if (hasUpgrade('$', 12)) gain = new Decimal(0.6)
 		if (hasUpgrade('$', 13)) gain = new Decimal(0.75)
