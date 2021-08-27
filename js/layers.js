@@ -33,51 +33,67 @@ addLayer("$", {
     ],
     layerShown(){return true},
 		upgrades: {
-		11:{
-		title: "start",
-		description: "You found a free idle game",
-		cost: new Decimal(0),
-		},
-		12:{
-		title: "java?",
-		description: "You can buy some coffee to stay up late to play The Game Tree (sleep time 12 hours> 9 hours).",
-		cost: new Decimal(5),
-		unlocked(){
-			return hasUpgrade("$",11)
-		},
-		},
-		13:{
-		title: "Don't sleep in hell!",
-		description: "You can buy a new bed to Improve sleep quality (sleep time 9 hours> 6 hours).",
-		cost: new Decimal(20),
-		unlocked(){
+			11:{
+			title: "start",
+			description: "You found a free idle game",
+			cost: new Decimal(0),
+			},
+			12:{
+			title: "java?",
+			description: "You can buy some coffee to stay up late to play The Game Tree (sleep time 12 hours> 9 hours).",
+			cost: new Decimal(5),
+			unlocked(){
+				return hasUpgrade("$",11)
+			},
+			},
+			13:{
+			title: "Don't sleep in hell!",
+			description: "You can buy a new bed to Improve sleep quality (sleep time 9 hours> 6 hours).",
+			cost: new Decimal(20),
+			unlocked(){
+				return hasUpgrade("$",12)
+			},
+			},
+			14:{
+			title: "Adrenaline",
+			description: "You can buy some adrenalines to Improve sleep quality (sleep time 6 hours> 3 hours).",
+			cost: new Decimal(200),
+			unlocked(){
+				return hasUpgrade("$",13)
+			},
+			},
+			21:{
+			title: "Investment is risky",
+			description: "You can unlock a milestone",
+			cost: new Decimal(25),
+			unlocked(){
 			return hasUpgrade("$",12)
-		},
-		},
-		14:{
-		title: "Adrenaline",
-		description: "You can buy some adrenalines to Improve sleep quality (sleep time 6 hours> 3 hours).",
-		cost: new Decimal(200),
-		unlocked(){
-			return hasUpgrade("$",13)
-		},
-		},
-		21:{
-		title: "Investment is risky",
-		description: "You can unlock a milestone",
-		cost: new Decimal(25),
-		unlocked(){
-		return hasUpgrade("$",12)
-		},
-		},
-		22:{
-			title: "too much?",
-			description: "You can buy some woods",
-			cost: new Decimal(30),
-		unlocked(){
-			return hasUpgrade("$",13)
-		},
-		},
+			},
+			},
+			22:{
+				title: "too much?",
+				description: "You can buy some woods",
+				cost: new Decimal(30),
+			unlocked(){
+				return hasUpgrade("$",13)
+			},
+			},
+			23:{
+				title: "friend?",
+				description: "You can find some friend.  ... (?)",
+				cost: new Decimal(1000),
+			unlocked(){
+				return hasUpgrade("$",11) && hasUpgrade("$",12) && hasUpgrade("$",13) && hasUpgrade("$",14) && hasUpgrade("$",21) && hasUpgrade("$",22)
+			},
+			},
+			24:{
+				title: "Make DLC",
+				description: "You can make The Game Tree's DLC",
+				cost: new Decimal(10000),
+			unlocked(){
+				return hasUpgrade("$",11) && hasUpgrade("$",12) && hasUpgrade("$",13) && hasUpgrade("$",14) && hasUpgrade("$",21) && hasUpgrade("$",22)
+			},
+			},
 		},
 		milestones: {
 		0: {

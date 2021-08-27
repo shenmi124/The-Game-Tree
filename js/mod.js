@@ -13,12 +13,15 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.3.3",
+	num: "0.3.3.1",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Attack!</h2><br>
+	<h3>v0.3.3.1</h3><br>
+		- Fix bugs where time cannot be produced<br>
+		- Added rwo unescapes in "$"<br>
 	<h3>v0.3.3</h3><br>
 		- Added one buyables in "b"<br>
 		- Added some upgrades<br>
@@ -109,7 +112,6 @@ function getPointGen() {
 		if (hasUpgrade('w', 11)) gain = gain.times(upgradeEffect('w', 11))
 		if (hasUpgrade('w', 24)) gain = gain.times(upgradeEffect('w', 24))
 		if (hasUpgrade('s',11)) gain = gain.mul(1.75)
-		if (getBuyableAmount("b", 11)) gain = gain.times(getBuyableAmount("b",11))
 		if (inChallenge('s',11)) gain = gain.mul(0.55)
 		if (inChallenge('s',12)) gain = gain.mul(0.45)
 		if (inChallenge('s',21)) gain = gain.mul(0.35)
