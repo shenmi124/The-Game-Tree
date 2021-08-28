@@ -496,7 +496,7 @@ addLayer("a", {
 					},
 				onClick(){
 					let bm = Math.floor(Math.random() * 100001)
-					player.a.atk = player.a.atk.sub(10000)
+					player.a.atk = player.a.atk.sub(100000)
 					player.b.points = player.b.points.add(bm);
 					player.c.points = player.c.points.add(1);
 				},
@@ -514,7 +514,7 @@ addLayer("a", {
 					},
 				onClick(){
 					let bm = Math.floor(Math.random() * 1000001)
-					player.a.atk = player.a.atk.sub(100000)
+					player.a.atk = player.a.atk.sub(1000000)
 					player.b.points = player.b.points.add(bm);
 					player.c.points = player.c.points.add(10);
 				},
