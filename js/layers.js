@@ -420,7 +420,7 @@ addLayer("a", {
 	base:10,
 	branches: ["b"],
 	update(diff) {
-		player.a.atk = player.a.atk.add(new Decimal((player.a.points.pow(2))).mul(diff));
+		player.a.atk = player.a.atk.add(new Decimal((player.a.points.add((buyableEffect('b',14))).pow(2))).mul(diff));
 	},
     gainMult() {
         mult = new Decimal(1)
@@ -436,7 +436,7 @@ addLayer("a", {
     layerShown(){return player[this.layer].unlocked || (hasChallenge("s",22))},
 		clickables: {
 			11: {
-				display() {return  'You hava ' + format(player.a.atk) + " ATK <br> You get " + format(player.a.points.pow(2))+ "/sec"},
+				display() {return  'You hava ' + format(player.a.atk) + " ATK <br> You get " + format(player.a.points.add((buyableEffect('b',14))).pow(2))+ "/sec"},
 			},
 			21: {
 				title:"kill it! *1 ",
@@ -537,8 +537,8 @@ addLayer("b", {
 	resource: "blood",
 		doReset(resettingLayer) {
 			let keep = [];
-			if (hasUpgrade("bm", 13)) keep.push("");
-			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades");
+			if (hasUpgrade("bm", 12)) keep.push("buyables");
+			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades","buyables");
 			if (layers[resettingLayer].row > this.row) layerDataReset("b", keep)
 		},
     color: "#CE0000",
@@ -555,10 +555,10 @@ addLayer("b", {
 	buyables: {
 		11: {
 			cost(x) { 
-				return new Decimal(10000).mul((x+1)*100)
+				return new Decimal(1000).add(99000*x)
 			},
 			title:"Efficiency Rune I",
-			display() { return "cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>+"+format(getBuyableAmount(this.layer, this.id))+" “kill it”"},
+			display() { return "cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(getBuyableAmount(this.layer, this.id))+" “kill it”"},
 			canAfford() { return player[this.layer].points.gte(this.cost()) },
 			buy() {
 				player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -569,7 +569,7 @@ addLayer("b", {
 		},
 		12: {
 			cost(x) { 
-				return new Decimal(1000).mul((x+1)*(x+1)).sub(100000*x*x)
+				return new Decimal(1000).add(99000*x)
 			},
 			title:"Endurance Rune I",
 			display() { return "cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:"+format(this.effect())+"x"},
@@ -580,16 +580,64 @@ addLayer("b", {
 			},
 			purchaseLimit: 2,
 			unlocked(){return hasUpgrade("bm",32)},
-			effect:function(){
+			effect:function(x){
 					{
-						let eff = new Decimal(1).add(0.5*x).pow(player[this.layer].points*0.000022*x)
-						eff = softcap(eff,new Decimal(5),0.9)
-						eff = softcap(eff,new Decimal(15),0.7)
-						eff = softcap(eff,new Decimal(25),0.3)
+						let eff = new Decimal(1).add(1*(x-1)).mul(player[this.layer].points*0.00022*(x+1))
+						eff = softcap(eff,new Decimal(5),0.15)
+						eff = softcap(eff,new Decimal(15),0.1)
+						eff = softcap(eff,new Decimal(25),0.05)
 						return eff
 					}
 				
 				},
+		},
+		13: {
+			cost(x) { 
+				return new Decimal(1000).add(99000*x)
+			},
+			title:"Speed Rune I",
+			display() { return "cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:-"+format(this.effect())},
+			canAfford() { return player[this.layer].points.gte(this.cost()) },
+			buy() {
+				player[this.layer].points = player[this.layer].points.sub(this.cost())
+				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+			},
+			purchaseLimit: 2,
+			unlocked(){return hasUpgrade("bm",33)},
+			effect:function(x){
+				{
+					let eff = new Decimal(100*x)
+					return eff
+				}
+				
+			},
+		},
+		14: {
+			cost(x) { 
+				return new Decimal(1000).add(99000*x)
+			},
+			title:"Strength Rune I",
+			display() { return "cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(this.effect())},
+			canAfford() { return player[this.layer].points.gte(this.cost()) },
+			buy() {
+				player[this.layer].points = player[this.layer].points.sub(this.cost())
+				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+			},
+			purchaseLimit: 2,
+			unlocked(){return hasUpgrade("bm",34)},
+			effect:function(x){
+				{
+					let eff = new Decimal(1*x).mul(player[this.layer].points*0.00003*(x+1))
+					eff = softcap(eff,new Decimal(1),0.8)
+					eff = softcap(eff,new Decimal(2),0.7)
+					eff = softcap(eff,new Decimal(3),0.6)
+					eff = softcap(eff,new Decimal(4),0.5)
+					eff = softcap(eff,new Decimal(5),0.4)
+					eff = softcap(eff,new Decimal(6),0.3)
+					eff = softcap(eff,new Decimal(7),0)
+					return eff
+				}
+			},
 		},
 	}
 })
@@ -604,7 +652,11 @@ addLayer("bm", {
 		points: new Decimal(0),
     }},
     color: "#842a84",
-    requires: new Decimal(500), 
+    requires:function (){
+		let bmr = new Decimal(500)
+		if (getBuyableAmount("b", 13).gte(1)) bmr = bmr.sub(buyableEffect('b',13))
+		return bmr
+	},
     resource: "blood magic",
     baseResource: "blood", 
     baseAmount() {return player.b.points},
@@ -652,7 +704,7 @@ addLayer("bm", {
 		},
 		33:{
 			title: "Speed Rune I",
-			description: "Unlock Speed Rune I(Not made)",
+			description: "Unlock Speed Rune I",
 			cost: new Decimal(2),
 			unlocked(){
 				return (hasUpgrade("bm",11))
@@ -660,7 +712,7 @@ addLayer("bm", {
 		},
 		34:{
 			title: "Strength Rune I",
-			description: "Unlock Strength Rune I(Not made)",
+			description: "Unlock Strength Rune I",
 			cost: new Decimal(2),
 			unlocked(){
 				return (hasUpgrade("bm",11))

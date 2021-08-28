@@ -13,12 +13,14 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.3.3.3",
+	num: "0.3.4.3",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Attack!</h2><br>
+	<h3>v0.3.4.3</h3><br>
+		- Made three new runes<br>
 	<h3>v0.3.3.3</h3><br>
 		- Balance the game<br>
 	<h3>v0.3.3.2</h3><br>
