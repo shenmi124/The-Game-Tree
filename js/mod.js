@@ -1,6 +1,6 @@
 let modInfo = {
 	name: "The Game Tree",
-	id: "Gamemodv0.2",
+	id: "Gamemodv0.3",
 	author: "mysterious_124",
 	pointsName: "time",
 	modFiles: ["layers.js", "tree.js"],
@@ -13,12 +13,14 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.3.3.2",
+	num: "0.3.3.3",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Attack!</h2><br>
+	<h3>v0.3.3.3</h3><br>
+		- Balance the game<br>
 	<h3>v0.3.3.2</h3><br>
 		- Balance the game<br>
 		- "Endurance Rune" I is ready<br>
@@ -116,10 +118,10 @@ function getPointGen() {
 		if (hasUpgrade('w', 24)) gain = gain.times(upgradeEffect('w', 24))
 		if (hasUpgrade('s',11)) gain = gain.mul(2)
 		if (getBuyableAmount("b", 12).gte(1)) gain = gain.mul(buyableEffect('b',12))
-		if (inChallenge('s',11)) gain = gain.mul(0.55)
-		if (inChallenge('s',12)) gain = gain.mul(0.45)
-		if (inChallenge('s',21)) gain = gain.mul(0.35)
-		if (inChallenge('s',22)) gain = gain.mul(0.25)
+		if (inChallenge('s',11)) gain = gain.mul(0.75)
+		if (inChallenge('s',12)) gain = gain.mul(0.65)
+		if (inChallenge('s',21)) gain = gain.mul(0.55)
+		if (inChallenge('s',22)) gain = gain.mul(0.45)
 	return gain
 }
 
@@ -129,6 +131,8 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
+	function(){return"V is Virtual | R is Reality"},
+	function(){return"Current endgame: 1 coal (But there is no coal)"},
 ]
 
 // Determines when the game "ends"
