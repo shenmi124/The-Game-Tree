@@ -537,7 +537,7 @@ addLayer("b", {
 	resource: "blood",
 		doReset(resettingLayer) {
 			let keep = [];
-			if (hasUpgrade("bm", 12)) keep.push("buyables");
+			if (hasUpgrade("bm", 12)) keep.push("buyables","upgrades");
 			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades","buyables");
 			if (layers[resettingLayer].row > this.row) layerDataReset("b", keep)
 		},
@@ -716,6 +716,38 @@ addLayer("bm", {
 			cost: new Decimal(2),
 			unlocked(){
 				return (hasUpgrade("bm",11))
+			},
+		},
+		41:{
+			title: "Efficiency Rune II",
+			description: "Unlock Efficiency Rune II",
+			cost: new Decimal(20),
+			unlocked(){
+				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
+			},
+		},
+		42:{
+			title: "Endurance Rune II",
+			description: "Unlock Efficiency Rune II",
+			cost: new Decimal(20),
+			unlocked(){
+				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
+			},
+		},
+		43:{
+			title: "Speed Rune II",
+			description: "Unlock Efficiency Rune II",
+			cost: new Decimal(20),
+			unlocked(){
+				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
+			},
+		},
+		44:{
+			title: "Strength Rune II",
+			description: "Unlock Efficiency Rune II",
+			cost: new Decimal(20),
+			unlocked(){
+				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
 		},
 	}
