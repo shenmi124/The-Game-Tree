@@ -582,7 +582,7 @@ addLayer("b", {
 			unlocked(){return hasUpgrade("bm",32)},
 			effect:function(x){
 					{
-						let eff = new Decimal(1).add(1*(x-1)).mul(player[this.layer].points*0.00022*(x+1))
+						let eff = new Decimal(1).mul(player[this.layer].points*0.0002*(x+1)).add(1*x)
 						eff = softcap(eff,new Decimal(5),0.15)
 						eff = softcap(eff,new Decimal(15),0.1)
 						eff = softcap(eff,new Decimal(25),0.05)
