@@ -13,12 +13,15 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.3.4.4",
+	num: "0.3.5.4",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Attack!</h2><br>
+	<h3>v0.3.5.4</h3><br>
+		- Added one rune.
+		- Added some upgrade.
 	<h3>v0.3.4.4</h3><br>
 		- Change rune formula, increase rune effect display<br>
 	<h3>v0.3.4.3</h3><br>
@@ -136,12 +139,13 @@ function addedPlayerData() { return {
 // Display extra things at the top of the page
 var displayThings = [
 	function(){return"V is Virtual | R is Reality"},
-	function(){return"Current endgame: 1 coal (But there is no coal)"},
+	function(){return"Current endgame: 3 coal"},
+	function(){return"因为学业，不知道什么时候才能继续更新"},
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e280000000"))
+	return player.c.points.gte(new Decimal("3"))
 }
 
 
