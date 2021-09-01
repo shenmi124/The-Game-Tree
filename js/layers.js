@@ -921,7 +921,7 @@ addLayer("cr", {
     symbol: "V-CR",
     position: 1,
     startData() { return {
-        unlocked: true,
+        unlocked: false,
 		points: new Decimal(0),
     }},
     color: "#FF9224",

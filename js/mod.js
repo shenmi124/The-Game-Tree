@@ -13,15 +13,17 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.3.5.4",
+	num: "0.3.5.5",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Attack!</h2><br>
+	<h3>v0.3.5.5</h3><br>
+		- Fix some bug.<br>
 	<h3>v0.3.5.4</h3><br>
-		- Added one rune.
-		- Added some upgrade.
+		- Added one rune.<br>
+		- Added some upgrade.<br>
 	<h3>v0.3.4.4</h3><br>
 		- Change rune formula, increase rune effect display<br>
 	<h3>v0.3.4.3</h3><br>
