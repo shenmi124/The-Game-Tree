@@ -12,10 +12,7 @@ let modInfo = {
 }
 
 // Set your version in num and name
-let VERSION = {
-	num: "0.3.6.5",
-	name: "Literally nothing",
-}
+
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
@@ -86,8 +83,15 @@ function maxTickLength() {
 function fixOldSave(oldVersion){
 }
 
+let VERSION = {
+	num: "0.3.6.6",
+	name: "Literally nothing",
+}
+
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Attack!</h2><br>
+	<h3>v0.3.6.6<h3><br> 
+		- Fix some bugs<br>
 	<h3>v0.3.6.5</h3><br>
 		- Added "i"!But it cannot be unlocked at the moment<br>
 		- Rune is ready<br>
