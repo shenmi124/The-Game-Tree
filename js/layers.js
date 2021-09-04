@@ -533,7 +533,7 @@ addLayer("s", {
 				description: "Get 9% wood every second",
 				cost: new Decimal(99),
 				unlocked(){
-					return hasChallenge("c",11)
+					return hasChallenge("c",11) && hasUpgrade("c",21)
 				},
 			},
 			15:{
@@ -1123,16 +1123,16 @@ addLayer("c", {
 				cost:new Decimal(1),
 			},
 			12:{
-				title:"No wood but have torches",
-				description:"keep s challenge",
-				cost:new Decimal(2),
-				unlocked(){return hasUpgrade("c",11)},
-			},
-			13:{
 				title:"No wood in the mine.but...",
 				description:"unlock c challenge",
-				cost:new Decimal(10),
+				cost:new Decimal(2),
 				unlocked(){return hasUpgrade("w",34)},
+			},
+			13:{
+				title:"No wood but have torches",
+				description:"keep s challenge",
+				cost:new Decimal(10),
+				unlocked(){return hasUpgrade("c",11)},
 			},
 			14:{
 				title:"Coal merchant",
@@ -1195,7 +1195,7 @@ addLayer("c", {
 			11: {
 				name: "No wood in the mine. but have ore",
 				challengeDescription: "you find stone & coal, the Time acquisition is only 50%, the stone best * 3",
-				unlocked() { return hasUpgrade("c",13) },
+				unlocked() { return hasUpgrade("c",12) },
 				canComplete: function() {return player.s.points.gte(100)},
 				goalDescription:"100 stone",
 				rewardDescription: "Unlock s & c upgrade",
