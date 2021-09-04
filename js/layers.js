@@ -118,7 +118,7 @@ addLayer("$", {
 				},
 				canClick() {
 					let $c = player[this.layer].points
-					if ($c >= 3) 
+					if ($c >= 300) 
 					if (!inChallenge('s',11))
 					if (!inChallenge('s',12))
 					if (!inChallenge('s',21))
@@ -150,26 +150,27 @@ addLayer("$", {
 					player.s.points = player.s.points.add(10)
 				},
 			},
-		13: {
-			display() {return "5000$ -> 1coal"},
-			unlocked(){
-				return (hasUpgrade("c",13) && player.c.unlocked)
-			},
-			canClick() {
-				let $c = player[this.layer].points
-				if ($c >= 5000) 
-				if (!inChallenge('s',11))
-				if (!inChallenge('s',12))
-				if (!inChallenge('s',21))
-				if (!inChallenge('s',22))
-				return $c
-			},
-			onClick(){
-				player.$.points = player.$.points.sub(5000)
-				player.c.points = player.c.points.add(1)
+			14: {
+				display() {return "5000$ -> 1coal"},
+				unlocked(){
+					return (hasUpgrade("c",13) && player.c.unlocked)
+				},
+				canClick() {
+					let $c = player[this.layer].points
+					if ($c >= 5000) 
+					if (!inChallenge('s',11))
+					if (!inChallenge('s',12))
+					if (!inChallenge('s',21))
+					if (!inChallenge('s',22))
+					return $c
+				},
+				onClick(){
+					player.$.points = player.$.points.sub(5000)
+					player.c.points = player.c.points.add(1)
+				},
 			},
 		},
-		},
+		passiveGeneration() { return hasMilestone("$", 0)?0.05:0 }
 })
 
 
