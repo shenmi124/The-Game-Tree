@@ -19,6 +19,7 @@ addLayer("$", {
 			if (resettingLayer=="a") keep.push("points","best","total","milestones","upgrades");
 			if (resettingLayer=="bm") keep.push("points","best","total","milestones","upgrades");
 			if (resettingLayer=="c") keep.push("points","best","total","milestones","upgrades");
+			if (resettingLayer=="i") keep.push("points","best","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("$", keep)
 		},
     gainMult() { // Calculate the multiplier for main currency from bonuses
@@ -60,7 +61,7 @@ addLayer("$", {
 			description: "You can buy some adrenalines to Improve sleep quality (sleep time 6 hours> 3 hours).",
 			cost: new Decimal(200),
 			unlocked(){
-				return hasUpgrade("$",13)
+				return hasUpgrade("$",14)
 			},
 			},
 			21:{
@@ -77,22 +78,6 @@ addLayer("$", {
 				cost: new Decimal(30),
 			unlocked(){
 				return hasUpgrade("$",13)
-			},
-			},
-			23:{
-				title: "friend?",
-				description: "You can find some friend.  ... (?)(Not make)",
-				cost: new Decimal(1000),
-			unlocked(){
-				return hasUpgrade("$",11) && hasUpgrade("$",12) && hasUpgrade("$",13) && hasUpgrade("$",14) && hasUpgrade("$",21) && hasUpgrade("$",22)
-			},
-			},
-			24:{
-				title: "Make DLC",
-				description: "You can make The Game Tree's DLC(Not make)",
-				cost: new Decimal(10000),
-			unlocked(){
-				return hasUpgrade("$",11) && hasUpgrade("$",12) && hasUpgrade("$",13) && hasUpgrade("$",14) && hasUpgrade("$",21) && hasUpgrade("$",22)
 			},
 			},
 		},
@@ -148,7 +133,7 @@ addLayer("$", {
 		13: {
 			display() {return "5000$ -> 1coal"},
 			unlocked(){
-				return (hasUpgrade("w",33) || player.c.unlocked)
+				return (hasUpgrade("c",13) || player.c.unlocked)
 			},
 			canClick() {
 				let $c = player[this.layer].points
@@ -181,6 +166,9 @@ addLayer("w", {
 		let wr = new Decimal(5);
 		if (hasUpgrade('w',22)) wr = wr.sub(1)
 		if (hasUpgrade('w',31)) wr = wr.sub(1)
+		if (inChallenge('s',12)) wr = wr.mul(2)
+		if (inChallenge('s',21)) wr = wr.mul(3)
+		if (inChallenge('s',22)) wr = wr.mul(4)
 		return wr
 	},
     resource: "wood",
@@ -197,9 +185,6 @@ addLayer("w", {
 		},
     gainMult() {
         let mult = new Decimal(1)
-			if(inChallenge('s',12)) mult = mult.mul(0.5)
-			if(inChallenge('s',21)) mult = mult.mul(0.5)
-			if(inChallenge('s',22)) mult = mult.mul(0.5)
         return mult
     },
     gainExp() { 
@@ -338,9 +323,30 @@ addLayer("w", {
 		33:{
 			title: "Buy and sell",
 			description: "With real money",
-			cost: new Decimal (750),
+			cost: new Decimal (1000),
 			unlocked(){
 				return hasUpgrade("b",13)
+			}, 
+		},
+		34:{
+			title: "Planks",
+			description: "A wooden house can make you better fight(ATK best + 1)",
+			cost: new Decimal (1500),
+			unlocked(){
+				return hasUpgrade("cr",11)
+			}, 
+			effect(){
+				let eff = new Decimal(0)
+				if (hasUpgrade("w",34)) eff = new Decimal(1)
+				return eff
+			},
+		},
+		35:{
+			title: "Charcoal",
+			description: "coal and charcoal?(unlock coal upgrade)",
+			cost: new Decimal (2500),
+			unlocked(){
+				return hasUpgrade("cr",11)
 			}, 
 		},
 		},
@@ -391,7 +397,8 @@ addLayer("w", {
 			},
 		},
 		},
-		passiveGeneration() { return hasUpgrade("c", 11)?0.01:0 },
+		passiveGeneration() { return hasUpgrade("c", 21)?0.01:0 },
+		passiveGeneration() { return hasUpgrade("s", 13)?0.09:0 }
 })
 
 
@@ -407,7 +414,8 @@ addLayer("s", {
     requires:function (){
 		let sr = new Decimal(20)
 		if (hasUpgrade('w',32)) sr = sr.sub(5)
-		if (hasUpgrade('c',12)) sr = sr.sub(5)
+		if (hasUpgrade('cr',12)) sr = sr.sub(5)
+		if (inChallenge("c",11)) sr = sr.mul(3)
 		return sr
 	},
     resource: "stone",
@@ -426,7 +434,7 @@ addLayer("s", {
 		doReset(resettingLayer) {
 			let keep = [];
 			if (hasUpgrade("c",12)) keep.push("challenges");
-			if (layers[resettingLayer].row > this.row) layerDataReset("w", keep);
+			if (layers[resettingLayer].row > this.row) layerDataReset("s", keep);
 		},
     row: 1, 
     hotkeys: [
@@ -452,7 +460,7 @@ addLayer("s", {
 			},
 		12: {
 			name: "No wood in the mine2.0",
-			challengeDescription: "This makes you negative, the Time acquisition is only 65%, the Wood base is *4",
+			challengeDescription: "This makes you negative, the Time acquisition is only 65%, the Wood base is *2",
 			unlocked() { return hasChallenge("s",11) },
 			canComplete: function() {return player.w.points.gte(20)},
 			goalDescription:"20 wood",
@@ -460,7 +468,7 @@ addLayer("s", {
 			},
 		21: {
 			name: "No wood in the mine3.0",
-			challengeDescription: "This makes you negative, the Time acquisition is only 55%, the Wood base is *4",
+			challengeDescription: "This makes you negative, the Time acquisition is only 55%, the Wood base is *3",
 			unlocked() { return hasChallenge("s",12) },
 			canComplete: function() {return player.w.points.gte(35)},
 			goalDescription:"35 wood",
@@ -475,18 +483,47 @@ addLayer("s", {
 			rewardDescription: "Unlock three new rows",
 			},
 			},
-			upgrades:{
-		11:{
-			title: "stone!",
-			description: "You got stone, which makes you feel excited, you want to spend more time playing this game (Time acquisition is 200%)",
-			cost: new Decimal(1),
-		},
-		12:{
-			title: "axe",
-			description: "Make stone_axe (Improve wood acquisition)",
-			cost: new Decimal(3),
-		},
-			}
+		upgrades:{
+			11:{
+				title: "stone!",
+				description: "You got stone, which makes you feel excited, you want to spend more time playing this game (Time acquisition is 200%)",
+				cost: new Decimal(1),
+			},
+			12:{
+				title: "axe",
+				description: "Make stone_axe (Improve wood acquisition)",
+				cost: new Decimal(3),
+			},
+			13:{
+				title: "Stone house",
+				description: "Fire prevention, It’s also a solid defense(ATK best +1)",
+				cost: new Decimal(3),
+				unlocked(){
+					return hasChallenge("c",11)
+				},
+				effect(){
+					let eff = new Decimal(0)
+					if (hasUpgrade("s",13)) eff = new Decimal(1)
+					return eff
+				},
+			},
+			14:{
+				title: "Many axes",
+				description: "Get 9% wood every second",
+				cost: new Decimal(99),
+				unlocked(){
+					return hasChallenge("c",11)
+				},
+			},
+			15:{
+				title: "Compression technology",
+				description: "You can compress your stone",
+				cost: new Decimal(81),
+				unlocked(){
+					return hasChallenge("c",11)
+				},
+			},
+		}
 })
 
 
@@ -500,7 +537,11 @@ addLayer("a", {
 		atk: new Decimal(0),
     }},
     color: "#FFB5B5",
-    requires: new Decimal(1), 
+    requires:function (){
+		let ar = new Decimal(1)
+		if (getBuyableAmount("b", 23).gte(1)) ar = ar.sub(buyableEffect('b',23))
+		return ar
+	}, 
     resource: "attack",
     baseResource: "stone", 
     baseAmount() {return player.s.points},
@@ -509,7 +550,7 @@ addLayer("a", {
 	base:10,
 	branches: ["b"],
 	update(diff) {
-		player.a.atk = player.a.atk.add(new Decimal((player.a.points.add((buyableEffect('b',14))).pow(2))).mul(diff));
+		player.a.atk = player.a.atk.add(player.a.points.add(buyableEffect('b',14)).add(upgradeEffect("w",34)).add(upgradeEffect("s",13)).pow(2).mul(diff));
 	},
     gainMult() {
         mult = new Decimal(1)
@@ -530,7 +571,7 @@ addLayer("a", {
     layerShown(){return player[this.layer].unlocked || (hasChallenge("s",22))},
 		clickables: {
 			11: {
-				display() {return  'You hava ' + format(player.a.atk) + " ATK <br> You get " + format(player.a.points.add((buyableEffect('b',14))).pow(2))+ "/sec"},
+				display() {return  'You hava ' + format(player.a.atk) + " ATK <br> You get " + format(player.a.points.add(buyableEffect('b',14)).add(upgradeEffect("w",34)).add(upgradeEffect("s",13)).pow(2))+ "/sec"},
 				canClick(){return true}
 			},
 			21: {
@@ -544,6 +585,7 @@ addLayer("a", {
 				onClick(){
 					let bm = Math.floor(Math.random() * 101)
 					let cm = Math.floor(Math.random() * 1000)
+					if (getBuyableAmount("b", 24).gte(1)) bm = bm.mul(buyableEffect('b',12))
 					player.a.atk = player.a.atk.sub(100)
 					player.b.points = player.b.points.add(bm);
 					if (cm == 0) {player.cr.points = player.cr.points.add(1)};
@@ -560,6 +602,7 @@ addLayer("a", {
 				onClick(){
 					let bm = Math.floor(Math.random() * 1001)
 					let cm = Math.floor(Math.random() * 100)
+					if (getBuyableAmount("b", 24).gte(1)) bm = bm.mul(buyableEffect('b',12))
 					player.a.atk = player.a.atk.sub(1000)
 					player.b.points = player.b.points.add(bm);
 					if (cm == 0) {player.cr.points = player.cr.points.add(1)};
@@ -576,6 +619,7 @@ addLayer("a", {
 				onClick(){
 					let bm = Math.floor(Math.random() * 10001)
 					let cm = Math.floor(Math.random() * 10)
+					if (getBuyableAmount("b", 24).gte(1)) bm = bm.mul(buyableEffect('b',12))
 					player.a.atk = player.a.atk.sub(10000)
 					player.b.points = player.b.points.add(bm);
 					if (cm == 0) {player.cr.points = player.cr.points.add(1)};
@@ -591,6 +635,7 @@ addLayer("a", {
 					},
 				onClick(){
 					let bm = Math.floor(Math.random() * 100001)
+					if (getBuyableAmount("b", 24).gte(1)) bm = bm.mul(buyableEffect('b',12))
 					player.a.atk = player.a.atk.sub(100000)
 					player.b.points = player.b.points.add(bm);
 					player.cr.points = player.cr.points.add(1);
@@ -609,6 +654,7 @@ addLayer("a", {
 					},
 				onClick(){
 					let bm = Math.floor(Math.random() * 1000001)
+					if (getBuyableAmount("b", 24).gte(1)) bm = bm.mul(buyableEffect('b',12))
 					player.a.atk = player.a.atk.sub(1000000)
 					player.b.points = player.b.points.add(bm);
 					player.cr.points = player.cr.points.add(10);
@@ -772,6 +818,72 @@ addLayer("b", {
 			purchaseLimit: 3,
 			unlocked(){return hasUpgrade("bm",41)},
 		},
+		22: {
+			cost(x) { 
+				return new Decimal(1000).add(80000*x*x)
+			},
+			title:"Endurance Rune II",
+			display() { return "Time gained based on blood magic increase<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:"+format(this.effect())+"x"},
+			canAfford() { return player[this.layer].points.gte(this.cost()) },
+			buy() {
+				player[this.layer].points = player[this.layer].points.sub(this.cost())
+				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+			},
+			purchaseLimit: 3,
+			unlocked(){return hasUpgrade("bm",42)},
+			effect:function(x){
+					{
+						let eff = new Decimal(1).mul(player.bm.points*0.02*(x+1)).add(1*x)
+						eff = softcap(eff,new Decimal(5),0.15)
+						eff = softcap(eff,new Decimal(15),0.1)
+						eff = softcap(eff,new Decimal(25),0.05)
+						return eff
+					}
+				
+			},
+			},
+		23: {
+			cost(x) { 
+				return new Decimal(1000).add(80000*x*x)
+			},
+			title:"Speed Rune II",
+			display() { return "Reduce the number of blood attack to get the base<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:-"+format(this.effect())+"x"},
+			canAfford() { return player[this.layer].points.gte(this.cost()) },
+			buy() {
+				player[this.layer].points = player[this.layer].points.sub(this.cost())
+				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+			},
+			purchaseLimit: 3,
+			unlocked(){return hasUpgrade("bm",43)},
+			effect:function(x){
+				{
+					let eff = new Decimal(0.1*x)
+					return eff
+				}
+				
+			},
+		},
+		24: {
+			cost(x) { 
+				return new Decimal(1000).add(80000*x*x)
+			},
+			title:"Strength Rune II",
+			display() { return "“kill it” Extra give Blood<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(this.effect())+"%"},
+			canAfford() { return player[this.layer].points.gte(this.cost()) },
+			buy() {
+				player[this.layer].points = player[this.layer].points.sub(this.cost())
+				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+			},
+			purchaseLimit: 3,
+			unlocked(){return hasUpgrade("bm",44)},
+			effect:function(x){
+				{
+					let eff = new Decimal(0.25*x)
+					return eff
+				}
+				
+			},
+		},
 	}
 })
 
@@ -807,6 +919,7 @@ addLayer("bm", {
 	doReset(resettingLayer) {
 			let keep = [];
 			if (resettingLayer=="c") keep.push("points","best","total","milestones","upgrades");
+			if (resettingLayer=="i") keep.push("points","best","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("bm", keep)
 		},
     hotkeys: [
@@ -921,7 +1034,7 @@ addLayer("cr", {
     symbol: "V-CR",
     position: 1,
     startData() { return {
-        unlocked: false,
+        unlocked: true,
 		points: new Decimal(0),
     }},
     color: "#FF9224",
@@ -934,7 +1047,7 @@ addLayer("cr", {
 		upgrades:{
 			11:{
 				title:"copper_axe",
-				description:"Make copper_axe(unlock too upgrades)(No make)",
+				description:"Make copper_axe(unlock two upgrades)",
 				cost:new Decimal(15),
 				unlocked(){return hasUpgrade("b",14)},
 			},
@@ -950,11 +1063,12 @@ addLayer("cr", {
 
 addLayer("c", {
     name: "coal",
-    symbol: "R-C",
+    symbol: "V-C",
     position: 0,
     startData() { return {
         unlocked: false,
 		points: new Decimal(0),
+		t: new Decimal(0)
     }},
     color: "#3C3C3C",
     requires: new Decimal(15), 
@@ -962,7 +1076,7 @@ addLayer("c", {
     baseResource: "stone", 
     baseAmount() {return player.s.points},
     type: "normal",
-    exponent: 0,
+    exponent: 0.85,
 	branches: ["s","b"],
     gainMult() {
         mult = new Decimal(1)
@@ -975,11 +1089,16 @@ addLayer("c", {
     hotkeys: [
         {key: "c", description: "c: Reset for c points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
+		doReset(resettingLayer) {
+			let keep = [];
+			if (resettingLayer=="i") keep.push("points","best","total","milestones","upgrades");
+			if (layers[resettingLayer].row > this.row) layerDataReset("c", keep)
+		},
     layerShown(){return (hasUpgrade("b",12)) || player[this.layer].unlocked},
 		upgrades:{
 			11:{
 				title:"Torch",
-				description:"Light up here(get 1% wood every second)",
+				description:"Light up here.",
 				cost:new Decimal(1),
 			},
 			12:{
@@ -988,5 +1107,109 @@ addLayer("c", {
 				cost:new Decimal(2),
 				unlocked(){return hasUpgrade("c",11)},
 			},
+			13:{
+				title:"No wood in the mine.but...",
+				description:"unlock c challenge",
+				cost:new Decimal(10),
+				unlocked(){return hasUpgrade("w",34)},
+			},
+			14:{
+				title:"Coal merchant",
+				description:"Sell and buy ​​some coal",
+				cost:new Decimal(30),
+				unlocked(){return hasChallenge("c",11)},
+			},
+			21:{
+				title:"Light up here",
+				description:"No zombies will bother you logging.(get 1% wood every second)",
+				cost:new Decimal(40),
+				currencyDisplayName:"torch",
+				unlocked(){return hasUpgrade("c",11)},
+				canAfford:function(){return (player.c.t >= 40)},
+				pay:function(){
+					player.c.t = player.c.t.sub(40)
+				},
+			}
+		},
+		clickables: {
+			11: {
+				display() {return  'You hava ' + format(player.c.t) + "torch"},
+				canClick(){return true}
+			},
+			12: {
+				display() {return "make torch(1coal + 1000wood = 4torch)"},
+				unlocked(){
+					return hasUpgrade("c",11)
+				},
+				canClick() {
+					let cc = player[this.layer].points
+					let mc = player.w.points
+					if (cc >= 1)
+					if (mr = 1000)
+					return cc + mc
+				},
+				onClick(){
+					player.c.points = player.c.points.sub(1)
+					player.w.points = player.w.points.sub(1000)
+					player.c.t = player.c.t.add(4)
+				},
+			},
+			21: {
+				display() {return "10coal -> 30000$"},
+				unlocked(){
+					return hasUpgrade("c",14)
+				},
+				canClick() {
+					let cc = player[this.layer].points
+					if (cc >= 10) 
+					return cc
+				},
+				onClick(){
+					player.c.points = player.c.points.sub(10)
+					player.$.points = player.$.points.add(30000)
+				},
+			},
+		},
+		challenges:{
+			11: {
+				name: "No wood in the mine. but have ore",
+				challengeDescription: "you find stone & coal, the Time acquisition is only 50%, the stone best * 3",
+				unlocked() { return hasUpgrade("c",13) },
+				canComplete: function() {return player.s.points.gte(100)},
+				goalDescription:"100 stone",
+				rewardDescription: "Unlock s & c upgrade",
+			},
 		},
 })
+
+
+addLayer("i", {
+    name: "iron",
+    symbol: "V-I",
+    position: 3,
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+    }},
+    color: "#F0F0F0",
+    requires: new Decimal(30), 
+    resource: "iron",
+    baseResource: "copper", 
+    baseAmount() {return player.cr.points},
+    type: "normal",
+    exponent: 2,
+	branches: ["cr"],
+    gainMult() {
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { 
+        return new Decimal(1)
+    },
+    row: 3, 
+    hotkeys: [
+        {key: "i", description: "i: Reset for i points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return false},
+})
+
