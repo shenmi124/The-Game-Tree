@@ -90,7 +90,7 @@ let VERSION = {
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Attack!</h2><br>
-	<h3>v0.3.6.6<h3><br> 
+	<h3>v0.3.6.6</h3><br> 
 		- Fix some bugs<br>
 	<h3>v0.3.6.5</h3><br>
 		- Added "i"!But it cannot be unlocked at the moment<br>
