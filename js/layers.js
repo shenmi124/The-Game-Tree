@@ -298,15 +298,15 @@ addLayer("w", {
 		},
 		25:{
 			title: "The End?",
-			description: "wood requires -1",
+			description: "keep wood upgrade",
 			cost: new Decimal (233),
 			unlocked(){
 			return hasChallenge("s",21)
 			}, 
 		},
 		31:{
-			title: "Fine crafts",
-			description: "keep wood upgrade",
+			title: "wooden_axe",
+			description: "wood requires -1",
 			cost: new Decimal (500),
 			unlocked(){
 				return hasUpgrade("b",13)
