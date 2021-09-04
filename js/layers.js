@@ -61,7 +61,7 @@ addLayer("$", {
 			description: "You can buy some adrenalines to Improve sleep quality (sleep time 6 hours> 3 hours).",
 			cost: new Decimal(200),
 			unlocked(){
-				return hasUpgrade("$",14)
+				return hasUpgrade("$",13)
 			},
 			},
 			21:{
