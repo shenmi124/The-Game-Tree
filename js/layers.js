@@ -112,7 +112,7 @@ addLayer("$", {
 				},
 			},
 			12: {
-				display() {return "300$ -> 500wood"},
+				display() {return "30$ -> 50wood"},
 				unlocked(){
 					return hasUpgrade("$",22)
 				},
@@ -131,7 +131,7 @@ addLayer("$", {
 				},
 			},
 			13: {
-				display() {return "300$ -> 10stone"},
+				display() {return "500$ -> 5stone"},
 				unlocked(){
 					return (hasUpgrade("w",33) && player.s.unlocked)
 				},
@@ -146,8 +146,8 @@ addLayer("$", {
 					return $c
 				},
 				onClick(){
-					player.$.points = player.$.points.sub(300)
-					player.s.points = player.s.points.add(10)
+					player.$.points = player.$.points.sub(500)
+					player.s.points = player.s.points.add(5)
 				},
 			},
 			14: {
