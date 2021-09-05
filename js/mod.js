@@ -45,6 +45,7 @@ function getPointGen() {
 		if (inChallenge('s',21)) gain = gain.mul(0.55)
 		if (inChallenge('s',22)) gain = gain.mul(0.45)
 		if (inChallenge('c',11)) gain = gain.mul(0.5)
+		if (inChallenge('c',12)) gain = gain.mul(0.4)
 	return gain
 }
 
@@ -84,11 +85,16 @@ function fixOldSave(oldVersion){
 }
 
 let VERSION = {
-	num: "0.3.6.7",
+	num: "0.4",
 	name: "Literally nothing",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+<h2>Achievement</h2><br>
+	<h3>v0.4</h3><br>
+		- Due to a bug, temporarily remove the effect of Rune 24.<br>
+		- Added Hidden Achievements<br>
+		- Fix some bugs<br>
 <h2>Attack!</h2><br>
 	<h3>v0.3.6.7</h3><br> 
 		- Modified a lot of things<br>

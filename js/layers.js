@@ -118,7 +118,7 @@ addLayer("$", {
 				},
 				canClick() {
 					let $c = player[this.layer].points
-					if ($c >= 300) 
+					if ($c >= 30) 
 					if (!inChallenge('s',11))
 					if (!inChallenge('s',12))
 					if (!inChallenge('s',21))
@@ -126,8 +126,8 @@ addLayer("$", {
 					return $c
 				},
 				onClick(){
-					player.$.points = player.$.points.sub(300)
-					player.w.points = player.w.points.add(500)
+					player.$.points = player.$.points.sub(30)
+					player.w.points = player.w.points.add(50)
 				},
 			},
 			13: {
@@ -418,8 +418,8 @@ addLayer("w", {
 			},
 		},
 		},
-		passiveGeneration() { return hasUpgrade("c", 21)?0.01:0 },
-		passiveGeneration() { return hasUpgrade("s", 13)?0.09:0 }
+		passiveGeneration() { return hasUpgrade("c", 21)?0.09:0 },
+		passiveGeneration() { return hasUpgrade("s", 13)?0.01:0 }
 })
 
 
@@ -436,7 +436,9 @@ addLayer("s", {
 		let sr = new Decimal(20)
 		if (hasUpgrade('w',32)) sr = sr.sub(5)
 		if (hasUpgrade('cr',12)) sr = sr.sub(5)
+		if (hasChallenge("c",11)) sr = sr.sub(2)
 		if (inChallenge("c",11)) sr = sr.mul(3)
+		if (inChallenge("c",12)) sr = sr.mul(3.5)
 		return sr
 	},
     resource: "stone",
@@ -530,15 +532,15 @@ addLayer("s", {
 			},
 			14:{
 				title: "Many axes",
-				description: "Get 9% wood every second",
+				description: "Get 1% wood every second",
 				cost: new Decimal(99),
 				unlocked(){
-					return hasChallenge("c",11) && hasUpgrade("c",21)
+					return hasChallenge("c",11)
 				},
 			},
 			15:{
 				title: "Compression technology",
-				description: "You can compress your stone",
+				description: "You can compress your stone(画大饼)",
 				cost: new Decimal(81),
 				unlocked(){
 					return hasChallenge("c",11)
@@ -597,69 +599,69 @@ addLayer("a", {
 			},
 			21: {
 				title:"kill it! *1 ",
-				display() {return  "- 100 ATK<br>get 0~100 blood<br>0.1% get copper"},
+				display() {return  "- 100 ATK<br>get 0~1000 blood<br>0.1% get copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 100) 
 					return true
 					},
 				onClick(){
-					let bm = Math.floor(Math.random() * 101)
+					let bm = Math.floor(Math.random() * 1001)
 					let cm = Math.floor(Math.random() * 1000)
-					if (getBuyableAmount("b", 24).gte(1)) bm = bm.mul(buyableEffect('b',12))
 					player.a.atk = player.a.atk.sub(100)
 					player.b.points = player.b.points.add(bm);
 					if (cm == 0) {player.cr.points = player.cr.points.add(1)};
+					return bm + cm
 				},
 			},
 			22: {
 				title:"kill it! *10 ",
-				display() {return  "- 1000 ATK<br>get 0~1000 blood<br>1% get copper"},
+				display() {return  "- 1000 ATK<br>get 0~10000 blood<br>1% get copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 1000) 
 					return true
 					},
 				onClick(){
-					let bm = Math.floor(Math.random() * 1001)
+					let bm = Math.floor(Math.random() * 10001)
 					let cm = Math.floor(Math.random() * 100)
-					if (getBuyableAmount("b", 24).gte(1)) bm = bm.mul(buyableEffect('b',12))
 					player.a.atk = player.a.atk.sub(1000)
 					player.b.points = player.b.points.add(bm);
 					if (cm == 0) {player.cr.points = player.cr.points.add(1)};
+					return bm + cm
 				},
 			},
 			23: {
 				title:"kill it! *100 ",
-				display() {return  "- 10000 ATK<br>get 0~10000 blood<br>10% get copper"},
+				display() {return  "- 10000 ATK<br>get 0~100000 blood<br>10% get copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 10000) 
 					return true
 					},
 				onClick(){
-					let bm = Math.floor(Math.random() * 10001)
+					let bm = Math.floor(Math.random() * 100001)
 					let cm = Math.floor(Math.random() * 10)
-					if (getBuyableAmount("b", 24).gte(1)) bm = bm.mul(buyableEffect('b',12))
 					player.a.atk = player.a.atk.sub(10000)
 					player.b.points = player.b.points.add(bm);
 					if (cm == 0) {player.cr.points = player.cr.points.add(1)};
+					return bm + cm
 				},
 			},
 			24: {
 				title:"kill it! *1000 ",
-				display() {return  "- 100000 ATK<br>get 0~100000 blood<br>100% get copper"},
+				display() {return  "- 100000 ATK<br>get 0~1000000 blood<br>100% get copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 100000) 
 					return true
 					},
 				onClick(){
-					let bm = Math.floor(Math.random() * 100001)
-					if (getBuyableAmount("b", 24).gte(1)) bm = bm.mul(buyableEffect('b',12))
+					let bm = Math.floor(Math.random() * 1000001)
 					player.a.atk = player.a.atk.sub(100000)
 					player.b.points = player.b.points.add(bm);
 					player.cr.points = player.cr.points.add(1);
+					return bm + cm
 				},
 				unlocked(){
 					return getBuyableAmount("b", 11).gte(1)
@@ -667,18 +669,18 @@ addLayer("a", {
 			},
 			25: {
 				title:"kill it! *10000 ",
-				display() {return  "- 1000000 ATK<br>get 0~1000000 blood<br>1000% get copper"},
+				display() {return  "- 1000000 ATK<br>get 0~10000000 blood<br>1000% get copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 1000000) 
 					return true
 					},
 				onClick(){
-					let bm = Math.floor(Math.random() * 1000001)
-					if (getBuyableAmount("b", 24).gte(1)) bm = bm.mul(buyableEffect('b',12))
+					let bm = Math.floor(Math.random() * 10000001)
 					player.a.atk = player.a.atk.sub(1000000)
 					player.b.points = player.b.points.add(bm);
 					player.cr.points = player.cr.points.add(10);
+					return bm + cm
 				},
 				unlocked(){
 					return getBuyableAmount("b", 11).gte(2)
@@ -741,7 +743,7 @@ addLayer("b", {
 	buyables: {
 		11: {
 			cost(x) { 
-				return new Decimal(1000).add(49000*x)
+				return new Decimal(1000).add(29000*x)
 			},
 			title:"Efficiency Rune I",
 			display() { return "Get extra ”kill it“<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(getBuyableAmount(this.layer, this.id))+" “kill it”"},
@@ -755,7 +757,7 @@ addLayer("b", {
 		},
 		12: {
 			cost(x) { 
-				return new Decimal(1000).add(49000*x)
+				return new Decimal(1000).add(29000*x)
 			},
 			title:"Endurance Rune I",
 			display() { return "Time gained based on blood increase<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:"+format(this.effect())+"x"},
@@ -769,9 +771,9 @@ addLayer("b", {
 			effect:function(x){
 					{
 						let eff = new Decimal(1).mul(player[this.layer].points*0.0002*(x+1)).add(1*x)
+						eff = softcap(eff,new Decimal(2),0.7)
 						eff = softcap(eff,new Decimal(5),0.15)
-						eff = softcap(eff,new Decimal(15),0.1)
-						eff = softcap(eff,new Decimal(25),0.05)
+						eff = softcap(eff,new Decimal(10),0.05)
 						return eff
 					}
 				
@@ -779,7 +781,7 @@ addLayer("b", {
 		},
 		13: {
 			cost(x) { 
-				return new Decimal(1000).add(49000*x)
+				return new Decimal(1000).add(29000*x)
 			},
 			title:"Speed Rune I",
 			display() { return "Reduce the number of blood magic to get the base<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:-"+format(this.effect())},
@@ -792,7 +794,7 @@ addLayer("b", {
 			unlocked(){return hasUpgrade("bm",33)},
 			effect:function(x){
 				{
-					let eff = new Decimal(100*x)
+					let eff = new Decimal(500*x)
 					return eff
 				}
 				
@@ -800,7 +802,7 @@ addLayer("b", {
 		},
 		14: {
 			cost(x) { 
-				return new Decimal(1000).add(49000*x)
+				return new Decimal(1000).add(29000*x)
 			},
 			title:"Strength Rune I",
 			display() { return "ATK best gained based on blood increase<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(this.effect())},
@@ -814,12 +816,12 @@ addLayer("b", {
 			effect:function(x){
 				{
 					let eff = new Decimal(1*x).mul(player[this.layer].points*0.00003*(x+1))
-					eff = softcap(eff,new Decimal(1),0.8)
-					eff = softcap(eff,new Decimal(2),0.7)
-					eff = softcap(eff,new Decimal(3),0.6)
-					eff = softcap(eff,new Decimal(4),0.5)
-					eff = softcap(eff,new Decimal(5),0.4)
-					eff = softcap(eff,new Decimal(6),0.3)
+					eff = softcap(eff,new Decimal(1),0.85)
+					eff = softcap(eff,new Decimal(2),0.75)
+					eff = softcap(eff,new Decimal(3),0.65)
+					eff = softcap(eff,new Decimal(4),0.55)
+					eff = softcap(eff,new Decimal(5),0.45)
+					eff = softcap(eff,new Decimal(6),0.35)
 					eff = softcap(eff,new Decimal(7),0)
 					return eff
 				}
@@ -855,9 +857,9 @@ addLayer("b", {
 			effect:function(x){
 					{
 						let eff = new Decimal(1).mul(player.bm.points*0.02*(x+1)).add(1*x)
-						eff = softcap(eff,new Decimal(5),0.15)
-						eff = softcap(eff,new Decimal(15),0.1)
-						eff = softcap(eff,new Decimal(25),0.05)
+						eff = softcap(eff,new Decimal(2),0.15)
+						eff = softcap(eff,new Decimal(3),0.1)
+						eff = softcap(eff,new Decimal(5),0.05)
 						return eff
 					}
 				
@@ -889,7 +891,7 @@ addLayer("b", {
 				return new Decimal(1000).add(80000*x*x)
 			},
 			title:"Strength Rune II",
-			display() { return "“kill it” Extra give Blood<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(this.effect())+"%"},
+			display() { return "“kill it” Extra give Blood<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(this.effect())+"x"},
 			canAfford() { return player[this.layer].points.gte(this.cost()) },
 			buy() {
 				player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -899,7 +901,7 @@ addLayer("b", {
 			unlocked(){return hasUpgrade("bm",44)},
 			effect:function(x){
 				{
-					let eff = new Decimal(0.25*x)
+					let eff = new Decimal(1+0.25*x)
 					return eff
 				}
 				
@@ -919,7 +921,7 @@ addLayer("bm", {
     }},
     color: "#842a84",
     requires:function (){
-		let bmr = new Decimal(500)
+		let bmr = new Decimal(2500)
 		if (getBuyableAmount("b", 13).gte(1)) bmr = bmr.sub(buyableEffect('b',13))
 		return bmr
 	},
@@ -1017,7 +1019,7 @@ addLayer("bm", {
 		41:{
 			title: "Efficiency Rune II",
 			description: "Unlock Efficiency Rune II",
-			cost: new Decimal(20),
+			cost: new Decimal(50),
 			unlocked(){
 				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
@@ -1025,7 +1027,7 @@ addLayer("bm", {
 		42:{
 			title: "Endurance Rune II",
 			description: "Unlock Efficiency Rune II",
-			cost: new Decimal(20),
+			cost: new Decimal(50),
 			unlocked(){
 				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
@@ -1033,7 +1035,7 @@ addLayer("bm", {
 		43:{
 			title: "Speed Rune II",
 			description: "Unlock Efficiency Rune II",
-			cost: new Decimal(20),
+			cost: new Decimal(50),
 			unlocked(){
 				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
@@ -1041,7 +1043,7 @@ addLayer("bm", {
 		44:{
 			title: "Strength Rune II",
 			description: "Unlock Efficiency Rune II",
-			cost: new Decimal(20),
+			cost: new Decimal(50),
 			unlocked(){
 				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
@@ -1092,7 +1094,11 @@ addLayer("c", {
 		t: new Decimal(0)
     }},
     color: "#3C3C3C",
-    requires: new Decimal(15), 
+    requires:function(){
+		let cr = new Decimal(30)
+		if (hasChallenge("c",12)) cr = cr.sub(5) 
+		return cr
+	},
     resource: "coal",
     baseResource: "stone", 
     baseAmount() {return player.s.points},
@@ -1126,26 +1132,26 @@ addLayer("c", {
 				title:"No wood in the mine.but...",
 				description:"unlock c challenge",
 				cost:new Decimal(2),
-				unlocked(){return hasUpgrade("w",34)},
+				unlocked(){return hasUpgrade("c",11)},
 			},
 			13:{
 				title:"No wood but have torches",
 				description:"keep s challenge",
 				cost:new Decimal(10),
-				unlocked(){return hasUpgrade("c",11)},
+				unlocked(){return hasUpgrade("c",12)},
 			},
 			14:{
 				title:"Coal merchant",
 				description:"Sell and buy ​​some coal",
 				cost:new Decimal(30),
-				unlocked(){return hasChallenge("c",11)},
+				unlocked(){return hasChallenge("c",12)},
 			},
 			21:{
 				title:"Light up here",
-				description:"No zombies will bother you logging.(get 1% wood every second)",
+				description:"No zombies will bother you logging.(get 9% wood every second)",
 				cost:new Decimal(40),
 				currencyDisplayName:"torch",
-				unlocked(){return hasUpgrade("c",11)},
+				unlocked(){return hasUpgrade("c",12)},
 				canAfford:function(){return (player.c.t >= 40)},
 				pay:function(){
 					player.c.t = player.c.t.sub(40)
@@ -1166,7 +1172,7 @@ addLayer("c", {
 					let cc = player[this.layer].points
 					let mc = player.w.points
 					if (cc >= 1)
-					if (mr = 1000)
+					if (mc >= 1000)
 					return cc + mc
 				},
 				onClick(){
@@ -1194,11 +1200,19 @@ addLayer("c", {
 		challenges:{
 			11: {
 				name: "No wood in the mine. but have ore",
-				challengeDescription: "you find stone & coal, the Time acquisition is only 50%, the stone best * 3",
+				challengeDescription: "you find stone, the Time acquisition is only 50%, the stone best * 3",
 				unlocked() { return hasUpgrade("c",12) },
-				canComplete: function() {return player.s.points.gte(100)},
-				goalDescription:"100 stone",
-				rewardDescription: "Unlock s & c upgrade",
+				canComplete: function() {return player.s.points.gte(50)},
+				goalDescription:"50 stone",
+				rewardDescription: "Unlock s upgrade, stone best - 2.",
+			},
+			11: {
+				name: "No wood in the mine. but have ore",
+				challengeDescription: "you find coal, the Time acquisition is only 40%, the stone best * 3.5",
+				unlocked() { return hasChallenge("c",11) },
+				canComplete: function() {return player.s.points.gte(75)},
+				goalDescription:"75 stone",
+				rewardDescription: "Unlock c upgrade, coal best - 5.",
 			},
 		},
 })
@@ -1234,3 +1248,75 @@ addLayer("i", {
     layerShown(){return false},
 })
 
+addLayer("ha", {
+    name: "Hidden Achievement",
+    symbol: "HA",
+    position: 3,
+    startData() { return {
+        unlocked: true,
+		points: new Decimal(0),
+    }},
+    color: "yellow",
+    resource: "Hidden Achievement",
+    type: "none",
+    row: "side", 
+    layerShown(){return true},
+	tooltip() {
+        return ("Hidden Achievements")
+    },
+	achievementPopups: true,
+    achievements: {
+        11: {
+            name: "yeeeeeeeee",
+            done() {
+                return player.w.points == 114514
+				},
+            tooltip() {
+                return `<div style="font-size: 14px">yeeeeeeeee<br>
+                ${(hasAchievement('ha', 11) ? 'have 114514 wood'+'<br>' +'Is it necessary to take such a foul-smelling achievement?' : '')}
+                </div>`;
+            },
+            onComplete() {
+                player.ha.points  = player.ha.points.add(1)
+            },
+        },
+		12: {
+            name: "Demon",
+            done() {
+				return player.b.points == 666
+			},
+            tooltip() {
+                return `<div style="font-size: 14px">Demon<br>
+                ${(hasAchievement('ha', 12) ? 'have 666 blood'+'<br>' +'And no demons' : '')}
+                </div>`;
+            },
+            onComplete() {
+                player.ha.points  = player.ha.points.add(1)
+            },
+        },
+		13: {
+            name: "Enough!",
+            done() {
+				return (player.b.points == 2368 && inChallenge("s",22))
+			},
+            tooltip() {
+                return `<div style="font-size: 14px">Enough!<br>
+                ${(hasAchievement('ha', 13) ? 'have 2368 wood in s 22challenge'+'<br>' +'Backpack, inventory, hands are all wood' : '')}
+                </div>`;
+            },
+            onComplete() {
+                player.ha.points  = player.ha.points.add(1)
+            },
+        },
+    },
+	tabFormat: [
+        ["display-text",
+            function() { return `you find ${player.ha.achievements.length} Hidden Achievements` },
+            { "color": 'yellow', "font-size": "32px", "font-family": "Comic Sans MS" }],
+        "blank",
+        "blank",
+        "blank",
+        "blank",
+        "achievements",
+    ],
+})
