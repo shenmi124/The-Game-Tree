@@ -153,7 +153,7 @@ addLayer("$", {
 			14: {
 				display() {return "5000$ -> 1coal"},
 				unlocked(){
-					return (hasUpgrade("c",13) && player.c.unlocked)
+					return (hasUpgrade("c",14) && player.c.unlocked)
 				},
 				canClick() {
 					let $c = player[this.layer].points
@@ -277,7 +277,7 @@ addLayer("w", {
 		},
 		21:{
 		title: "too too much!",
-		description: "Strengthen “wood” & ”The Game Tree is AWESOME!“",
+		description: "Strengthen “wood” & “The Game Tree is AWESOME!”",
 		effect() {
 			let eff = player[this.layer].points.add(1).pow(0.035)
 			return eff
@@ -419,7 +419,7 @@ addLayer("w", {
 		},
 		},
 		passiveGeneration() { return hasUpgrade("c", 21)?0.09:0 },
-		passiveGeneration() { return hasUpgrade("s", 13)?0.01:0 }
+		passiveGeneration() { return hasUpgrade("s", 13)?0.01:0 },
 })
 
 
@@ -746,7 +746,7 @@ addLayer("b", {
 				return new Decimal(1000).add(29000*x)
 			},
 			title:"Efficiency Rune I",
-			display() { return "Get extra ”kill it“<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(getBuyableAmount(this.layer, this.id))+" “kill it”"},
+			display() { return "Get extra “kill it”<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(getBuyableAmount(this.layer, this.id))+" “kill it”"},
 			canAfford() { return player[this.layer].points.gte(this.cost()) },
 			buy() {
 				player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -1096,6 +1096,7 @@ addLayer("c", {
     color: "#3C3C3C",
     requires:function(){
 		let cr = new Decimal(30)
+		if (hasChallenge("c",11)) cr = cr.sub(2) 
 		if (hasChallenge("c",12)) cr = cr.sub(5) 
 		return cr
 	},
@@ -1138,7 +1139,7 @@ addLayer("c", {
 				title:"No wood but have torches",
 				description:"keep s challenge",
 				cost:new Decimal(10),
-				unlocked(){return hasUpgrade("c",12)},
+				unlocked(){return hasChallenge("c",12)},
 			},
 			14:{
 				title:"Coal merchant",
@@ -1151,7 +1152,7 @@ addLayer("c", {
 				description:"No zombies will bother you logging.(get 9% wood every second)",
 				cost:new Decimal(40),
 				currencyDisplayName:"torch",
-				unlocked(){return hasUpgrade("c",12)},
+				unlocked(){return hasChallenge("c",12)},
 				canAfford:function(){return (player.c.t >= 40)},
 				pay:function(){
 					player.c.t = player.c.t.sub(40)
@@ -1202,12 +1203,12 @@ addLayer("c", {
 				name: "No wood in the mine. but have ore",
 				challengeDescription: "you find stone, the Time acquisition is only 50%, the stone best * 3",
 				unlocked() { return hasUpgrade("c",12) },
-				canComplete: function() {return player.s.points.gte(50)},
-				goalDescription:"50 stone",
+				canComplete: function() {return player.s.points.gte(30)},
+				goalDescription:"30 stone",
 				rewardDescription: "Unlock s upgrade, stone best - 2.",
 			},
-			11: {
-				name: "No wood in the mine. but have ore",
+			12: {
+				name: "No wood in the mine. but have ore2.0",
 				challengeDescription: "you find coal, the Time acquisition is only 40%, the stone best * 3.5",
 				unlocked() { return hasChallenge("c",11) },
 				canComplete: function() {return player.s.points.gte(75)},
@@ -1247,6 +1248,7 @@ addLayer("i", {
     ],
     layerShown(){return false},
 })
+
 
 addLayer("ha", {
     name: "Hidden Achievement",
@@ -1297,11 +1299,39 @@ addLayer("ha", {
 		13: {
             name: "Enough!",
             done() {
-				return (player.b.points == 2368 && inChallenge("s",22))
+				return (player.w.points >= 2368 && inChallenge("s",22))
 			},
             tooltip() {
                 return `<div style="font-size: 14px">Enough!<br>
                 ${(hasAchievement('ha', 13) ? 'have 2368 wood in s 22challenge'+'<br>' +'Backpack, inventory, hands are all wood' : '')}
+                </div>`;
+            },
+            onComplete() {
+                player.ha.points  = player.ha.points.add(1)
+            },
+        },
+		14: {
+            name: "The pinnacle of immorality",
+            done() {
+				return player.devSpeed > 1
+			},
+            tooltip() {
+                return `<div style="font-size: 14px">The pinnacle of immorality<br>
+                ${(hasAchievement('ha', 14) ? 'Play games by speeding up'+'<br>' +'stop!!!' : '')}
+                </div>`;
+            },
+            onComplete() {
+                player.ha.points  = player.ha.points.add(1)
+            },
+        },
+		15: {
+            name: "The pinnacle of morality",
+            done() {
+				return player.devSpeed < 1
+			},
+            tooltip() {
+                return `<div style="font-size: 14px">The pinnacle of morality<br>
+                ${(hasAchievement('ha', 15) ? 'Play games by slowing down'+'<br>' +'st.OH!You go on.' : '')}
                 </div>`;
             },
             onComplete() {
@@ -1320,3 +1350,4 @@ addLayer("ha", {
         "achievements",
     ],
 })
+

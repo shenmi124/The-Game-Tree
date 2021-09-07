@@ -85,12 +85,14 @@ function fixOldSave(oldVersion){
 }
 
 let VERSION = {
-	num: "0.4",
-	name: "Literally nothing",
+	num: "0.4.1",
+	name: "Achievement",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Achievement</h2><br>
+	<h3>v0.4.1</h3><br>
+		- What has been updated?<br>
 	<h3>v0.4</h3><br>
 		- Due to a bug, temporarily remove the effect of Rune 24.<br>
 		- Added Hidden Achievements<br>
