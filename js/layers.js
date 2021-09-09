@@ -215,6 +215,9 @@ addLayer("w", {
         return exp
     },
     row: 0, 
+	update(diff) {
+			generatePoints("w", this.revenue(diff))
+		},
     hotkeys: [
         {key: "w", description: "w: Reset for w points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
@@ -418,8 +421,12 @@ addLayer("w", {
 			},
 		},
 		},
-		passiveGeneration() { return hasUpgrade("c", 21)?0.09:0 },
-		passiveGeneration() { return hasUpgrade("s", 13)?0.01:0 },
+		revenue(diff) {
+			let wu = 0
+			if (hasUpgrade("s",13)) wu += 1
+			if (hasUpgrade("c",21)) wu += 9
+			return diff * wu / 100
+		}
 })
 
 
@@ -446,7 +453,7 @@ addLayer("s", {
     baseAmount() {return player.w.points},
     type: "normal",
     exponent: 0.5,
-	branches: ["w"],
+	branches: [["w","#ADADAD"]],
     gainMult() {
         mult = new Decimal(1)
         return mult
@@ -571,7 +578,7 @@ addLayer("a", {
     type: "static",
     exponent: 1,
 	base:10,
-	branches: ["b"],
+	branches: [["b","#FFB5B5"]],
 	update(diff) {
 		player.a.atk = player.a.atk.add(player.a.points.add(buyableEffect('b',14)).add(upgradeEffect("w",34)).add(upgradeEffect("s",13)).pow(2).mul(diff));
 	},
@@ -714,6 +721,7 @@ addLayer("b", {
 			title: "Magic?",
 			description: "Blood, blood, I need blood. OH!,I still need an altar",
 			cost: new Decimal(666),
+			style() {return {'border-color': "#CE0000" }}
 		},
 		12:{
 			title: "Blood stone",
@@ -722,6 +730,7 @@ addLayer("b", {
 			unlocked(){
 				return hasUpgrade("bm" ,13)
 			},
+			style() {return {'border-color': "#CE0000" }}
 		},
 		13:{
 			title: "Blood wood",
@@ -730,6 +739,7 @@ addLayer("b", {
 			unlocked(){
 				return hasUpgrade("bm" ,14)
 			},
+			style() {return {'border-color': "#CE0000" }}
 		},
 		14:{
 			title: "Blood copper",
@@ -738,6 +748,7 @@ addLayer("b", {
 			unlocked(){
 				return hasUpgrade("bm" ,14)
 			},
+			style() {return {'border-color': "#CE0000" }}
 		},
 	},
 	buyables: {
@@ -754,6 +765,7 @@ addLayer("b", {
 			},
 			purchaseLimit: 2,
 			unlocked(){return hasUpgrade("bm",31)},
+            style() {return {'border-color': "#CE0000" }}
 		},
 		12: {
 			cost(x) { 
@@ -778,6 +790,7 @@ addLayer("b", {
 					}
 				
 				},
+			style() {return {'border-color': "#CE0000" }}
 		},
 		13: {
 			cost(x) { 
@@ -799,6 +812,7 @@ addLayer("b", {
 				}
 				
 			},
+			style() {return {'border-color': "#CE0000" }}
 		},
 		14: {
 			cost(x) { 
@@ -826,6 +840,7 @@ addLayer("b", {
 					return eff
 				}
 			},
+			style() {return {'border-color': "#CE0000" }}
 		},
 		21: {
 			cost(x) { 
@@ -840,6 +855,7 @@ addLayer("b", {
 			},
 			purchaseLimit: 3,
 			unlocked(){return hasUpgrade("bm",41)},
+			style() {return {'border-color': "#CE0000" }}
 		},
 		22: {
 			cost(x) { 
@@ -864,7 +880,8 @@ addLayer("b", {
 					}
 				
 			},
-			},
+			style() {return {'border-color': "#CE0000" }}
+		},
 		23: {
 			cost(x) { 
 				return new Decimal(1000).add(80000*x*x)
@@ -885,6 +902,7 @@ addLayer("b", {
 				}
 				
 			},
+			style() {return {'border-color': "#CE0000" }}
 		},
 		24: {
 			cost(x) { 
@@ -904,8 +922,8 @@ addLayer("b", {
 					let eff = new Decimal(1+0.25*x)
 					return eff
 				}
-				
 			},
+			style() {return {'border-color': "#CE0000" }}
 		},
 	}
 })
@@ -930,7 +948,7 @@ addLayer("bm", {
     baseAmount() {return player.b.points},
     type: "normal",
     exponent: 1,
-	branches: ["b"],
+	branches: [["b","#842a84"]],
     gainMult() {
         mult = new Decimal(1)
         return mult
@@ -954,11 +972,13 @@ addLayer("bm", {
 			title: "Drink?",
 			description: "No,no,no. But maybe I can make some blood runes",
 			cost: new Decimal(1),
+			style() {return {'border-color': "#842a84" }}
 		},
 		12:{
 			title: "Immortal",
 			description: "Keep blood on buyables & upgrade",
 			cost: new Decimal(30),
+			style() {return {'border-color': "#842a84" }}
 		},
 		13:{
 			title: "soak",
@@ -967,6 +987,7 @@ addLayer("bm", {
 			unlocked(){
 				return (getBuyableAmount("b", 21).gte(1))
 			},
+			style() {return {'border-color': "#842a84" }}
 		},
 		14:{
 			title: "expand",
@@ -974,7 +995,8 @@ addLayer("bm", {
 			cost: new Decimal(40),
 			unlocked(){
 				return (getBuyableAmount("b", 21).gte(2))
-			}
+			},
+			style() {return {'border-color': "#842a84" }}
 		},
 		15:{
 			title: "Increase",
@@ -982,7 +1004,8 @@ addLayer("bm", {
 			cost: new Decimal(75),
 			unlocked(){
 				return (getBuyableAmount("b", 21).gte(3))
-			}
+			},
+			style() {return {'border-color': "#842a84" }}
 		},
 		31:{
 			title: "Efficiency Rune I",
@@ -991,6 +1014,7 @@ addLayer("bm", {
 			unlocked(){
 				return (hasUpgrade("bm",11))
 			},
+			style() {return {'border-color': "#842a84" }}
 		},
 		32:{
 			title: "Endurance Rune I",
@@ -999,6 +1023,7 @@ addLayer("bm", {
 			unlocked(){
 				return (hasUpgrade("bm",11))
 			},
+			style() {return {'border-color': "#842a84" }}
 		},
 		33:{
 			title: "Speed Rune I",
@@ -1007,6 +1032,7 @@ addLayer("bm", {
 			unlocked(){
 				return (hasUpgrade("bm",11))
 			},
+			style() {return {'border-color': "#842a84" }}
 		},
 		34:{
 			title: "Strength Rune I",
@@ -1015,6 +1041,7 @@ addLayer("bm", {
 			unlocked(){
 				return (hasUpgrade("bm",11))
 			},
+			style() {return {'border-color': "#842a84" }}
 		},
 		41:{
 			title: "Efficiency Rune II",
@@ -1023,6 +1050,7 @@ addLayer("bm", {
 			unlocked(){
 				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
+			style() {return {'border-color': "#842a84" }}
 		},
 		42:{
 			title: "Endurance Rune II",
@@ -1031,6 +1059,7 @@ addLayer("bm", {
 			unlocked(){
 				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
+			style() {return {'border-color': "#842a84" }}
 		},
 		43:{
 			title: "Speed Rune II",
@@ -1039,6 +1068,7 @@ addLayer("bm", {
 			unlocked(){
 				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
+			style() {return {'border-color': "#842a84" }}
 		},
 		44:{
 			title: "Strength Rune II",
@@ -1047,6 +1077,7 @@ addLayer("bm", {
 			unlocked(){
 				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
+			style() {return {'border-color': "#842a84" }}
 		},
 	},
 })
@@ -1059,13 +1090,14 @@ addLayer("cr", {
     startData() { return {
         unlocked: true,
 		points: new Decimal(0),
+		e: new Decimal(0),
     }},
     color: "#FF9224",
     requires: new Decimal(0), 
     resource: "copper",
     type: "none",
     row: 2, 
-	branches: ["s","a"],
+	branches: [["s","#FF9224"],["a","#FF9224"]],
     layerShown(){return (hasChallenge("s",22))},
 		upgrades:{
 			11:{
@@ -1081,6 +1113,20 @@ addLayer("cr", {
 				unlocked(){return hasUpgrade("b",14)},
 			},
 		},
+		bars: {
+			bigBar: {
+				direction: RIGHT,
+				width: 300,
+				height: 30,
+				progress() { return player.cr.e },
+			},
+		},
+	tabFormat: [
+        "main-display",
+        "upgrades",
+        "blank",
+		["row", [["clickable", 11], "blank", ["bar", "bigBar"], "blank", ["clickable", 12]]],
+    ]
 })
 
 
@@ -1097,7 +1143,8 @@ addLayer("c", {
     requires:function(){
 		let cr = new Decimal(30)
 		if (hasChallenge("c",11)) cr = cr.sub(2) 
-		if (hasChallenge("c",12)) cr = cr.sub(5) 
+		if (hasChallenge("c",12)) cr = cr.sub(3)
+		if (hasChallenge("c",13)) cr = cr.sub(5) 
 		return cr
 	},
     resource: "coal",
@@ -1105,7 +1152,7 @@ addLayer("c", {
     baseAmount() {return player.s.points},
     type: "normal",
     exponent: 0.85,
-	branches: ["s","b"],
+	branches: [["s","#3C3C3C"],["b","#3C3C3C"]],
     gainMult() {
         mult = new Decimal(1)
         return mult
@@ -1149,13 +1196,13 @@ addLayer("c", {
 			},
 			21:{
 				title:"Light up here",
-				description:"No zombies will bother you logging.(get 9% wood every second)",
-				cost:new Decimal(40),
+				description:"No zombies will bother you logging.(Get 9% wood second)",
+				cost:new Decimal(50),
 				currencyDisplayName:"torch",
 				unlocked(){return hasChallenge("c",12)},
-				canAfford:function(){return (player.c.t >= 40)},
+				canAfford:function(){return (player.c.t >= 50)},
 				pay:function(){
-					player.c.t = player.c.t.sub(40)
+					player.c.t = player.c.t.sub(50)
 				},
 			}
 		},
@@ -1203,17 +1250,25 @@ addLayer("c", {
 				name: "No wood in the mine. but have ore",
 				challengeDescription: "you find stone, the Time acquisition is only 50%, the stone best * 3",
 				unlocked() { return hasUpgrade("c",12) },
-				canComplete: function() {return player.s.points.gte(30)},
-				goalDescription:"30 stone",
+				canComplete: function() {return player.s.points.gte(15)},
+				goalDescription:"15 stone",
 				rewardDescription: "Unlock s upgrade, stone best - 2.",
 			},
 			12: {
 				name: "No wood in the mine. but have ore2.0",
 				challengeDescription: "you find coal, the Time acquisition is only 40%, the stone best * 3.5",
 				unlocked() { return hasChallenge("c",11) },
-				canComplete: function() {return player.s.points.gte(75)},
-				goalDescription:"75 stone",
-				rewardDescription: "Unlock c upgrade, coal best - 5.",
+				canComplete: function() {return player.s.points.gte(25)},
+				goalDescription:"25 stone",
+				rewardDescription: "Unlock c upgrade, coal best - 3.",
+			},
+			21: {
+				name: "No wood in the mine. but have ore3.0",
+				challengeDescription: "you find copper, the Time acquisition is only 30%, the stone best * 4",
+				unlocked() { return hasChallenge("c",12) },
+				canComplete: function() {return player.s.points.gte(35)},
+				goalDescription:"35 stone",
+				rewardDescription: "Unlock Battery, coal best - 5.",
 			},
 		},
 })
@@ -1234,7 +1289,7 @@ addLayer("i", {
     baseAmount() {return player.cr.points},
     type: "normal",
     exponent: 2,
-	branches: ["cr"],
+	branches: [["cr","#F0F0F0"]],
     gainMult() {
         mult = new Decimal(1)
         return mult
