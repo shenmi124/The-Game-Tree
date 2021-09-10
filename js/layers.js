@@ -1,18 +1,21 @@
 addLayer("$", {
-    name: "$", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "R-$", // This appears on the layer's node. Default is the id with the first letter capitalized
-    position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    name: "$",
+    symbol: "R-$",
+    position: 1,
     startData() { return {
         unlocked: true,
 		points: new Decimal(0),
     }},
     color: "#FFFF6F",
-    requires: new Decimal(10), // Can be a function that takes requirement increases into account
-    resource: "$", // Name of prestige currency
-    baseResource: "time", // Name of resource prestige is based on
-    baseAmount() {return player.points}, // Get the current amount of baseResource
-    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0, // Prestige currency exponent
+    requires: new Decimal(10),
+    resource: "$",
+    baseResource: "time",
+    baseAmount() {return player.points},
+    type: "normal",
+    exponent:function(){
+		let $e = new Decimal("0")
+		return $e
+	},
 		doReset(resettingLayer) {
 			let keep = [];
 			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades");
@@ -22,14 +25,17 @@ addLayer("$", {
 			if (resettingLayer=="i") keep.push("points","best","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("$", keep)
 		},
-    gainMult() { // Calculate the multiplier for main currency from bonuses
+    gainMult() {
         mult = new Decimal(1)
         return mult
     },
-    gainExp() { // Calculate the exponent on main currency from bonuses
+    gainExp() {
         return new Decimal(1)
     },
-    row: 0, // Row the layer is in on the tree (0 is the first row)
+	update(diff) {
+		generatePoints("$", this.revenue(diff))
+	},
+    row: 0,
     hotkeys: [
         {key: "$", description: "$: Reset for $ points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
@@ -104,6 +110,9 @@ addLayer("$", {
 					if (!inChallenge('s',12))
 					if (!inChallenge('s',21))
 					if (!inChallenge('s',22))
+					if (!inChallenge('c',11))
+					if (!inChallenge('c',12))
+					if (!inChallenge('c',21))
 					return $c
 				},
 				onClick(){
@@ -123,6 +132,9 @@ addLayer("$", {
 					if (!inChallenge('s',12))
 					if (!inChallenge('s',21))
 					if (!inChallenge('s',22))
+					if (!inChallenge('c',11))
+					if (!inChallenge('c',12))
+					if (!inChallenge('c',21))
 					return $c
 				},
 				onClick(){
@@ -143,6 +155,8 @@ addLayer("$", {
 					if (!inChallenge('s',21))
 					if (!inChallenge('s',22))
 					if (!inChallenge('c',11))
+					if (!inChallenge('c',12))
+					if (!inChallenge('c',21))
 					return $c
 				},
 				onClick(){
@@ -162,6 +176,9 @@ addLayer("$", {
 					if (!inChallenge('s',12))
 					if (!inChallenge('s',21))
 					if (!inChallenge('s',22))
+					if (!inChallenge('c',11))
+					if (!inChallenge('c',12))
+					if (!inChallenge('c',21))
 					return $c
 				},
 				onClick(){
@@ -170,7 +187,11 @@ addLayer("$", {
 				},
 			},
 		},
-		passiveGeneration() { return hasMilestone("$", 0)?0.05:0 }
+		revenue(diff) {
+			let $u = 0
+			if (hasMilestone("$",0)) $u += 5
+			return diff * $u / 100
+		}
 })
 
 
@@ -217,7 +238,7 @@ addLayer("w", {
     row: 0, 
 	update(diff) {
 			generatePoints("w", this.revenue(diff))
-		},
+	},
     hotkeys: [
         {key: "w", description: "w: Reset for w points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
@@ -601,7 +622,7 @@ addLayer("a", {
     layerShown(){return player[this.layer].unlocked || (hasChallenge("s",22))},
 		clickables: {
 			11: {
-				display() {return  'You hava ' + format(player.a.atk) + " ATK <br> You get " + format(player.a.points.add(buyableEffect('b',14)).add(upgradeEffect("w",34)).add(upgradeEffect("s",13)).pow(2))+ "/sec"},
+				display() {return  'You have ' + format(player.a.atk) + " ATK <br> You get " + format(player.a.points.add(buyableEffect('b',14)).add(upgradeEffect("w",34)).add(upgradeEffect("s",13)).pow(2))+ "/sec"},
 				canClick(){return true}
 			},
 			21: {
@@ -1113,19 +1134,29 @@ addLayer("cr", {
 				unlocked(){return hasUpgrade("b",14)},
 			},
 		},
+		clickables:{
+			11:{
+				title:"+",
+				canClick(){return true},
+				unlock(){return hasChallenge("c",21)},
+				width: 50,
+				height: 50,
+			}
+		},
 		bars: {
 			bigBar: {
 				direction: RIGHT,
 				width: 300,
 				height: 30,
 				progress() { return player.cr.e },
+				unlock(){return hasChallenge("c",21)},
 			},
 		},
 	tabFormat: [
         "main-display",
         "upgrades",
         "blank",
-		["row", [["clickable", 11], "blank", ["bar", "bigBar"], "blank", ["clickable", 12]]],
+		["row", [["bar", "bigBar"], "blank", ["clickable", 11]]],
     ]
 })
 
