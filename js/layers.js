@@ -1,6 +1,6 @@
 addLayer("$", {
     name: "$",
-    symbol: "R-$",
+    symbol: "$",
     position: 1,
     startData() { return {
         unlocked: true,
@@ -197,7 +197,7 @@ addLayer("$", {
 
 addLayer("w", {
     name: "wood",
-    symbol: "V-W",
+    symbol: "W",
     position: 0,
     startData() { return {
         unlocked: true,
@@ -367,7 +367,7 @@ addLayer("w", {
 		},
 		33:{
 			title: "Buy and sell",
-			description: "With real money",
+			description: "With money",
 			cost: new Decimal (1000),
 			unlocked(){
 				return hasUpgrade("b",13)
@@ -453,7 +453,7 @@ addLayer("w", {
 
 addLayer("s", {
     name: "stone",
-    symbol: "V-S",
+    symbol: "S",
     position: 0,
     startData() { return {
         unlocked:false,
@@ -580,7 +580,7 @@ addLayer("s", {
 
 addLayer("a", {
     name: "attack",
-    symbol: "V-A",
+    symbol: "A",
     position: 1,
     startData() { return {
         unlocked: false,
@@ -627,7 +627,7 @@ addLayer("a", {
 			},
 			21: {
 				title:"kill it! *1 ",
-				display() {return  "- 100 ATK<br>get 0~1000 blood<br>0.1% get copper"},
+				display() {return  "- 100 ATK<br>Get 0~1000 Blood<br>0.1% get Copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 100) 
@@ -644,7 +644,7 @@ addLayer("a", {
 			},
 			22: {
 				title:"kill it! *10 ",
-				display() {return  "- 1000 ATK<br>get 0~10000 blood<br>1% get copper"},
+				display() {return  "- 1000 ATK<br>Get 0~10000 Blood<br>1% get Copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 1000) 
@@ -661,7 +661,7 @@ addLayer("a", {
 			},
 			23: {
 				title:"kill it! *100 ",
-				display() {return  "- 10000 ATK<br>get 0~100000 blood<br>10% get copper"},
+				display() {return  "- 10000 ATK<br>Get 0~100000 Blood<br>10% get Copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 10000) 
@@ -678,7 +678,7 @@ addLayer("a", {
 			},
 			24: {
 				title:"kill it! *1000 ",
-				display() {return  "- 100000 ATK<br>get 0~1000000 blood<br>100% get copper"},
+				display() {return  "- 100000 ATK<br>Get 0~1000000 Blood<br>100% get Copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 100000) 
@@ -697,7 +697,7 @@ addLayer("a", {
 			},
 			25: {
 				title:"kill it! *10000 ",
-				display() {return  "- 1000000 ATK<br>get 0~10000000 blood<br>1000% get copper"},
+				display() {return  "- 1000000 ATK<br>Get 0~10000000 Blood<br>1000% get Copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 1000000) 
@@ -720,7 +720,7 @@ addLayer("a", {
 
 addLayer("b", {
     name: "blood",
-    symbol: "V-B",
+    symbol: "B",
     position: 0.1,
     startData() { return {
         unlocked: true,
@@ -740,7 +740,7 @@ addLayer("b", {
 	upgrades:{
 		11:{
 			title: "Magic?",
-			description: "Blood, blood, I need blood. OH!,I still need an altar",
+			description: "Blood, Blood, I need blood. OH!,I still need an altar",
 			cost: new Decimal(666),
 			style() {return {'border-color': "#CE0000" }}
 		},
@@ -883,7 +883,7 @@ addLayer("b", {
 				return new Decimal(1000).add(80000*x*x)
 			},
 			title:"Endurance Rune II",
-			display() { return "Time gained based on blood magic increase<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:"+format(this.effect())+"x"},
+			display() { return "Time gained based on blood magic increase<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/3<br>"+"Currently:"+format(this.effect())+"x"},
 			canAfford() { return player[this.layer].points.gte(this.cost()) },
 			buy() {
 				player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -908,7 +908,7 @@ addLayer("b", {
 				return new Decimal(1000).add(80000*x*x)
 			},
 			title:"Speed Rune II",
-			display() { return "Reduce the number of blood attack to get the base<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:-"+format(this.effect())+"x"},
+			display() { return "Reduce the number of blood attack to get the base<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/3<br>"+"Currently:-"+format(this.effect())+"x"},
 			canAfford() { return player[this.layer].points.gte(this.cost()) },
 			buy() {
 				player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -930,7 +930,7 @@ addLayer("b", {
 				return new Decimal(1000).add(80000*x*x)
 			},
 			title:"Strength Rune II",
-			display() { return "“kill it” Extra give Blood<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(this.effect())+"x"},
+			display() { return "“kill it” Extra give Blood<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/3<br>"+"Currently:+"+format(this.effect())+"x"},
 			canAfford() { return player[this.layer].points.gte(this.cost()) },
 			buy() {
 				player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -952,7 +952,7 @@ addLayer("b", {
 
 addLayer("bm", {
     name: "blood magic",
-    symbol: "V-BM",
+    symbol: "BM",
     position: 2,
     startData() { return {
         unlocked: false,
@@ -1106,7 +1106,7 @@ addLayer("bm", {
 
 addLayer("cr", {
     name: "copper",
-    symbol: "V-CR",
+    symbol: "CR",
     position: 1,
     startData() { return {
         unlocked: true,
@@ -1163,7 +1163,7 @@ addLayer("cr", {
 
 addLayer("c", {
     name: "coal",
-    symbol: "V-C",
+    symbol: "C",
     position: 0,
     startData() { return {
         unlocked: false,
@@ -1239,7 +1239,7 @@ addLayer("c", {
 		},
 		clickables: {
 			11: {
-				display() {return  'You hava ' + format(player.c.t) + "torch"},
+				display() {return  'You have ' + format(player.c.t) + " torch"},
 				canClick(){return true}
 			},
 			12: {
@@ -1307,7 +1307,7 @@ addLayer("c", {
 
 addLayer("i", {
     name: "iron",
-    symbol: "V-I",
+    symbol: "I",
     position: 3,
     startData() { return {
         unlocked: false,
@@ -1361,7 +1361,7 @@ addLayer("ha", {
 				},
             tooltip() {
                 return `<div style="font-size: 14px">yeeeeeeeee<br>
-                ${(hasAchievement('ha', 11) ? 'have 114514 wood'+'<br>' +'Is it necessary to take such a foul-smelling achievement?' : '')}
+                ${(hasAchievement('ha', 11) ? 'have 114514 Wood'+'<br>' +'Is it necessary to take such a foul-smelling achievement?' : '')}
                 </div>`;
             },
             onComplete() {
@@ -1375,7 +1375,7 @@ addLayer("ha", {
 			},
             tooltip() {
                 return `<div style="font-size: 14px">Demon<br>
-                ${(hasAchievement('ha', 12) ? 'have 666 blood'+'<br>' +'And no demons' : '')}
+                ${(hasAchievement('ha', 12) ? 'have 666 Blood'+'<br>' +'And no demons' : '')}
                 </div>`;
             },
             onComplete() {
@@ -1389,7 +1389,7 @@ addLayer("ha", {
 			},
             tooltip() {
                 return `<div style="font-size: 14px">Enough!<br>
-                ${(hasAchievement('ha', 13) ? 'have 2368 wood in s 22challenge'+'<br>' +'Backpack, inventory, hands are all wood' : '')}
+                ${(hasAchievement('ha', 13) ? 'have 2368 Wood in s 22challenge'+'<br>' +'Backpack, inventory, hands are all wood' : '')}
                 </div>`;
             },
             onComplete() {

@@ -55,9 +55,7 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
-	function(){return"V is Virtual | R is Reality"},
 	function(){return"Current endgame: 1 iron"},
-	function(){return"因为学业，不知道什么时候才能继续更新"},
 ]
 
 // Determines when the game "ends"
@@ -85,12 +83,15 @@ function fixOldSave(oldVersion){
 }
 
 let VERSION = {
-	num: "0.5.0.1",
+	num: "0.5.0.2",
 	name: "Art",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Art</h2><br>
+	<h3>v0.5.0.2</h3><br>
+		- Changed some small things<br>
+		- Remove V/R<br>
 	<h3>v0.5.0.1</h3><br>
 		- Changed some small things<br>
 	<h3>v0.5</h3><br>
