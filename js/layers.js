@@ -96,7 +96,7 @@ addLayer("$", {
 					return player.$.points.gte(50) && hasUpgrade("$",21)},
 				},
 		
-			},
+		},
 		clickables: {
 			11: {
 				display() {return "3$ -> 5wood"},
@@ -237,7 +237,7 @@ addLayer("w", {
     },
     row: 0, 
 	update(diff) {
-			generatePoints("w", this.revenue(diff))
+		generatePoints("w", this.revenue(diff))
 	},
     hotkeys: [
         {key: "w", description: "w: Reset for w points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -444,10 +444,12 @@ addLayer("w", {
 		},
 		revenue(diff) {
 			let wu = 0
-			if (hasUpgrade("s",13)) wu += 1
+			if (hasUpgrade("s",14)) wu += 1
 			if (hasUpgrade("c",21)) wu += 9
-			return diff * wu / 100
-		}
+			if (player.w.points >= 500) {
+			wc = 500}else{wc = 0}
+			return diff * wu / 100 - (wc * player.cr.b1)
+		},
 })
 
 
@@ -463,10 +465,11 @@ addLayer("s", {
     requires:function (){
 		let sr = new Decimal(20)
 		if (hasUpgrade('w',32)) sr = sr.sub(5)
-		if (hasUpgrade('cr',12)) sr = sr.sub(5)
-		if (hasChallenge("c",11)) sr = sr.sub(2)
-		if (inChallenge("c",11)) sr = sr.mul(3)
-		if (inChallenge("c",12)) sr = sr.mul(3.5)
+		if (hasUpgrade('cr',12)) sr = sr.sub(3)
+		if (hasMilestone("d",1)) sr = sr.sub(1)
+		if (hasChallenge("c",11)) sr = sr.mul(2)
+		if (inChallenge("c",12)) sr = sr.mul(3)
+		if (inChallenge("c",21)) sr = sr.mul(3.5)
 		return sr
 	},
     resource: "stone",
@@ -708,7 +711,7 @@ addLayer("a", {
 					player.a.atk = player.a.atk.sub(1000000)
 					player.b.points = player.b.points.add(bm);
 					player.cr.points = player.cr.points.add(10);
-					return bm + cm
+					return bm
 				},
 				unlocked(){
 					return getBuyableAmount("b", 11).gte(2)
@@ -1112,14 +1115,30 @@ addLayer("cr", {
         unlocked: true,
 		points: new Decimal(0),
 		e: new Decimal(0),
+		em: new Decimal(1),
+		b1: new Decimal(0),
+		b2: new Decimal(0),
+		diff: new Decimal(0),
     }},
     color: "#FF9224",
     requires: new Decimal(0), 
     resource: "copper",
     type: "none",
     row: 2, 
-	branches: [["s","#FF9224"],["a","#FF9224"]],
+	branches: [["s","#FF9224"],["a","#FF9224"],["d","#272727"]],
     layerShown(){return (hasChallenge("s",22))},
+	update(diff) {
+		if(hasUpgrade("cr",14)) {player.cr.e = player.cr.e.add(player.cr.diff.add(0.1).mul(diff))}
+		if(player.cr.e > player.cr.em){player.cr.e = player.cr.em}
+		player.cr.b1 = player.cr.b1.add(player.cr.diff.sub(0.2).mul(diff))
+		if(player.cr.b1 > 1){player.cr.b1 = new Decimal(1)}
+		if(player.cr.b1 < 0){player.cr.b1 = new Decimal(0)}
+		player.cr.b2 = player.cr.b2.add(player.cr.diff.sub(0.2).mul(diff))
+		if(player.cr.b2 > 1){player.cr.b2 = new Decimal(1)}
+		if(player.cr.b2 < 0){player.cr.b2 = new Decimal(0)}
+		
+		if(hasMilestone("d",3)) {player.cr.points = player.cr.points.add(player.cr.diff.add(0.01).mul(diff))}
+	},
 		upgrades:{
 			11:{
 				title:"copper_axe",
@@ -1129,34 +1148,142 @@ addLayer("cr", {
 			},
 			12:{
 				title:"copper_pickaxe",
-				description:"Make copper_pickaxe(stone requires -5)",
+				description:"Make copper_pickaxe(stone requires -3)",
 				cost:new Decimal(15),
 				unlocked(){return hasUpgrade("b",14)},
+			},
+			13:{
+				title:"Capacitor library",
+				description:"Store electricity",
+				cost:new Decimal(5),
+				unlocked(){return hasChallenge("c",21)},
+			},
+			14:{
+				title:"lightning rod",
+				description:"Accumulate electricity slowly",
+				cost:new Decimal(5),
+				unlocked(){return hasUpgrade("cr",13)},
+			},
+			15:{
+				title:"Electric stove",
+				description:"Burning with electricity!",
+				cost:new Decimal(10),
+				unlocked(){return hasUpgrade("cr",13)},
+			},
+			16:{
+				title:"Mining machine",
+				description:"Let me see what's underneath",
+				cost:new Decimal(10),
+				unlocked(){return hasUpgrade("cr",13)},
+			},
+			21:{
+				title:"Capacitor library^2",
+				description:"Store electricity^2",
+				cost:new Decimal(20),
+				unlocked(){return hasUpgrade("cr",14)},
+				effect(){
+					if (hasUpgrade("cr",21)) {player.cr.em = new Decimal(4)}
+				}
+			},
+			22:{
+				title:"Mining machine MK2",
+				description:"Enjoy ten times the speed",
+				cost:new Decimal(20),
+				unlocked(){return hasUpgrade("cr",16)},
+				effect(){
+					if (hasUpgrade("cr",22)) {player.d.mk = new Decimal(10)}
+				}
 			},
 		},
 		clickables:{
 			11:{
-				title:"+",
-				canClick(){return true},
-				unlock(){return hasChallenge("c",21)},
-				width: 50,
-				height: 50,
+				title:"Fill 10% of electricity",
+				canClick(){
+					if(player.cr.e >= 0.1){return true}
+				},
+				unlocked(){return hasUpgrade("cr",15)},
+				onClick(){
+					player.cr.b1 = player.cr.b1.add(0.1)
+					player.cr.e = player.cr.e.sub(0.1)
+				},
+			},
+			12:{
+				title:"Fill 10% of electricity",
+				canClick(){
+					if(player.cr.e >= 0.1){return true}
+				},
+				unlocked(){return hasUpgrade("cr",16)},
+				onClick(){
+					player.cr.b2 = player.cr.b2.add(0.1)
+					player.cr.e = player.cr.e.sub(0.1)
+				},
 			}
 		},
 		bars: {
-			bigBar: {
+			bigBar0: {
+				display() {return "You have " + format(player.cr.e) +"/"+format(player.cr.em)+" electricity"},
 				direction: RIGHT,
-				width: 300,
-				height: 30,
-				progress() { return player.cr.e },
-				unlock(){return hasChallenge("c",21)},
+				width: 500,
+				height: 100,
+				progress() { return player.cr.e / player.cr.em },
+				unlocked(){return hasUpgrade("cr",13)},
+				baseStyle: {
+					"background-color": "#FFFFFF"
+				},
+				fillStyle: {
+					"background-color": "#DDDD00"
+				},
+				textStyle: {
+					"color": "#000000"
+				}
 			},
+			bigBar1: {
+				display() {return "Electric stove<br>Use electricity to turn wood into coal(500 : 1)<br>" + format(player.cr.b1) +"/1"},
+				direction: RIGHT,
+				width: 500,
+				height: 100,
+				progress() { return player.cr.b1 },
+				unlocked(){return hasUpgrade("cr",15)},
+				baseStyle: {
+					"background-color": "#FFFFFF"
+				},
+				fillStyle: {
+					"background-color": "#DDDD00"
+				},
+				textStyle: {
+					"color": "#000000"
+				}
+			},
+			bigBar2: {
+				display() {return "Mining machine<br>Electric Mining Machine<br>" + format(player.cr.b2) +"/1"},
+				direction: RIGHT,
+				width: 500,
+				height: 100,
+				progress() { return player.cr.b2 },
+				unlocked(){return hasUpgrade("cr",16)},
+				baseStyle: {
+					"background-color": "#FFFFFF"
+				},
+				fillStyle: {
+					"background-color": "#DDDD00"
+				},
+				textStyle: {
+					"color": "#000000"
+				}
+			},
+		},
+		revenue(diff) {
+			let cu = 1
+			return diff * cu * player.cr.b1
 		},
 	tabFormat: [
         "main-display",
         "upgrades",
         "blank",
-		["row", [["bar", "bigBar"], "blank", ["clickable", 11]]],
+		["row", [["bar", "bigBar0"], "blank", ]],
+		"blank",
+		["row", [["bar", "bigBar1"], "blank", ["clickable", 11]]],
+		["row", [["bar", "bigBar2"], "blank", ["clickable", 12]]],
     ]
 })
 
@@ -1173,9 +1300,9 @@ addLayer("c", {
     color: "#3C3C3C",
     requires:function(){
 		let cr = new Decimal(30)
-		if (hasChallenge("c",11)) cr = cr.sub(2) 
-		if (hasChallenge("c",12)) cr = cr.sub(3)
-		if (hasChallenge("c",13)) cr = cr.sub(5) 
+		if (hasChallenge("c",11)) cr = cr.sub(1) 
+		if (hasChallenge("c",12)) cr = cr.sub(2)
+		if (hasChallenge("c",13)) cr = cr.sub(4) 
 		return cr
 	},
     resource: "coal",
@@ -1197,7 +1324,7 @@ addLayer("c", {
     ],
 		doReset(resettingLayer) {
 			let keep = [];
-			if (resettingLayer=="i") keep.push("points","best","total","milestones","upgrades");
+			if (resettingLayer=="i") keep.push("points","best","total","milestones","upgrades","challenges");
 			if (layers[resettingLayer].row > this.row) layerDataReset("c", keep)
 		},
     layerShown(){return (hasUpgrade("b",12)) || player[this.layer].unlocked},
@@ -1283,7 +1410,7 @@ addLayer("c", {
 				unlocked() { return hasUpgrade("c",12) },
 				canComplete: function() {return player.s.points.gte(15)},
 				goalDescription:"15 stone",
-				rewardDescription: "Unlock s upgrade, stone best - 2.",
+				rewardDescription: "Unlock s upgrade, stone best - 1.",
 			},
 			12: {
 				name: "No wood in the mine. but have ore2.0",
@@ -1291,7 +1418,7 @@ addLayer("c", {
 				unlocked() { return hasChallenge("c",11) },
 				canComplete: function() {return player.s.points.gte(25)},
 				goalDescription:"25 stone",
-				rewardDescription: "Unlock c upgrade, coal best - 3.",
+				rewardDescription: "Unlock c upgrade, coal best - 2.",
 			},
 			21: {
 				name: "No wood in the mine. but have ore3.0",
@@ -1299,7 +1426,7 @@ addLayer("c", {
 				unlocked() { return hasChallenge("c",12) },
 				canComplete: function() {return player.s.points.gte(35)},
 				goalDescription:"35 stone",
-				rewardDescription: "Unlock Battery, coal best - 5.",
+				rewardDescription: "Unlock Battery, coal best - 4.",
 			},
 		},
 })
@@ -1310,11 +1437,11 @@ addLayer("i", {
     symbol: "I",
     position: 3,
     startData() { return {
-        unlocked: false,
+        unlocked: true,
 		points: new Decimal(0),
     }},
     color: "#F0F0F0",
-    requires: new Decimal(30), 
+    requires: new Decimal(50), 
     resource: "iron",
     baseResource: "copper", 
     baseAmount() {return player.cr.points},
@@ -1332,7 +1459,92 @@ addLayer("i", {
     hotkeys: [
         {key: "i", description: "i: Reset for i points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return false},
+    layerShown(){return hasMilestone("d",4) || player[this.layer].unlocked},
+})
+
+
+addLayer("d", {
+    name: "depth",
+    symbol: "D",
+    position: -2,
+    startData() { return {
+        unlocked: true,
+		points: new Decimal(0),
+		mk:new Decimal(1),
+		mkm: new Decimal(980),
+    }},
+    color: "#272727",
+    resource: "depth",
+    type: "none",
+    row: 0, 
+    layerShown(){return hasUpgrade("cr",16)},
+	update(diff) {
+		player.d.points = player.d.points.add(player.cr.diff.add(player.cr.b2).mul(player.b.points >= 33 ? 0.5:1).mul(player.d.mk).mul(diff))
+		if (player.d.points >= player.d.mkm){player.d.points = player.d.mkm}
+	},
+		doReset(resettingLayer) {
+			let keep = [];
+			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades","challenges");
+			if (resettingLayer=="a") keep.push("points","best","total","milestones","upgrades","challenges");
+			if (resettingLayer=="bm") keep.push("points","best","total","milestones","upgrades","challenges");
+			if (resettingLayer=="c") keep.push("points","best","total","milestones","upgrades","challenges");
+			if (layers[resettingLayer].row > this.row) layerDataReset("c", keep)
+		},
+		milestones: {
+			0: {
+				requirementDescription: "0.01km(soli)",
+				effectDescription: "You dug the soil,wait,what?",
+				done() {
+					return player.d.points.gte(0.01)
+				},
+				unlocked(){return hasMilestone("d",0)}
+			},
+			1: {
+				requirementDescription: "1km(stone)",
+				effectDescription: "You dug the stone,uh,ok,ok.At least there is some gain.<br>stone requires - 1",
+				done() {
+					return player.d.points.gte(1)
+				},
+				unlocked(){return hasMilestone("d",1)}
+			},
+			2: {
+				requirementDescription: "33km(Break through the crust)",
+				effectDescription: "nic...that's bad<br>The geology hardens",
+				done() {
+					return player.d.points.gte(33)
+				},
+				unlocked(){return hasMilestone("d",2)}
+			},
+			3: {
+				requirementDescription: "320km(copper)",
+				effectDescription: "nice.<br>get 0.01 copper /sec",
+				done() {
+					return player.d.points.gte(320)
+				},
+				unlocked(){return hasMilestone("d",3)}
+			},
+			4: {
+				requirementDescription: "480km(iron)",
+				effectDescription: "nice!!!<br>unlock iron",
+				done() {
+					return player.d.points.gte(480)
+				},
+				unlocked(){return hasMilestone("d",4)}
+			},
+			5: {
+				requirementDescription: "980km(Break through the upper mantle)",
+				effectDescription: "Uh, it may not be able to break through.",
+				done() {
+					return player.d.points.gte(980)
+				},
+				unlocked(){return hasMilestone("d",5)}
+			},
+		},
+	tabFormat: [
+		"main-display",
+		['display-text',function(){return `<h3>You have dug<h3> `+format(player.d.points)+` <h3>kilometers<h3>`}],,
+		"milestones",
+	]
 })
 
 

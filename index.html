@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 
 <head>
-
 	<link rel="stylesheet" type="text/css" href="css/system-style.css" />
 	<link rel="stylesheet" type="text/css" href="css/bars.css" />
 	<link rel="stylesheet" type="text/css" href="css/components.css" />
@@ -34,11 +33,21 @@
 	<script src="js/utils/options.js"></script>
 	<script src="js/utils/save.js"></script>
 	<script src="js/utils/themes.js"></script>
-
 </head>
 
 
 <body onload="load()" onmousemove="updateMouse(event)">
+	<style>
+	body {
+		background-image: url("js/data/background.png");
+		background-repeat: no-repeat;
+	}
+	p.round3 {
+		border: 2px solid white;
+		border-radius: 12px;
+	}
+	</style>
+	<p class="round3"><a href="https://shenmi124.github.io/The-Game-Tree/" class="copyright" target="_blank">The Game Tree </a>by mysterious_124</p>
 	<div id="app">
 		<canvas id="treeCanvas" class="canvas" v-if="!(tmp.gameEnded && !player.keepGoing)"></canvas>
 
