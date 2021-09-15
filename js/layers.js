@@ -509,32 +509,32 @@ addLayer("s", {
 			name: "No wood in the mine",
 			challengeDescription: "This makes you negative, the Time acquisition is only 75%",
 			unlocked() { return hasMilestone("s",0) },
-			canComplete: function() {return player.w.points.gte(20)},
-			goalDescription:"20 wood",
+			canComplete: function() {return player.w.points.gte(7)},
+			goalDescription:"7 wood",
 			rewardDescription: "Unlock a new wood upgrade",
 			},
 		12: {
 			name: "No wood in the mine2.0",
 			challengeDescription: "This makes you negative, the Time acquisition is only 65%, the Wood base is *2",
 			unlocked() { return hasChallenge("s",11) },
-			canComplete: function() {return player.w.points.gte(20)},
-			goalDescription:"20 wood",
+			canComplete: function() {return player.w.points.gte(10)},
+			goalDescription:"10 wood",
 			rewardDescription: "Unlock two new wood upgrade",
 			},
 		21: {
 			name: "No wood in the mine3.0",
 			challengeDescription: "This makes you negative, the Time acquisition is only 55%, the Wood base is *3",
 			unlocked() { return hasChallenge("s",12) },
-			canComplete: function() {return player.w.points.gte(35)},
-			goalDescription:"35 wood",
+			canComplete: function() {return player.w.points.gte(15)},
+			goalDescription:"15 wood",
 			rewardDescription: "Unlock two new wood upgrade",
 			},
 		22: {
 			name: "No wood in the mine4.0",
 			challengeDescription: "This makes you negative, the Time acquisition is only 45%, the Wood base is *4",
 			unlocked() { return hasChallenge("s",21) },
-			canComplete: function() {return player.w.points.gte(60)},
-			goalDescription:"60 wood",
+			canComplete: function() {return player.w.points.gte(30)},
+			goalDescription:"30 wood",
 			rewardDescription: "Unlock three new rows",
 			},
 			},
@@ -623,7 +623,7 @@ addLayer("a", {
 			if (resettingLayer=="c") keep.push("points","base","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("a", keep)
 		},
-    layerShown(){return player[this.layer].unlocked || (hasChallenge("s",22))},
+    layerShown(){return (hasChallenge("s",22))},
 		clickables: {
 			11: {
 				display() {return  'You have ' + format(player.a.atk) + " ATK <br> You get " + format(player.a.points.add(buyableEffect('b',14)).add(upgradeEffect("w",34)).add(upgradeEffect("s",13)).pow(2))+ "/sec"},
@@ -631,7 +631,7 @@ addLayer("a", {
 			},
 			21: {
 				title:"kill it! *1 ",
-				display() {return  "- 100 ATK<br>Get 0~1000 Blood<br>0.1% get Copper"},
+				display() {return  "- 100 ATK<br>Get 0~1000 Blood<br>0.2% get Copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 100) 
@@ -639,7 +639,7 @@ addLayer("a", {
 					},
 				onClick(){
 					let bm = Math.floor(Math.random() * 1001)
-					let cm = Math.floor(Math.random() * 1000)
+					let cm = Math.floor(Math.random() * 500)
 					player.a.atk = player.a.atk.sub(100)
 					player.b.points = player.b.points.add(bm);
 					if (cm == 0) {player.cr.points = player.cr.points.add(1)};
@@ -648,7 +648,7 @@ addLayer("a", {
 			},
 			22: {
 				title:"kill it! *10 ",
-				display() {return  "- 1000 ATK<br>Get 0~10000 Blood<br>1% get Copper"},
+				display() {return  "- 1000 ATK<br>Get 0~10000 Blood<br>2% get Copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 1000) 
@@ -656,7 +656,7 @@ addLayer("a", {
 					},
 				onClick(){
 					let bm = Math.floor(Math.random() * 10001)
-					let cm = Math.floor(Math.random() * 100)
+					let cm = Math.floor(Math.random() * 50)
 					player.a.atk = player.a.atk.sub(1000)
 					player.b.points = player.b.points.add(bm);
 					if (cm == 0) {player.cr.points = player.cr.points.add(1)};
@@ -665,7 +665,7 @@ addLayer("a", {
 			},
 			23: {
 				title:"kill it! *100 ",
-				display() {return  "- 10000 ATK<br>Get 0~100000 Blood<br>10% get Copper"},
+				display() {return  "- 10000 ATK<br>Get 0~100000 Blood<br>20% get Copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 10000) 
@@ -673,7 +673,7 @@ addLayer("a", {
 					},
 				onClick(){
 					let bm = Math.floor(Math.random() * 100001)
-					let cm = Math.floor(Math.random() * 10)
+					let cm = Math.floor(Math.random() * 5)
 					player.a.atk = player.a.atk.sub(10000)
 					player.b.points = player.b.points.add(bm);
 					if (cm == 0) {player.cr.points = player.cr.points.add(1)};
@@ -682,7 +682,7 @@ addLayer("a", {
 			},
 			24: {
 				title:"kill it! *1000 ",
-				display() {return  "- 100000 ATK<br>Get 0~1000000 Blood<br>100% get Copper"},
+				display() {return  "- 100000 ATK<br>Get 0~1000000 Blood<br>200% get Copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 100000) 
@@ -692,7 +692,7 @@ addLayer("a", {
 					let bm = Math.floor(Math.random() * 1000001)
 					player.a.atk = player.a.atk.sub(100000)
 					player.b.points = player.b.points.add(bm);
-					player.cr.points = player.cr.points.add(1);
+					player.cr.points = player.cr.points.add(2);
 					return bm + cm
 				},
 				unlocked(){
@@ -701,7 +701,7 @@ addLayer("a", {
 			},
 			25: {
 				title:"kill it! *10000 ",
-				display() {return  "- 1000000 ATK<br>Get 0~10000000 Blood<br>1000% get Copper"},
+				display() {return  "- 1000000 ATK<br>Get 0~10000000 Blood<br>2000% get Copper"},
 				canClick() {
 					let ac = player.a.atk
 					if (ac >= 1000000) 
@@ -711,7 +711,7 @@ addLayer("a", {
 					let bm = Math.floor(Math.random() * 10000001)
 					player.a.atk = player.a.atk.sub(1000000)
 					player.b.points = player.b.points.add(bm);
-					player.cr.points = player.cr.points.add(10);
+					player.cr.points = player.cr.points.add(20);
 					return bm
 				},
 				unlocked(){
@@ -1459,7 +1459,7 @@ addLayer("i", {
     hotkeys: [
         {key: "i", description: "i: Reset for i points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return hasMilestone("d",4) || player[this.layer].unlocked},
+    layerShown(){return hasMilestone("d",4) || player.i.points >= 0.01},
 })
 
 
