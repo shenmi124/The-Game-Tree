@@ -18,11 +18,11 @@ addLayer("$", {
 	},
 		doReset(resettingLayer) {
 			let keep = [];
-			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades");
-			if (resettingLayer=="a") keep.push("points","best","total","milestones","upgrades");
-			if (resettingLayer=="bm") keep.push("points","best","total","milestones","upgrades");
-			if (resettingLayer=="c") keep.push("points","best","total","milestones","upgrades");
-			if (resettingLayer=="i") keep.push("points","best","total","milestones","upgrades");
+			if (resettingLayer=="s") keep.push("points","base","total","milestones","upgrades");
+			if (resettingLayer=="a") keep.push("points","base","total","milestones","upgrades");
+			if (resettingLayer=="bm") keep.push("points","base","total","milestones","upgrades");
+			if (resettingLayer=="c") keep.push("points","base","total","milestones","upgrades");
+			if (resettingLayer=="i") keep.push("points","base","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("$", keep)
 		},
     gainMult() {
@@ -221,8 +221,8 @@ addLayer("w", {
 		doReset(resettingLayer) {
 			let keep = [];
 			if (hasUpgrade("w", 25)) keep.push("upgrades");
-			if (resettingLayer=="a") keep.push("points","best","total","milestones","upgrades");
-			if (resettingLayer=="bm") keep.push("points","best","total","milestones","upgrades");
+			if (resettingLayer=="a") keep.push("points","base","total","milestones","upgrades");
+			if (resettingLayer=="bm") keep.push("points","base","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("w", keep);
 		},
     gainMult() {
@@ -375,7 +375,7 @@ addLayer("w", {
 		},
 		34:{
 			title: "Planks",
-			description: "A wooden house can make you better fight(ATK best + 1)",
+			description: "A wooden house can make you better fight(ATK base + 1)",
 			cost: new Decimal (1500),
 			unlocked(){
 				return hasUpgrade("cr",11)
@@ -467,7 +467,8 @@ addLayer("s", {
 		if (hasUpgrade('w',32)) sr = sr.sub(5)
 		if (hasUpgrade('cr',12)) sr = sr.sub(3)
 		if (hasMilestone("d",1)) sr = sr.sub(1)
-		if (hasChallenge("c",11)) sr = sr.mul(2)
+		if (hasChallenge("c",11)) sr = sr.sub(1) 
+		if (inChallenge("c",11)) sr = sr.mul(2)
 		if (inChallenge("c",12)) sr = sr.mul(3)
 		if (inChallenge("c",21)) sr = sr.mul(3.5)
 		return sr
@@ -550,7 +551,7 @@ addLayer("s", {
 			},
 			13:{
 				title: "Stone house",
-				description: "Fire prevention, It’s also a solid defense(ATK best +1)",
+				description: "Fire prevention, It’s also a solid defense(ATK base +1)",
 				cost: new Decimal(3),
 				unlocked(){
 					return hasChallenge("c",11)
@@ -619,7 +620,7 @@ addLayer("a", {
     ],
 	doReset(resettingLayer) {
 			let keep = [];
-			if (resettingLayer=="c") keep.push("points","best","total","milestones","upgrades");
+			if (resettingLayer=="c") keep.push("points","base","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("a", keep)
 		},
     layerShown(){return player[this.layer].unlocked || (hasChallenge("s",22))},
@@ -733,7 +734,7 @@ addLayer("b", {
 		doReset(resettingLayer) {
 			let keep = [];
 			if (hasUpgrade("bm", 12)) keep.push("buyables","upgrades");
-			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades","buyables");
+			if (resettingLayer=="s") keep.push("points","base","total","milestones","upgrades","buyables");
 			if (layers[resettingLayer].row > this.row) layerDataReset("b", keep)
 		},
     color: "#CE0000",
@@ -843,7 +844,7 @@ addLayer("b", {
 				return new Decimal(1000).add(29000*x)
 			},
 			title:"Strength Rune I",
-			display() { return "ATK best gained based on blood increase<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(this.effect())},
+			display() { return "ATK base gained based on blood increase<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(this.effect())},
 			canAfford() { return player[this.layer].points.gte(this.cost()) },
 			buy() {
 				player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -983,8 +984,8 @@ addLayer("bm", {
     row: 1, 
 	doReset(resettingLayer) {
 			let keep = [];
-			if (resettingLayer=="c") keep.push("points","best","total","milestones","upgrades");
-			if (resettingLayer=="i") keep.push("points","best","total","milestones","upgrades");
+			if (resettingLayer=="c") keep.push("points","base","total","milestones","upgrades");
+			if (resettingLayer=="i") keep.push("points","base","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("bm", keep)
 		},
     hotkeys: [
@@ -1300,7 +1301,6 @@ addLayer("c", {
     color: "#3C3C3C",
     requires:function(){
 		let cr = new Decimal(30)
-		if (hasChallenge("c",11)) cr = cr.sub(1) 
 		if (hasChallenge("c",12)) cr = cr.sub(2)
 		if (hasChallenge("c",13)) cr = cr.sub(4) 
 		return cr
@@ -1324,7 +1324,7 @@ addLayer("c", {
     ],
 		doReset(resettingLayer) {
 			let keep = [];
-			if (resettingLayer=="i") keep.push("points","best","total","milestones","upgrades","challenges");
+			if (resettingLayer=="i") keep.push("points","base","total","milestones","upgrades","challenges");
 			if (layers[resettingLayer].row > this.row) layerDataReset("c", keep)
 		},
     layerShown(){return (hasUpgrade("b",12)) || player[this.layer].unlocked},
@@ -1406,27 +1406,27 @@ addLayer("c", {
 		challenges:{
 			11: {
 				name: "No wood in the mine. but have ore",
-				challengeDescription: "you find stone, the Time acquisition is only 50%, the stone best * 3",
+				challengeDescription: "you find stone, the Time acquisition is only 50%, the stone base * 3",
 				unlocked() { return hasUpgrade("c",12) },
 				canComplete: function() {return player.s.points.gte(15)},
 				goalDescription:"15 stone",
-				rewardDescription: "Unlock s upgrade, stone best - 1.",
+				rewardDescription: "Unlock s upgrade,stone base - 1.",
 			},
 			12: {
 				name: "No wood in the mine. but have ore2.0",
-				challengeDescription: "you find coal, the Time acquisition is only 40%, the stone best * 3.5",
+				challengeDescription: "you find coal, the Time acquisition is only 40%, the stone base * 3.5",
 				unlocked() { return hasChallenge("c",11) },
 				canComplete: function() {return player.s.points.gte(25)},
 				goalDescription:"25 stone",
-				rewardDescription: "Unlock c upgrade, coal best - 2.",
+				rewardDescription: "Unlock c upgrade,coal base - 2.",
 			},
 			21: {
 				name: "No wood in the mine. but have ore3.0",
-				challengeDescription: "you find copper, the Time acquisition is only 30%, the stone best * 4",
+				challengeDescription: "you find copper, the Time acquisition is only 30%, the stone base * 4",
 				unlocked() { return hasChallenge("c",12) },
 				canComplete: function() {return player.s.points.gte(35)},
 				goalDescription:"35 stone",
-				rewardDescription: "Unlock Battery, coal best - 4.",
+				rewardDescription: "Unlock Battery,coal base - 4.",
 			},
 		},
 })
@@ -1484,10 +1484,10 @@ addLayer("d", {
 	},
 		doReset(resettingLayer) {
 			let keep = [];
-			if (resettingLayer=="s") keep.push("points","best","total","milestones","upgrades","challenges");
-			if (resettingLayer=="a") keep.push("points","best","total","milestones","upgrades","challenges");
-			if (resettingLayer=="bm") keep.push("points","best","total","milestones","upgrades","challenges");
-			if (resettingLayer=="c") keep.push("points","best","total","milestones","upgrades","challenges");
+			if (resettingLayer=="s") keep.push("points","base","total","milestones","upgrades","challenges");
+			if (resettingLayer=="a") keep.push("points","base","total","milestones","upgrades","challenges");
+			if (resettingLayer=="bm") keep.push("points","base","total","milestones","upgrades","challenges");
+			if (resettingLayer=="c") keep.push("points","base","total","milestones","upgrades","challenges");
 			if (layers[resettingLayer].row > this.row) layerDataReset("c", keep)
 		},
 		milestones: {

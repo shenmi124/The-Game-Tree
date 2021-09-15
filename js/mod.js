@@ -83,12 +83,15 @@ function fixOldSave(oldVersion){
 }
 
 let VERSION = {
-	num: "0.5.1.2",
+	num: "0.5.2.2",
 	name: "Art",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Art</h2><br>
+	<h3>v0.5.2.2</h3><br>
+		- Fix bug<br>
+		- Modify "a"<br>
 	<h3>v0.5.1.2</h3><br>
 		- Art!<br>
 		- Added "d"<br>
