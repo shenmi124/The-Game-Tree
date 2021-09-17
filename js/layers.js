@@ -1,200 +1,3 @@
-addLayer("$", {
-    name: "$",
-    symbol: "$",
-    position: 1,
-    startData() { return {
-        unlocked: true,
-		points: new Decimal(0),
-    }},
-    color: "#FFFF6F",
-    requires: new Decimal(10),
-    resource: "$",
-    baseResource: "time",
-    baseAmount() {return player.points},
-    type: "normal",
-    exponent:function(){
-		let $e = new Decimal("0")
-		return $e
-	},
-		doReset(resettingLayer) {
-			let keep = [];
-			if (resettingLayer=="s") keep.push("points","base","total","milestones","upgrades");
-			if (resettingLayer=="a") keep.push("points","base","total","milestones","upgrades");
-			if (resettingLayer=="bm") keep.push("points","base","total","milestones","upgrades");
-			if (resettingLayer=="c") keep.push("points","base","total","milestones","upgrades");
-			if (resettingLayer=="i") keep.push("points","base","total","milestones","upgrades");
-			if (layers[resettingLayer].row > this.row) layerDataReset("$", keep)
-		},
-    gainMult() {
-        mult = new Decimal(1)
-        return mult
-    },
-    gainExp() {
-        return new Decimal(1)
-    },
-	update(diff) {
-		generatePoints("$", this.revenue(diff))
-	},
-    row: 0,
-    hotkeys: [
-        {key: "$", description: "$: Reset for $ points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-    ],
-    layerShown(){return true},
-		upgrades: {
-			11:{
-			title: "start",
-			description: "You found a free idle game",
-			cost: new Decimal(0),
-			},
-			12:{
-			title: "java?",
-			description: "You can buy some coffee to stay up late to play The Game Tree (sleep time 12 hours> 9 hours).",
-			cost: new Decimal(5),
-			unlocked(){
-				return hasUpgrade("$",11)
-			},
-			},
-			13:{
-			title: "Don't sleep in hell!",
-			description: "You can buy a new bed to Improve sleep quality (sleep time 9 hours> 6 hours).",
-			cost: new Decimal(20),
-			unlocked(){
-				return hasUpgrade("$",12)
-			},
-			},
-			14:{
-			title: "Adrenaline",
-			description: "You can buy some adrenalines to Improve sleep quality (sleep time 6 hours> 3 hours).",
-			cost: new Decimal(200),
-			unlocked(){
-				return hasUpgrade("$",13)
-			},
-			},
-			21:{
-			title: "Investment is risky",
-			description: "You can unlock a milestone",
-			cost: new Decimal(25),
-			unlocked(){
-			return hasUpgrade("$",12)
-			},
-			},
-			22:{
-				title: "too much?",
-				description: "You can buy some woods",
-				cost: new Decimal(30),
-			unlocked(){
-				return hasUpgrade("$",13)
-			},
-			},
-		},
-		milestones: {
-			0: {
-				requirementDescription: "50$",
-				effectDescription: "Get 5% $ every second",
-				unlocked(){return hasUpgrade("$",21)},
-				done() {
-					return player.$.points.gte(50) && hasUpgrade("$",21)},
-				},
-		
-		},
-		clickables: {
-			11: {
-				display() {return "3$ -> 5wood"},
-				unlocked(){
-					return hasUpgrade("$",22)
-				},
-				canClick() {
-					let $c = player[this.layer].points
-					if ($c >= 3) 
-					if (!inChallenge('s',11))
-					if (!inChallenge('s',12))
-					if (!inChallenge('s',21))
-					if (!inChallenge('s',22))
-					if (!inChallenge('c',11))
-					if (!inChallenge('c',12))
-					if (!inChallenge('c',21))
-					return $c
-				},
-				onClick(){
-					player.$.points = player.$.points.sub(3)
-					player.w.points = player.w.points.add(5)
-				},
-			},
-			12: {
-				display() {return "30$ -> 50wood"},
-				unlocked(){
-					return hasUpgrade("$",22)
-				},
-				canClick() {
-					let $c = player[this.layer].points
-					if ($c >= 30) 
-					if (!inChallenge('s',11))
-					if (!inChallenge('s',12))
-					if (!inChallenge('s',21))
-					if (!inChallenge('s',22))
-					if (!inChallenge('c',11))
-					if (!inChallenge('c',12))
-					if (!inChallenge('c',21))
-					return $c
-				},
-				onClick(){
-					player.$.points = player.$.points.sub(30)
-					player.w.points = player.w.points.add(50)
-				},
-			},
-			13: {
-				display() {return "500$ -> 5stone"},
-				unlocked(){
-					return (hasUpgrade("w",33) && player.s.unlocked)
-				},
-				canClick() {
-					let $c = player[this.layer].points
-					if ($c >= 300) 
-					if (!inChallenge('s',11))
-					if (!inChallenge('s',12))
-					if (!inChallenge('s',21))
-					if (!inChallenge('s',22))
-					if (!inChallenge('c',11))
-					if (!inChallenge('c',12))
-					if (!inChallenge('c',21))
-					return $c
-				},
-				onClick(){
-					player.$.points = player.$.points.sub(500)
-					player.s.points = player.s.points.add(5)
-				},
-			},
-			14: {
-				display() {return "5000$ -> 1coal"},
-				unlocked(){
-					return (hasUpgrade("c",14) && player.c.unlocked)
-				},
-				canClick() {
-					let $c = player[this.layer].points
-					if ($c >= 5000) 
-					if (!inChallenge('s',11))
-					if (!inChallenge('s',12))
-					if (!inChallenge('s',21))
-					if (!inChallenge('s',22))
-					if (!inChallenge('c',11))
-					if (!inChallenge('c',12))
-					if (!inChallenge('c',21))
-					return $c
-				},
-				onClick(){
-					player.$.points = player.$.points.sub(5000)
-					player.c.points = player.c.points.add(1)
-				},
-			},
-		},
-		revenue(diff) {
-			let $u = 0
-			if (hasMilestone("$",0)) $u += 5
-			return diff * $u / 100
-		}
-})
-
-
 addLayer("w", {
     name: "wood",
     symbol: "W",
@@ -208,6 +11,7 @@ addLayer("w", {
 		let wr = new Decimal(5);
 		if (hasUpgrade('w',22)) wr = wr.sub(1)
 		if (hasUpgrade('w',31)) wr = wr.sub(1)
+		if (hasUpgrade('c',11)) wr = wr.sub(1)
 		if (inChallenge('s',12)) wr = wr.mul(2)
 		if (inChallenge('s',21)) wr = wr.mul(3)
 		if (inChallenge('s',22)) wr = wr.mul(4)
@@ -220,7 +24,7 @@ addLayer("w", {
     exponent: 0.5,
 		doReset(resettingLayer) {
 			let keep = [];
-			if (hasUpgrade("w", 25)) keep.push("upgrades");
+			if (hasMilestone("s", 1)) keep.push("upgrades");
 			if (resettingLayer=="a") keep.push("points","base","total","milestones","upgrades");
 			if (resettingLayer=="bm") keep.push("points","base","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("w", keep);
@@ -245,13 +49,18 @@ addLayer("w", {
     layerShown(){return true},
 		upgrades:{
 		11:{
+			title: "start",
+			description: "You found a free idle game",
+			cost: new Decimal(0),
+			},
+		12:{
 			title: "wood!",
 			description: "You got wood, which makes you feel excited, you want to spend more time playing this game",
 			cost: new Decimal(3),
 			effect() {
 				let eff = player[this.layer].points.add(1).pow(0.19)
-				if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.3);
-				if (hasUpgrade('w', 13)) eff = eff.times(upgradeEffect('w', 13));
+				if (hasUpgrade("w", 13)) eff = player[this.layer].points.add(1).pow(0.3);
+				if (hasUpgrade('w', 14)) eff = eff.times(upgradeEffect('w', 14));
 				if (hasUpgrade('w', 21)) eff = eff.times(upgradeEffect('w', 21));
 				eff = softcap(eff,new Decimal(5),0.2)
 				eff = softcap(eff,new Decimal(10),0.11)
@@ -260,43 +69,35 @@ addLayer("w", {
 			},
 			effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 			},
-		12:{
+		13:{
 		title: "Crafts",
 		description: "The upgrade effect in the left and right directions is increased by the power of 0.07",
 		cost: new Decimal(10),
 		unlocked(){
-		return hasUpgrade("w",13)
+		return hasUpgrade("w",14)
 		},
 		},
-		13:{
+		14:{
 		title: "The Game Tree is AWESOME!",
 		description: "Strengthen “wood!”" ,
 		cost: new Decimal(5),
 		unlocked(){
-		return hasUpgrade("w",11)
+		return hasUpgrade("w",12)
 		},
 		effect() {
         let eff = player[this.layer].points.add(1).pow(0.08)
-		if (hasUpgrade("w", 12)) eff = player[this.layer].points.add(1).pow(0.15);
+		if (hasUpgrade("w", 13)) eff = player[this.layer].points.add(1).pow(0.15);
 		if (hasUpgrade('w', 21)) eff = eff.times(upgradeEffect('w', 21));
 		return eff
 		},
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 		},
-		14:{
+		15:{
 		title: "Only used three times",
 		description: "Make wooden_pickaxe",
 		cost: new Decimal(20),
 		unlocked(){
-		return hasUpgrade("w",13)
-		},
-		},
-		15:{
-		title: "too much!",
-		description: "You can sell your woods",
-		cost: new Decimal (30),
-		unlocked(){
-		return hasUpgrade("w",13)
+		return hasUpgrade("w",14)
 		},
 		},
 		21:{
@@ -307,7 +108,7 @@ addLayer("w", {
 			return eff
 		},
 			effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
-		cost: new Decimal (40),
+		cost: new Decimal (30),
 		unlocked(){
 			return hasChallenge("s",11)
 		},
@@ -315,15 +116,15 @@ addLayer("w", {
 		22:{
 		title: "fast!",
 		description: "wood requires -1",
-		cost: new Decimal (45),
+		cost: new Decimal (40),
 		unlocked(){
-			return hasChallenge("s",12)
+			return hasChallenge("s",11)
 		},
 		},
 		23:{
-		title: "Really too much!",
-		description: "You can sell your woods, but more cost-effective",
-		cost: new Decimal (77),
+		title: "You are not the only one to play",
+		description: "You can buy some coffee to stay up late to play The Game Tree (sleep time 12 hours> 9 hours).",
+		cost: new Decimal (65),
 		unlocked(){
 			return hasChallenge("s",12)
 		},
@@ -331,9 +132,9 @@ addLayer("w", {
 		24:{
 		title: "Soon",
 		description: "Each wood upgrade will increase the production Time by 0.05 times",
-		cost: new Decimal (88),
+		cost: new Decimal (90),
 		unlocked(){
-			return hasChallenge("s",21)
+			return hasChallenge("s",12)
 		},
 		effect() {
 			let eff = player.w.upgrades.length * 0.05 + 1
@@ -342,17 +143,17 @@ addLayer("w", {
 		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 		},
 		25:{
-			title: "The End?",
-			description: "keep wood upgrade",
-			cost: new Decimal (233),
+			title: "Don't sleep in hell!",
+			description: "You can buy a new bed to Improve sleep quality (sleep time 9 hours> 6 hours).",
+			cost: new Decimal (100),
 			unlocked(){
-			return hasChallenge("s",21)
+			return (hasChallenge("s",21) && hasUpgrade("w",23))
 			}, 
 		},
 		31:{
 			title: "wooden_axe",
 			description: "wood requires -1",
-			cost: new Decimal (500),
+			cost: new Decimal (350),
 			unlocked(){
 				return hasUpgrade("b",13)
 			}, 
@@ -360,23 +161,31 @@ addLayer("w", {
 		32:{
 			title: "big wood bed",
 			description: "A good rest makes it easier for you to dig stones",
-			cost: new Decimal (750),
-			unlocked(){
-				return hasUpgrade("b",13)
-			}, 
-		},
-		33:{
-			title: "Buy and sell",
-			description: "With money",
 			cost: new Decimal (1000),
 			unlocked(){
 				return hasUpgrade("b",13)
 			}, 
 		},
+		33:{
+			title: "magic wood",
+			description: "blood magic and wood increase time production together",
+			cost: new Decimal (5000),
+			unlocked(){
+				return hasUpgrade("b",13)
+			},
+			effect(){
+				let eff = player.w.points.add(1).pow(0.05).add(player.bm.points.pow(0.35))
+				eff = softcap(eff,new Decimal(7),0.2)
+				eff = softcap(eff,new Decimal(15),0.1)
+				eff = softcap(eff,new Decimal(20),0.01)
+				return eff
+			},
+			effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
+		},
 		34:{
 			title: "Planks",
 			description: "A wooden house can make you better fight(ATK base + 1)",
-			cost: new Decimal (1500),
+			cost: new Decimal (12500),
 			unlocked(){
 				return hasUpgrade("cr",11)
 			}, 
@@ -388,63 +197,16 @@ addLayer("w", {
 		},
 		35:{
 			title: "Charcoal",
-			description: "coal and charcoal?(unlock coal upgrade)",
-			cost: new Decimal (2500),
+			description: "coal and charcoal?(unlock coal upgrade & coal best - 3)",
+			cost: new Decimal (37500),
 			unlocked(){
 				return hasUpgrade("cr",11)
 			}, 
 		},
 		},
-		clickables: {
-		11: {
-        display() {return "5wood -> 2$"},
-		unlocked(){
-		return hasUpgrade("w",15)
-		},
-		canClick() {
-		let wc = player[this.layer].points
-		if (wc >= 5) 
-		return true
-		},
-		onClick(){
-		player.w.points = player.w.points.sub(5)
-		player.$.points = player.$.points.add(2)
-		},
-		},
-		12: {
-        display() {return "25wood -> 13$"},
-		unlocked(){
-		return hasUpgrade("w",23)
-		},
-		canClick() {
-		let wc = player[this.layer].points
-		if (wc >= 25) 
-		return true
-		},
-		onClick(){
-		player.w.points = player.w.points.sub(25)
-		player.$.points = player.$.points.add(13)
-		},
-		},
-		13: {
-			display() {return "10000wood -> 7000$"},
-			unlocked(){
-				return hasUpgrade("w",33)
-			},
-			canClick() {
-				let wc = player[this.layer].points
-				if (wc >= 10000) 
-				return true
-			},
-			onClick(){
-				player.w.points = player.w.points.sub(10000)
-				player.$.points = player.$.points.add(7000)
-			},
-		},
-		},
 		revenue(diff) {
 			let wu = 0
-			if (hasUpgrade("s",14)) wu += 1
+			if (hasUpgrade("s",15)) wu += 1
 			if (hasUpgrade("c",21)) wu += 9
 			if (player.w.points >= 500) {
 			wc = 500}else{wc = 0}
@@ -468,7 +230,7 @@ addLayer("s", {
 		if (hasUpgrade('cr',12)) sr = sr.sub(3)
 		if (hasMilestone("d",1)) sr = sr.sub(1)
 		if (hasChallenge("c",11)) sr = sr.sub(1) 
-		if (inChallenge("c",11)) sr = sr.mul(2)
+		if (inChallenge("c",11)) sr = sr.mul(2.5)
 		if (inChallenge("c",12)) sr = sr.mul(3)
 		if (inChallenge("c",21)) sr = sr.mul(3.5)
 		return sr
@@ -477,7 +239,11 @@ addLayer("s", {
     baseResource: "wood", 
     baseAmount() {return player.w.points},
     type: "normal",
-    exponent: 0.5,
+    exponent:function (){
+		let se = 0.5
+		if (hasUpgrade("c",16)) se += (upgradeEffect('c', 16))
+		return se
+	},
 	branches: [["w","#ADADAD"]],
     gainMult() {
         mult = new Decimal(1)
@@ -488,61 +254,79 @@ addLayer("s", {
     },
 		doReset(resettingLayer) {
 			let keep = [];
-			if (hasUpgrade("c",12)) keep.push("challenges");
+			if (hasMilestone("c",0)) keep.push("upgrades");
+			if (hasMilestone("c",1)) keep.push("milestones");
+			if (hasMilestone("c",2)) keep.push("challenges");
 			if (layers[resettingLayer].row > this.row) layerDataReset("s", keep);
 		},
     row: 1, 
     hotkeys: [
         {key: "s", description: "s: Reset for s points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return player[this.layer].unlocked || (hasUpgrade("w",14))},
-			milestones: {
-		0: {
-			requirementDescription: "1stone",
-			effectDescription: "Unlock a new challenge & wood consumption divided by 1.5",
-		done() {
-			return player.s.points.gte(1)},
+    layerShown(){return player[this.layer].unlocked || (hasUpgrade("w",15))},
+		milestones: {
+			0: {
+				requirementDescription: "1stone",
+				effectDescription: "Unlock a new challenge & wood consumption divided by 1.5",
+				done() {
+					return player.s.points.gte(1)
+				},
+			},
+			1: {
+				requirementDescription: "5stone",
+				effectDescription: "Keep wood upgrade",
+				done() {
+					return player.s.points.gte(5) && hasChallenge("s",21)
+				},
+				unlocked(){return hasChallenge("s",21)}
+			},	
 		},
+		challenges: {
+			11: {
+				name: "No wood in the mine",
+				challengeDescription: "This makes you negative, the Time acquisition is only 80%",
+				unlocked() { return hasMilestone("s",0) },
+				canComplete: function() {return player.w.points.gte(5)},
+				goalDescription:"5 wood",
+				rewardDescription: "Unlock two new wood upgrade",
+			},
+			12: {
+				name: "No wood in the mine2.0",
+				challengeDescription: "This makes you negative, the Time acquisition is only 70%, the Wood base is *2",
+				unlocked() { return hasChallenge("s",11) },
+				canComplete: function() {return player.w.points.gte(10)},
+				goalDescription:"10 wood",
+				rewardDescription: "Unlock two new wood upgrade",
+			},
+			21: {
+				name: "No wood in the mine3.0",
+				challengeDescription: "This makes you negative, the Time acquisition is only 60%, the Wood base is *3",
+				unlocked() { return hasChallenge("s",12) },
+				canComplete: function() {return player.w.points.gte(15)},
+				goalDescription:"15 wood",
+				rewardDescription: "Unlock a new wood upgrade & stone milestone",
+			},
+			22: {
+				name: "No wood in the mine4.0",
+				challengeDescription: "This makes you negative, the Time acquisition is only 50%, the Wood base is *4",
+				unlocked() { return hasChallenge("s",21) },
+				canComplete: function() {return player.w.points.gte(30)},
+				goalDescription:"30 wood",
+				rewardDescription: "Unlock three new rows",
+			},
 		},
-			challenges: {
-		11: {
-			name: "No wood in the mine",
-			challengeDescription: "This makes you negative, the Time acquisition is only 75%",
-			unlocked() { return hasMilestone("s",0) },
-			canComplete: function() {return player.w.points.gte(7)},
-			goalDescription:"7 wood",
-			rewardDescription: "Unlock a new wood upgrade",
-			},
-		12: {
-			name: "No wood in the mine2.0",
-			challengeDescription: "This makes you negative, the Time acquisition is only 65%, the Wood base is *2",
-			unlocked() { return hasChallenge("s",11) },
-			canComplete: function() {return player.w.points.gte(10)},
-			goalDescription:"10 wood",
-			rewardDescription: "Unlock two new wood upgrade",
-			},
-		21: {
-			name: "No wood in the mine3.0",
-			challengeDescription: "This makes you negative, the Time acquisition is only 55%, the Wood base is *3",
-			unlocked() { return hasChallenge("s",12) },
-			canComplete: function() {return player.w.points.gte(15)},
-			goalDescription:"15 wood",
-			rewardDescription: "Unlock two new wood upgrade",
-			},
-		22: {
-			name: "No wood in the mine4.0",
-			challengeDescription: "This makes you negative, the Time acquisition is only 45%, the Wood base is *4",
-			unlocked() { return hasChallenge("s",21) },
-			canComplete: function() {return player.w.points.gte(30)},
-			goalDescription:"30 wood",
-			rewardDescription: "Unlock three new rows",
-			},
-			},
 		upgrades:{
 			11:{
 				title: "stone!",
-				description: "You got stone, which makes you feel excited, you want to spend more time playing this game (Time acquisition is 200%)",
+				description: "You got stone, which makes you feel excited, you want to spend more time playing this game (Time acquisition is 250%)",
 				cost: new Decimal(1),
+				effect(){
+					let eff = 2.5
+					if (hasUpgrade("s", 13)) eff = player[this.layer].points.mul(0.35).pow(0.35).add(2.5)
+					if (eff >= 5) {eff = 5}
+					return eff
+				},
+				effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, 
 			},
 			12:{
 				title: "axe",
@@ -550,30 +334,27 @@ addLayer("s", {
 				cost: new Decimal(3),
 			},
 			13:{
+				title: "What's so exciting about this?",
+				description: "“stone!”can be strengthened with the increase of stones",
+				cost: new Decimal(5),
+			},
+			14:{
 				title: "Stone house",
-				description: "Fire prevention, It’s also a solid defense(ATK base +1)",
-				cost: new Decimal(3),
+				description: "Fire prevention, It's also a solid defense(ATK base +1)",
+				cost: new Decimal(30),
 				unlocked(){
 					return hasChallenge("c",11)
 				},
 				effect(){
 					let eff = new Decimal(0)
-					if (hasUpgrade("s",13)) eff = new Decimal(1)
+					if (hasUpgrade("s",14)) eff = new Decimal(1)
 					return eff
 				},
 			},
-			14:{
+			15:{
 				title: "Many axes",
 				description: "Get 1% wood every second",
-				cost: new Decimal(99),
-				unlocked(){
-					return hasChallenge("c",11)
-				},
-			},
-			15:{
-				title: "Compression technology",
-				description: "You can compress your stone(画大饼)",
-				cost: new Decimal(81),
+				cost: new Decimal(50),
 				unlocked(){
 					return hasChallenge("c",11)
 				},
@@ -605,7 +386,7 @@ addLayer("a", {
 	base:10,
 	branches: [["b","#FFB5B5"]],
 	update(diff) {
-		player.a.atk = player.a.atk.add(player.a.points.add(buyableEffect('b',14)).add(upgradeEffect("w",34)).add(upgradeEffect("s",13)).pow(2).mul(diff));
+		player.a.atk = player.a.atk.add(player.a.points.add(buyableEffect('b',14)).add(buyableEffect('b',22)).add(upgradeEffect("w",34)).add(upgradeEffect("s",14)).pow(2).mul(diff));
 	},
     gainMult() {
         mult = new Decimal(1)
@@ -626,7 +407,7 @@ addLayer("a", {
     layerShown(){return (hasChallenge("s",22))},
 		clickables: {
 			11: {
-				display() {return  'You have ' + format(player.a.atk) + " ATK <br> You get " + format(player.a.points.add(buyableEffect('b',14)).add(upgradeEffect("w",34)).add(upgradeEffect("s",13)).pow(2))+ "/sec"},
+				display() {return  'You have ' + format(player.a.atk) + " ATK <br> You get " + format(player.a.points.add(buyableEffect('b',14)).add(buyableEffect('b',22)).add(upgradeEffect("w",34)).add(upgradeEffect("s",13)).pow(2))+ "/sec"},
 				canClick(){return true}
 			},
 			21: {
@@ -641,7 +422,7 @@ addLayer("a", {
 					let bm = Math.floor(Math.random() * 1001)
 					let cm = Math.floor(Math.random() * 500)
 					player.a.atk = player.a.atk.sub(100)
-					player.b.points = player.b.points.add(bm);
+					player.b.points = player.b.points.add(bm*(buyableEffect("b",24)));
 					if (cm == 0) {player.cr.points = player.cr.points.add(1)};
 					return bm + cm
 				},
@@ -658,7 +439,7 @@ addLayer("a", {
 					let bm = Math.floor(Math.random() * 10001)
 					let cm = Math.floor(Math.random() * 50)
 					player.a.atk = player.a.atk.sub(1000)
-					player.b.points = player.b.points.add(bm);
+					player.b.points = player.b.points.add(bm*(buyableEffect("b",24)));
 					if (cm == 0) {player.cr.points = player.cr.points.add(1)};
 					return bm + cm
 				},
@@ -675,7 +456,7 @@ addLayer("a", {
 					let bm = Math.floor(Math.random() * 100001)
 					let cm = Math.floor(Math.random() * 5)
 					player.a.atk = player.a.atk.sub(10000)
-					player.b.points = player.b.points.add(bm);
+					player.b.points = player.b.points.add(bm*(buyableEffect("b",24)));
 					if (cm == 0) {player.cr.points = player.cr.points.add(1)};
 					return bm + cm
 				},
@@ -691,7 +472,7 @@ addLayer("a", {
 				onClick(){
 					let bm = Math.floor(Math.random() * 1000001)
 					player.a.atk = player.a.atk.sub(100000)
-					player.b.points = player.b.points.add(bm);
+					player.b.points = player.b.points.add(bm*(buyableEffect("b",24)));
 					player.cr.points = player.cr.points.add(2);
 					return bm + cm
 				},
@@ -710,7 +491,7 @@ addLayer("a", {
 				onClick(){
 					let bm = Math.floor(Math.random() * 10000001)
 					player.a.atk = player.a.atk.sub(1000000)
-					player.b.points = player.b.points.add(bm);
+					player.b.points = player.b.points.add(bm*(buyableEffect("b",24)));
 					player.cr.points = player.cr.points.add(20);
 					return bm
 				},
@@ -751,7 +532,7 @@ addLayer("b", {
 		12:{
 			title: "Blood stone",
 			description: "Soak stone in blood, The blood will corrode the stone part",
-			cost: new Decimal(10000),
+			cost: new Decimal(50000),
 			unlocked(){
 				return hasUpgrade("bm" ,13)
 			},
@@ -760,7 +541,7 @@ addLayer("b", {
 		13:{
 			title: "Blood wood",
 			description: "Soak wood in blood, unlock wood upgrade",
-			cost: new Decimal(20000),
+			cost: new Decimal(100000),
 			unlocked(){
 				return hasUpgrade("bm" ,14)
 			},
@@ -769,9 +550,9 @@ addLayer("b", {
 		14:{
 			title: "Blood copper",
 			description: "Soak copper in blood, unlock copper upgrade",
-			cost: new Decimal(50000),
+			cost: new Decimal(250000),
 			unlocked(){
-				return hasUpgrade("bm" ,14)
+				return hasUpgrade("bm" ,15)
 			},
 			style() {return {'border-color': "#CE0000" }}
 		},
@@ -779,7 +560,7 @@ addLayer("b", {
 	buyables: {
 		11: {
 			cost(x) { 
-				return new Decimal(1000).add(29000*x)
+				return new Decimal(1000).add(9000*x)
 			},
 			title:"Efficiency Rune I",
 			display() { return "Get extra “kill it”<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(getBuyableAmount(this.layer, this.id))+" “kill it”"},
@@ -794,7 +575,7 @@ addLayer("b", {
 		},
 		12: {
 			cost(x) { 
-				return new Decimal(1000).add(29000*x)
+				return new Decimal(1000).add(9000*x)
 			},
 			title:"Endurance Rune I",
 			display() { return "Time gained based on blood increase<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:"+format(this.effect())+"x"},
@@ -808,7 +589,7 @@ addLayer("b", {
 			effect:function(x){
 					{
 						let eff = new Decimal(1).mul(player[this.layer].points*0.0002*(x+1)).add(1*x)
-						eff = softcap(eff,new Decimal(2),0.7)
+						eff = softcap(eff,new Decimal(2),0.2)
 						eff = softcap(eff,new Decimal(5),0.15)
 						eff = softcap(eff,new Decimal(10),0.05)
 						return eff
@@ -819,7 +600,7 @@ addLayer("b", {
 		},
 		13: {
 			cost(x) { 
-				return new Decimal(1000).add(29000*x)
+				return new Decimal(1000).add(9000*x)
 			},
 			title:"Speed Rune I",
 			display() { return "Reduce the number of blood magic to get the base<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:-"+format(this.effect())},
@@ -841,7 +622,7 @@ addLayer("b", {
 		},
 		14: {
 			cost(x) { 
-				return new Decimal(1000).add(29000*x)
+				return new Decimal(1000).add(9000*x)
 			},
 			title:"Strength Rune I",
 			display() { return "ATK base gained based on blood increase<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/2<br>"+"Currently:+"+format(this.effect())},
@@ -854,13 +635,13 @@ addLayer("b", {
 			unlocked(){return hasUpgrade("bm",34)},
 			effect:function(x){
 				{
-					let eff = new Decimal(1*x).mul(player[this.layer].points*0.00003*(x+1))
-					eff = softcap(eff,new Decimal(1),0.85)
-					eff = softcap(eff,new Decimal(2),0.75)
-					eff = softcap(eff,new Decimal(3),0.65)
-					eff = softcap(eff,new Decimal(4),0.55)
-					eff = softcap(eff,new Decimal(5),0.45)
-					eff = softcap(eff,new Decimal(6),0.35)
+					let eff = new Decimal(0.8*x).mul(player[this.layer].points*0.0001*(x+1))
+					eff = softcap(eff,new Decimal(1),0.8)
+					eff = softcap(eff,new Decimal(2),0.7)
+					eff = softcap(eff,new Decimal(3),0.6)
+					eff = softcap(eff,new Decimal(4),0.5)
+					eff = softcap(eff,new Decimal(5),0.4)
+					eff = softcap(eff,new Decimal(6),0.3)
 					eff = softcap(eff,new Decimal(7),0)
 					return eff
 				}
@@ -869,7 +650,7 @@ addLayer("b", {
 		},
 		21: {
 			cost(x) { 
-				return new Decimal(1000).add(80000*x*x)
+				return new Decimal(2000).add(80000*x*x)
 			},
 			title:"Efficiency Rune II",
 			display() { return "Unlock more BM upgrades<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/3<br>"+"Currently:+"+format(getBuyableAmount(this.layer, this.id))+" BM upgrades"},
@@ -884,10 +665,10 @@ addLayer("b", {
 		},
 		22: {
 			cost(x) { 
-				return new Decimal(1000).add(80000*x*x)
+				return new Decimal(2000).add(80000*x*x)
 			},
-			title:"Endurance Rune II",
-			display() { return "Time gained based on blood magic increase<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/3<br>"+"Currently:"+format(this.effect())+"x"},
+			title:"Strength Rune I",
+			display() { return "ATK base gained based on Time increase<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/3<br>"+"Currently:+"+format(this.effect())},
 			canAfford() { return player[this.layer].points.gte(this.cost()) },
 			buy() {
 				player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -896,20 +677,23 @@ addLayer("b", {
 			purchaseLimit: 3,
 			unlocked(){return hasUpgrade("bm",42)},
 			effect:function(x){
-					{
-						let eff = new Decimal(1).mul(player.bm.points*0.02*(x+1)).add(1*x)
-						eff = softcap(eff,new Decimal(2),0.15)
-						eff = softcap(eff,new Decimal(3),0.1)
-						eff = softcap(eff,new Decimal(5),0.05)
-						return eff
-					}
-				
+				{
+					let eff = new Decimal(1*x).mul(player.points*0.000005*(x+1))
+					eff = softcap(eff,new Decimal(1),0.85)
+					eff = softcap(eff,new Decimal(2),0.75)
+					eff = softcap(eff,new Decimal(3),0.65)
+					eff = softcap(eff,new Decimal(4),0.55)
+					eff = softcap(eff,new Decimal(5),0.45)
+					eff = softcap(eff,new Decimal(6),0.35)
+					eff = softcap(eff,new Decimal(7),0)
+					return eff
+				}
 			},
 			style() {return {'border-color': "#CE0000" }}
 		},
 		23: {
 			cost(x) { 
-				return new Decimal(1000).add(80000*x*x)
+				return new Decimal(2000).add(80000*x*x)
 			},
 			title:"Speed Rune II",
 			display() { return "Reduce the number of blood attack to get the base<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/3<br>"+"Currently:-"+format(this.effect())+"x"},
@@ -922,7 +706,7 @@ addLayer("b", {
 			unlocked(){return hasUpgrade("bm",43)},
 			effect:function(x){
 				{
-					let eff = new Decimal(0.1*x)
+					let eff = new Decimal(0.3*x)
 					return eff
 				}
 				
@@ -931,7 +715,7 @@ addLayer("b", {
 		},
 		24: {
 			cost(x) { 
-				return new Decimal(1000).add(80000*x*x)
+				return new Decimal(2000).add(40000*x*(x-1))
 			},
 			title:"Strength Rune II",
 			display() { return "“kill it” Extra give Blood<br>"+"cost:"+format(this.cost())+"<br>"+format(getBuyableAmount(this.layer, this.id))+"/3<br>"+"Currently:+"+format(this.effect())+"x"},
@@ -1071,7 +855,7 @@ addLayer("bm", {
 		41:{
 			title: "Efficiency Rune II",
 			description: "Unlock Efficiency Rune II",
-			cost: new Decimal(50),
+			cost: new Decimal(35),
 			unlocked(){
 				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
@@ -1080,7 +864,7 @@ addLayer("bm", {
 		42:{
 			title: "Endurance Rune II",
 			description: "Unlock Efficiency Rune II",
-			cost: new Decimal(50),
+			cost: new Decimal(35),
 			unlocked(){
 				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
@@ -1089,7 +873,7 @@ addLayer("bm", {
 		43:{
 			title: "Speed Rune II",
 			description: "Unlock Efficiency Rune II",
-			cost: new Decimal(50),
+			cost: new Decimal(35),
 			unlocked(){
 				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
@@ -1098,7 +882,7 @@ addLayer("bm", {
 		44:{
 			title: "Strength Rune II",
 			description: "Unlock Efficiency Rune II",
-			cost: new Decimal(50),
+			cost: new Decimal(35),
 			unlocked(){
 				return ((getBuyableAmount("b", 11).gte(2)) && (getBuyableAmount("b", 12).gte(2)) && (getBuyableAmount("b", 13).gte(2)) && (getBuyableAmount("b", 14).gte(2)))
 			},
@@ -1138,7 +922,8 @@ addLayer("cr", {
 		if(player.cr.b2 > 1){player.cr.b2 = new Decimal(1)}
 		if(player.cr.b2 < 0){player.cr.b2 = new Decimal(0)}
 		
-		if(hasMilestone("d",3)) {player.cr.points = player.cr.points.add(player.cr.diff.add(0.01).mul(diff))}
+		if(hasUpgrade("c",13)) {player.cr.points = player.cr.points.add(player.cr.diff.add(0.01).mul(diff))}
+		if(hasMilestone("d",3)) {player.cr.points = player.cr.points.add(player.cr.diff.add(0.04).mul(diff))}
 	},
 		upgrades:{
 			11:{
@@ -1183,7 +968,7 @@ addLayer("cr", {
 				cost:new Decimal(20),
 				unlocked(){return hasUpgrade("cr",14)},
 				effect(){
-					if (hasUpgrade("cr",21)) {player.cr.em = new Decimal(4)}
+					if (hasUpgrade("cr",21) && !hasUpgrade("cr",31)) {player.cr.em = new Decimal(4)}
 				}
 			},
 			22:{
@@ -1192,7 +977,25 @@ addLayer("cr", {
 				cost:new Decimal(20),
 				unlocked(){return hasUpgrade("cr",16)},
 				effect(){
-					if (hasUpgrade("cr",22)) {player.d.mk = new Decimal(10)}
+					if (hasUpgrade("cr",22) && !hasUpgrade("cr",32)) {player.d.mk = new Decimal(10)}
+				}
+			},
+			31:{
+				title:"Capacitor library^3",
+				description:"Store electricity^3",
+				cost:new Decimal(50),
+				unlocked(){return hasUpgrade("cr",21)},
+				effect(){
+					if (hasUpgrade("cr",31)) {player.cr.em = new Decimal(9)}
+				}
+			},
+			32:{
+				title:"Mining machine MK3",
+				description:"Enjoy Fifty times the speed",
+				cost:new Decimal(80),
+				unlocked(){return hasUpgrade("cr",22)},
+				effect(){
+					if (hasUpgrade("cr",32)) {player.d.mk = new Decimal(50)}
 				}
 			},
 		},
@@ -1296,13 +1099,14 @@ addLayer("c", {
     startData() { return {
         unlocked: false,
 		points: new Decimal(0),
-		t: new Decimal(0)
+		t: new Decimal(0),
     }},
     color: "#3C3C3C",
     requires:function(){
 		let cr = new Decimal(30)
 		if (hasChallenge("c",12)) cr = cr.sub(2)
-		if (hasChallenge("c",13)) cr = cr.sub(4) 
+		if (hasChallenge("c",13)) cr = cr.sub(4)
+		if (hasUpgrade("w",35)) cr = cr.sub(3)
 		return cr
 	},
     resource: "coal",
@@ -1331,48 +1135,94 @@ addLayer("c", {
 		upgrades:{
 			11:{
 				title:"Torch",
-				description:"Light up here.",
+				description:"Light up here.<br>wood base - 1",
 				cost:new Decimal(1),
 			},
 			12:{
 				title:"No wood in the mine.but...",
 				description:"unlock c challenge",
-				cost:new Decimal(2),
+				cost:new Decimal(1),
 				unlocked(){return hasUpgrade("c",11)},
 			},
 			13:{
-				title:"No wood but have torches",
-				description:"keep s challenge",
-				cost:new Decimal(10),
-				unlocked(){return hasChallenge("c",12)},
+				title:"Light mine",
+				description:"Get 0.01 cooper /sec",
+				cost:new Decimal(5),
+				currencyDisplayName:"torch",
+				unlocked(){return hasUpgrade("w",35)},
+				canAfford:function(){return (player.c.t >= 5)},
+				pay:function(){
+					player.c.t = player.c.t.sub(5)
+				},
 			},
-			14:{
-				title:"Coal merchant",
-				description:"Sell and buy ​​some coal",
-				cost:new Decimal(30),
+			15:{
+				title:"matches?",
+				description:"Torch making is more efficient",
+				cost:new Decimal(2),
+				unlocked(){return hasUpgrade("w",35)},
+			},
+			16:{
+				title:"Rubble",
+				description:"Collect excess rubble.(Each piece of coal will increase the stone index by 0.005, up to 0.25)",
+				cost:new Decimal(2),
 				unlocked(){return hasChallenge("c",12)},
+				effect(){
+					let eff = player[this.layer].points.mul(0.005)
+					if (eff >= 0.25){eff = 0.25}
+					return eff
+				},
+				effectDisplay() { return "+"+format(upgradeEffect(this.layer, this.id))}, 
 			},
 			21:{
-				title:"Light up here",
-				description:"No zombies will bother you logging.(Get 9% wood second)",
-				cost:new Decimal(50),
+				title:"Light up there",
+				description:"No zombies will bother you logging.(Get 9% wood every second)",
+				cost:new Decimal(30),
 				currencyDisplayName:"torch",
 				unlocked(){return hasChallenge("c",12)},
-				canAfford:function(){return (player.c.t >= 50)},
+				canAfford:function(){return (player.c.t >= 30)},
 				pay:function(){
-					player.c.t = player.c.t.sub(50)
+					player.c.t = player.c.t.sub(30)
 				},
 			}
+		},
+		milestones:{
+			0: {
+				requirementDescription: "1torch",
+				effectDescription: "keep s upgrades",
+				done() {
+					return player.c.t.gte(1)
+				},
+				unlocked(){return hasUpgrade("c",11)}
+			},
+			1: {
+				requirementDescription: "25torch",
+				effectDescription: "keep s milestones",
+				done() {
+					return player.c.t.gte(25)
+				},
+				unlocked(){return hasMilestone("c",0)}
+			},
+			2: {
+				requirementDescription: "125torch",
+				effectDescription: "keep s challenges",
+				done() {
+					return player.c.t.gte(125)
+				},
+				unlocked(){return hasMilestone("c",1)}
+			},
 		},
 		clickables: {
 			11: {
 				display() {return  'You have ' + format(player.c.t) + " torch"},
-				canClick(){return true}
+				canClick(){return true},
+				unlocked(){
+					return hasUpgrade("c",11)
+				},
 			},
 			12: {
 				display() {return "make torch(1coal + 1000wood = 4torch)"},
 				unlocked(){
-					return hasUpgrade("c",11)
+					return hasUpgrade("c",11) && !hasUpgrade("c",15)
 				},
 				canClick() {
 					let cc = player[this.layer].points
@@ -1387,37 +1237,40 @@ addLayer("c", {
 					player.c.t = player.c.t.add(4)
 				},
 			},
-			21: {
-				display() {return "10coal -> 30000$"},
+			13: {
+				display() {return "make torch(1coal + 800wood = 6torch)"},
 				unlocked(){
-					return hasUpgrade("c",14)
+					return hasUpgrade("c",15)
 				},
 				canClick() {
 					let cc = player[this.layer].points
-					if (cc >= 10) 
-					return cc
+					let mc = player.w.points
+					if (cc >= 1)
+					if (mc >= 800)
+					return cc + mc
 				},
 				onClick(){
-					player.c.points = player.c.points.sub(10)
-					player.$.points = player.$.points.add(30000)
+					player.c.points = player.c.points.sub(1)
+					player.w.points = player.w.points.sub(800)
+					player.c.t = player.c.t.add(6)
 				},
 			},
 		},
 		challenges:{
 			11: {
 				name: "No wood in the mine. but have ore",
-				challengeDescription: "you find stone, the Time acquisition is only 50%, the stone base * 3",
+				challengeDescription: "you find stone, the Time acquisition is only 80%, the stone base * 2.5",
 				unlocked() { return hasUpgrade("c",12) },
-				canComplete: function() {return player.s.points.gte(15)},
-				goalDescription:"15 stone",
+				canComplete: function() {return player.s.points.gte(4)},
+				goalDescription:"4 stone",
 				rewardDescription: "Unlock s upgrade,stone base - 1.",
 			},
 			12: {
 				name: "No wood in the mine. but have ore2.0",
 				challengeDescription: "you find coal, the Time acquisition is only 40%, the stone base * 3.5",
 				unlocked() { return hasChallenge("c",11) },
-				canComplete: function() {return player.s.points.gte(25)},
-				goalDescription:"25 stone",
+				canComplete: function() {return player.s.points.gte(10)},
+				goalDescription:"10 stone",
 				rewardDescription: "Unlock c upgrade,coal base - 2.",
 			},
 			21: {
@@ -1446,7 +1299,7 @@ addLayer("i", {
     baseResource: "copper", 
     baseAmount() {return player.cr.points},
     type: "normal",
-    exponent: 2,
+    exponent: 0,
 	branches: [["cr","#F0F0F0"]],
     gainMult() {
         mult = new Decimal(1)
@@ -1488,7 +1341,7 @@ addLayer("d", {
 			if (resettingLayer=="a") keep.push("points","base","total","milestones","upgrades","challenges");
 			if (resettingLayer=="bm") keep.push("points","base","total","milestones","upgrades","challenges");
 			if (resettingLayer=="c") keep.push("points","base","total","milestones","upgrades","challenges");
-			if (layers[resettingLayer].row > this.row) layerDataReset("c", keep)
+			if (layers[resettingLayer].row > this.row) layerDataReset("d", keep)
 		},
 		milestones: {
 			0: {
@@ -1517,7 +1370,7 @@ addLayer("d", {
 			},
 			3: {
 				requirementDescription: "320km(copper)",
-				effectDescription: "nice.<br>get 0.01 copper /sec",
+				effectDescription: "nice.<br>get 0.04 copper /sec",
 				done() {
 					return player.d.points.gte(320)
 				},
@@ -1542,7 +1395,7 @@ addLayer("d", {
 		},
 	tabFormat: [
 		"main-display",
-		['display-text',function(){return `<h3>You have dug<h3> `+format(player.d.points)+` <h3>kilometers<h3>`}],,
+		['display-text',function(){return `<h3>You have dug <h3> `+format(player.d.points)+` <h3>kilometers<h3>`}],,
 		"milestones",
 	]
 })

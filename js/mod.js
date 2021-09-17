@@ -24,7 +24,7 @@ function getStartPoints(){
 
 // Determines if it should show points/sec
 function canGenPoints(){
-	return hasUpgrade("$", 11);
+	return hasUpgrade("w", 11);
 }
 
 // Calculate points/sec!
@@ -32,20 +32,21 @@ function getPointGen() {
 	if(!canGenPoints())
 		return new Decimal(0)
 	let gain = new Decimal(0.5)
-		if (hasUpgrade('$', 12)) gain = new Decimal(0.6)
-		if (hasUpgrade('$', 13)) gain = new Decimal(0.75)
-		if (hasUpgrade('$', 13)) gain = new Decimal(0.875)
-		if (hasUpgrade('w', 11)) gain = gain.times(upgradeEffect('w', 11))
+		if (hasUpgrade('w', 11)) gain = new Decimal(0.5)
+		if (hasUpgrade('w', 23)) gain = new Decimal(0.6)
+		if (hasUpgrade('w', 25)) gain = new Decimal(0.75)
+		if (hasUpgrade('w', 12)) gain = gain.times(upgradeEffect('w', 12))
 		if (hasUpgrade('w', 24)) gain = gain.times(upgradeEffect('w', 24))
-		if (hasUpgrade('s',11)) gain = gain.mul(2)
+		if (hasUpgrade('w', 33)) gain = gain.times(upgradeEffect('w', 33))	
+		if (hasUpgrade('s', 11)) gain = gain.times(upgradeEffect('s', 11))
 		if (getBuyableAmount("b", 12).gte(1)) gain = gain.mul(buyableEffect('b',12))
-		if (getBuyableAmount("b", 22).gte(1)) gain = gain.mul(buyableEffect('b',22))
-		if (inChallenge('s',11)) gain = gain.mul(0.75)
-		if (inChallenge('s',12)) gain = gain.mul(0.65)
-		if (inChallenge('s',21)) gain = gain.mul(0.55)
-		if (inChallenge('s',22)) gain = gain.mul(0.45)
-		if (inChallenge('c',11)) gain = gain.mul(0.5)
+		if (inChallenge('s',11)) gain = gain.mul(0.8)
+		if (inChallenge('s',12)) gain = gain.mul(0.7)
+		if (inChallenge('s',21)) gain = gain.mul(0.6)
+		if (inChallenge('s',22)) gain = gain.mul(0.5)
+		if (inChallenge('c',11)) gain = gain.mul(0.8)
 		if (inChallenge('c',12)) gain = gain.mul(0.4)
+		if (inChallenge('c',21)) gain = gain.mul(0.3)
 	return gain
 }
 
@@ -83,12 +84,20 @@ function fixOldSave(oldVersion){
 }
 
 let VERSION = {
-	num: "0.5.2.2",
-	name: "Art",
+	num: "0.6",
+	name: "Metal age",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+<h2>Metal age</h2><br>
+	<h3>v0.6</h3><br>
+		- Now you can get iron<br>
+		- Changed to much things<br>
+		- Remove "$"<br>
 <h2>Art</h2><br>
+	<h3>v0.5.3.2</h3><br>
+		- Changed to much things<br>
+		- Remove "$"<br>
 	<h3>v0.5.2.2</h3><br>
 		- Fix bug<br>
 		- Modify "a"<br>

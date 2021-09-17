@@ -26,7 +26,6 @@ function canBuyBuyable(layer, id) {
 }
 
 
-
 function canAffordPurchase(layer, thing, cost) {
 	if (thing.currencyInternalName) {
 		let name = thing.currencyInternalName
