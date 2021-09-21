@@ -44,7 +44,10 @@ addLayer("i", {
 				title:"Changing times",
 				description:"Keep the tech tree, i milestones forever and i points",
 				cost:new Decimal(0),
-				style() {return {'border-color': "#F0F0F0" }}
+				style() {return {'border-color': "#F0F0F0" }},
+				unlocked(){
+					return hasMilestone("i",0)
+				},
 			},
 			12:{
 				title:"technology era",
@@ -88,6 +91,7 @@ addLayer("i", {
 				cost:function(){
 					let ic = new Decimal(1)
 					if (hasUpgrade("i",15)) ic = ic.mul(10)
+					if (hasUpgrade("i",13)) ic = ic.mul(1000)
 					return ic
 				},
 				style() {return {'border-color': "#F0F0F0" }},
@@ -106,6 +110,7 @@ addLayer("i", {
 				cost:function(){
 					let ic = new Decimal(1)
 					if (hasUpgrade("i",14)) ic = ic.mul(10)
+					if (hasUpgrade("i",13)) ic = ic.mul(1000)
 					return ic
 				},
 				style() {return {'border-color': "#F0F0F0" }},
@@ -124,6 +129,7 @@ addLayer("i", {
 				cost:function(){
 					let ic = new Decimal(1)
 					if (hasUpgrade("i",17)) ic = ic.mul(10)
+					if (hasUpgrade("i",12)) ic = ic.mul(1000)
 					return ic
 				},
 				style() {return {'border-color': "#F0F0F0" }},
@@ -142,6 +148,7 @@ addLayer("i", {
 				cost:function(){
 					let ic = new Decimal(1)
 					if (hasUpgrade("i",16)) ic = ic.mul(10)
+					if (hasUpgrade("i",12)) ic = ic.mul(1000)
 					return ic
 				},
 				style() {return {'border-color': "#F0F0F0" }},
@@ -167,6 +174,7 @@ addLayer("i", {
 		],
 })
 
+
 addLayer("fm", {
     name: "fire magic",
     symbol: "FM",
@@ -174,6 +182,7 @@ addLayer("fm", {
     startData() { return {
         unlocked: true,
 		points: new Decimal(0),
+		f: new Decimal(0),
     }},
     color: "#f35d2f",
     requires: new Decimal(10000), 
@@ -194,6 +203,17 @@ addLayer("fm", {
     hotkeys: [
         {key: "F", description: "shift+f: Reset for fm points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return true},
+    layerShown(){return hasUpgrade("i",16)},
+		clickables:{
+			11:{
+				title:"Fan<br>",
+				display(){return "The flame is burning<br>You will get Fire every time you fan<br>You have "+format(player.fm.f)+" fire"},
+				canClick(){return true},
+				onClick(){
+					player.fm.f = player.fm.f.add(0.1)
+				},
+				style() {return {'height': "145px",'width': '250px' }}
+			},
+		},
 })
 

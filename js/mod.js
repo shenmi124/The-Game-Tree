@@ -85,12 +85,17 @@ function fixOldSave(oldVersion){
 }
 
 let VERSION = {
-	num: "0.6.1",
+	num: "0.6.2",
 	name: "Metal age",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Metal age</h2><br>
+	<h3>v0.6.2</h><br> 
+		- Add an option and a sub-option<br>
+		- Modify some upgraded values<br>
+		- Added CT1<br>
+		- Added two HA<br>
 	<h3>v0.6.1</h3><br>
 		- Fix c & d Numerical value is abnormal<br>
 		- Added t milestone<br> 

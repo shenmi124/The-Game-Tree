@@ -19,9 +19,9 @@
 	<script src="js/mod.js"></script>
 	<script src="js/technical/loader.js"></script>
 	
-	<script src="js/layers/Start.js"></script>
-	<script src="js/layers/Changing times.js"></script>
-	<script src="js/layers/HA.js"></script>
+	<script src="js/layers/CT1.js"></script>
+	<script src="js/layers/CT2.js"></script>
+	<script src="js/layers/side.js"></script>
 
 	<script src="js/technical/temp.js"></script>
 	<script src="js/technical/displays.js"></script>
@@ -42,16 +42,12 @@
 
 <body onload="load()" onmousemove="updateMouse(event)">
 	<style>
-	body {
-		background-image: url("js/data/background.png");
-		background-repeat: no-repeat;
-	}
 	p.round3 {
 		border: 2px solid white;
 		border-radius: 12px;
 	}
 	</style>
-	<p class="round3"><a href="https://shenmi124.github.io/The-Game-Tree/" class="copyright" target="_blank">The Game Tree </a>by mysterious_124</p>
+	<p class="round3"><a href="https://shenmi124.github.io/The-Game-Tree/" class="copyright" target="_blank">The Game Tree </a>by mysterious_124 ps:More backgrounds can be switched in the settings</p>
 	<div id="app">
 		<canvas id="treeCanvas" class="canvas" v-if="!(tmp.gameEnded && !player.keepGoing)"></canvas>
 

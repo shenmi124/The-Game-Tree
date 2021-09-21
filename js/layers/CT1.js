@@ -1139,12 +1139,12 @@ addLayer("c", {
 			11:{
 				title:"Torch",
 				description:"Light up here.<br>wood base - 1",
-				cost:new Decimal(1),
+				cost:new Decimal(0.5),
 			},
 			12:{
 				title:"No wood in the mine.but...",
 				description:"unlock c challenge",
-				cost:new Decimal(1),
+				cost:new Decimal(0.5),
 				unlocked(){return hasUpgrade("c",11)},
 			},
 			13:{
