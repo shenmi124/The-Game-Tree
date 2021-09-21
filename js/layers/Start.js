@@ -27,6 +27,7 @@ addLayer("w", {
 			if (hasMilestone("s", 1)) keep.push("upgrades");
 			if (resettingLayer=="a") keep.push("points","base","total","milestones","upgrades");
 			if (resettingLayer=="bm") keep.push("points","base","total","milestones","upgrades");
+			if (resettingLayer=="fm") keep.push("points","base","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("w", keep);
 		},
     gainMult() {
@@ -257,6 +258,7 @@ addLayer("s", {
 			if (hasMilestone("c",0)) keep.push("upgrades");
 			if (hasMilestone("c",1)) keep.push("milestones");
 			if (hasMilestone("c",2)) keep.push("challenges");
+			if (resettingLayer=="fm") keep.push("points","base","total","milestones","upgrades","challenges");
 			if (layers[resettingLayer].row > this.row) layerDataReset("s", keep);
 		},
     row: 1, 
@@ -402,6 +404,7 @@ addLayer("a", {
 	doReset(resettingLayer) {
 			let keep = [];
 			if (resettingLayer=="c") keep.push("points","base","total","milestones","upgrades");
+			if (resettingLayer=="fm") keep.push("points","base","total","milestones","upgrades");
 			if (layers[resettingLayer].row > this.row) layerDataReset("a", keep)
 		},
     layerShown(){return (hasChallenge("s",22))},
@@ -914,7 +917,7 @@ addLayer("cr", {
     layerShown(){return (hasChallenge("s",22))},
 	update(diff) {
 		if(hasUpgrade("cr",14)) {player.cr.e = player.cr.e.add(player.cr.diff.add(0.1).mul(diff))}
-		if(player.cr.e > player.cr.em){player.cr.e = player.cr.em}
+		if(player.cr.e.gte(player.cr.em)){player.cr.e = player.cr.em}
 		player.cr.b1 = player.cr.b1.add(player.cr.diff.sub(0.2).mul(diff))
 		if(player.cr.b1 > 1){player.cr.b1 = new Decimal(1)}
 		if(player.cr.b1 < 0){player.cr.b1 = new Decimal(0)}
@@ -1285,37 +1288,6 @@ addLayer("c", {
 })
 
 
-addLayer("i", {
-    name: "iron",
-    symbol: "I",
-    position: 3,
-    startData() { return {
-        unlocked: true,
-		points: new Decimal(0),
-    }},
-    color: "#F0F0F0",
-    requires: new Decimal(50), 
-    resource: "iron",
-    baseResource: "copper", 
-    baseAmount() {return player.cr.points},
-    type: "normal",
-    exponent: 0,
-	branches: [["cr","#F0F0F0"]],
-    gainMult() {
-        mult = new Decimal(1)
-        return mult
-    },
-    gainExp() { 
-        return new Decimal(1)
-    },
-    row: 3, 
-    hotkeys: [
-        {key: "i", description: "i: Reset for i points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-    ],
-    layerShown(){return hasMilestone("d",4) || player.i.points >= 0.01},
-})
-
-
 addLayer("d", {
     name: "depth",
     symbol: "D",
@@ -1333,7 +1305,7 @@ addLayer("d", {
     layerShown(){return hasUpgrade("cr",16)},
 	update(diff) {
 		player.d.points = player.d.points.add(player.cr.diff.add(player.cr.b2).mul(player.b.points >= 33 ? 0.5:1).mul(player.d.mk).mul(diff))
-		if (player.d.points >= player.d.mkm){player.d.points = player.d.mkm}
+		if (player.d.points.gte(player.d.mkm)){player.d.points = player.d.mkm}
 	},
 		doReset(resettingLayer) {
 			let keep = [];
@@ -1341,11 +1313,12 @@ addLayer("d", {
 			if (resettingLayer=="a") keep.push("points","base","total","milestones","upgrades","challenges");
 			if (resettingLayer=="bm") keep.push("points","base","total","milestones","upgrades","challenges");
 			if (resettingLayer=="c") keep.push("points","base","total","milestones","upgrades","challenges");
+			if (resettingLayer=="fm") keep.push("points","base","total","milestones","upgrades","challenges");
 			if (layers[resettingLayer].row > this.row) layerDataReset("d", keep)
 		},
 		milestones: {
 			0: {
-				requirementDescription: "0.01km(soli)",
+				requirementDescription: "0.01m(soli)",
 				effectDescription: "You dug the soil,wait,what?",
 				done() {
 					return player.d.points.gte(0.01)
@@ -1353,7 +1326,7 @@ addLayer("d", {
 				unlocked(){return hasMilestone("d",0)}
 			},
 			1: {
-				requirementDescription: "1km(stone)",
+				requirementDescription: "1m(stone)",
 				effectDescription: "You dug the stone,uh,ok,ok.At least there is some gain.<br>stone requires - 1",
 				done() {
 					return player.d.points.gte(1)
@@ -1361,7 +1334,7 @@ addLayer("d", {
 				unlocked(){return hasMilestone("d",1)}
 			},
 			2: {
-				requirementDescription: "33km(Break through the crust)",
+				requirementDescription: "33m(rock)",
 				effectDescription: "nic...that's bad<br>The geology hardens",
 				done() {
 					return player.d.points.gte(33)
@@ -1369,7 +1342,7 @@ addLayer("d", {
 				unlocked(){return hasMilestone("d",2)}
 			},
 			3: {
-				requirementDescription: "320km(copper)",
+				requirementDescription: "320m(copper)",
 				effectDescription: "nice.<br>get 0.04 copper /sec",
 				done() {
 					return player.d.points.gte(320)
@@ -1377,7 +1350,7 @@ addLayer("d", {
 				unlocked(){return hasMilestone("d",3)}
 			},
 			4: {
-				requirementDescription: "480km(iron)",
+				requirementDescription: "480m(iron)",
 				effectDescription: "nice!!!<br>unlock iron",
 				done() {
 					return player.d.points.gte(480)
@@ -1385,7 +1358,7 @@ addLayer("d", {
 				unlocked(){return hasMilestone("d",4)}
 			},
 			5: {
-				requirementDescription: "980km(Break through the upper mantle)",
+				requirementDescription: "980m(Break through 0.1% of the upper mantle)",
 				effectDescription: "Uh, it may not be able to break through.",
 				done() {
 					return player.d.points.gte(980)
@@ -1395,110 +1368,8 @@ addLayer("d", {
 		},
 	tabFormat: [
 		"main-display",
-		['display-text',function(){return `<h3>You have dug <h3> `+format(player.d.points)+` <h3>kilometers<h3>`}],,
+		['display-text',function(){return `<h3>You have dug <h3> `+format(player.d.points)+` <h3>meters<h3>`}],,
 		"milestones",
 	]
-})
-
-
-addLayer("ha", {
-    name: "Hidden Achievement",
-    symbol: "HA",
-    position: 3,
-    startData() { return {
-        unlocked: true,
-		points: new Decimal(0),
-    }},
-    color: "yellow",
-    resource: "Hidden Achievement",
-    type: "none",
-    row: "side", 
-    layerShown(){return true},
-	tooltip() {
-        return ("Hidden Achievements")
-    },
-	achievementPopups: true,
-    achievements: {
-        11: {
-            name: "yeeeeeeeee",
-            done() {
-                return player.w.points == 114514
-				},
-            tooltip() {
-                return `<div style="font-size: 14px">yeeeeeeeee<br>
-                ${(hasAchievement('ha', 11) ? 'have 114514 Wood'+'<br>' +'Is it necessary to take such a foul-smelling achievement?' : '')}
-                </div>`;
-            },
-            onComplete() {
-                player.ha.points  = player.ha.points.add(1)
-            },
-        },
-		12: {
-            name: "Demon",
-            done() {
-				return player.b.points == 666
-			},
-            tooltip() {
-                return `<div style="font-size: 14px">Demon<br>
-                ${(hasAchievement('ha', 12) ? 'have 666 Blood'+'<br>' +'And no demons' : '')}
-                </div>`;
-            },
-            onComplete() {
-                player.ha.points  = player.ha.points.add(1)
-            },
-        },
-		13: {
-            name: "Enough!",
-            done() {
-				return (player.w.points >= 2368 && inChallenge("s",22))
-			},
-            tooltip() {
-                return `<div style="font-size: 14px">Enough!<br>
-                ${(hasAchievement('ha', 13) ? 'have 2368 Wood in s 22challenge'+'<br>' +'Backpack, inventory, hands are all wood' : '')}
-                </div>`;
-            },
-            onComplete() {
-                player.ha.points  = player.ha.points.add(1)
-            },
-        },
-		14: {
-            name: "The pinnacle of immorality",
-            done() {
-				return player.devSpeed > 1
-			},
-            tooltip() {
-                return `<div style="font-size: 14px">The pinnacle of immorality<br>
-                ${(hasAchievement('ha', 14) ? 'Play games by speeding up'+'<br>' +'stop!!!' : '')}
-                </div>`;
-            },
-            onComplete() {
-                player.ha.points  = player.ha.points.add(1)
-            },
-        },
-		15: {
-            name: "The pinnacle of morality",
-            done() {
-				return player.devSpeed < 1
-			},
-            tooltip() {
-                return `<div style="font-size: 14px">The pinnacle of morality<br>
-                ${(hasAchievement('ha', 15) ? 'Play games by slowing down'+'<br>' +'st.OH!You go on.' : '')}
-                </div>`;
-            },
-            onComplete() {
-                player.ha.points  = player.ha.points.add(1)
-            },
-        },
-    },
-	tabFormat: [
-        ["display-text",
-            function() { return `you find ${player.ha.achievements.length} Hidden Achievements` },
-            { "color": 'yellow', "font-size": "32px", "font-family": "Comic Sans MS" }],
-        "blank",
-        "blank",
-        "blank",
-        "blank",
-        "achievements",
-    ],
 })
 
