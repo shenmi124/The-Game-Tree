@@ -976,11 +976,11 @@ addLayer("cr", {
 			},
 			22:{
 				title:"Mining machine MK2",
-				description:"Enjoy ten times the speed",
+				description:"Enjoy thirty times the speed",
 				cost:new Decimal(20),
 				unlocked(){return hasUpgrade("cr",16)},
 				effect(){
-					if (hasUpgrade("cr",22) && !hasUpgrade("cr",32)) {player.d.mk = new Decimal(10)}
+					if (hasUpgrade("cr",22) && !hasUpgrade("cr",32)) {player.d.mk = new Decimal(30)}
 				}
 			},
 			31:{
@@ -994,11 +994,11 @@ addLayer("cr", {
 			},
 			32:{
 				title:"Mining machine MK3",
-				description:"Enjoy Fifty times the speed",
+				description:"Enjoy seventy times the speed",
 				cost:new Decimal(80),
 				unlocked(){return hasUpgrade("cr",22)},
 				effect(){
-					if (hasUpgrade("cr",32)) {player.d.mk = new Decimal(50)}
+					if (hasUpgrade("cr",32)) {player.d.mk = new Decimal(70)}
 				}
 			},
 		},
