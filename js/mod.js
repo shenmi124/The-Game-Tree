@@ -85,13 +85,16 @@ function fixOldSave(oldVersion){
 }
 
 let VERSION = {
-	num: "0.6.2",
+	num: "0.6.3",
 	name: "Metal age",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 <h2>Metal age</h2><br>
-	<h3>v0.6.2</h><br> 
+	<h3>v0.6.3</h3><br>
+		- Some content has been updated, but can't play yet<br>
+		- Modified some game mechanics<br>
+	<h3>v0.6.2</h3><br> 
 		- Add an option and a sub-option<br>
 		- Modify some upgraded values<br>
 		- Added CT1<br>

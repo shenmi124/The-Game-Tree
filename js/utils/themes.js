@@ -31,7 +31,7 @@ var colors = {
 		locked: "#c4a7b3",
 		background: "#053246",
 		background_tooltip: "rgba(0, 15, 31, 0.75)",
-	},
+	},		
 }
 function changeTheme() {
 
